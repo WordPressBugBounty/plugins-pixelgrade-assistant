@@ -38,11 +38,6 @@ class PixelgradeAssistant {
 	public $starter_content = null;
 
 	/**
-	 * @var PixelgradeAssistant_Support
-	 */
-	public $plugin_support = null;
-
-	/**
 	 * @var PixelgradeAssistant_SetupWizard
 	 */
 	public $plugin_setup_wizard = null;
@@ -89,7 +84,7 @@ class PixelgradeAssistant {
 	 * The lowest supported WordPress version
 	 * @var string
 	 */
-	protected $wp_support = '4.9.9';
+	protected $wp_support = '5.9';
 
 	protected $theme_support = false;
 
@@ -99,7 +94,7 @@ class PixelgradeAssistant {
 	 * @access  private
 	 * @since   1.3.0
 	 */
-	private $minimalRequiredPhpVersion  = '5.3.0';
+	private $minimalRequiredPhpVersion  = '7.4';
 
 	/**
 	 * Define the core functionality of the plugin.
@@ -204,12 +199,6 @@ class PixelgradeAssistant {
 		 */
 		require_once plugin_dir_path( $this->file ) . 'includes/class-pixelgrade_assistant-data-collector.php';
 		$this->plugin_data_collector = PixelgradeAssistant_DataCollector::instance( $this );
-
-		/**
-		 * The class responsible for defining all actions that occur in support section.
-		 */
-		require_once plugin_dir_path( $this->file ) . 'admin/class-pixelgrade_assistant-support.php';
-		$this->plugin_support = PixelgradeAssistant_Support::instance( $this );
 
 		/**
 		 * The class responsible for various admin notifications.
@@ -325,11 +314,34 @@ class PixelgradeAssistant {
 			'strong' => array(),
 		);
 		$html = '<div class="updated fade">' .
-		        sprintf( esc_html__( 'Error: plugin "%s" requires a newer version of PHP to be running.', 'pixelgrade_assistant' ), $this->plugin_name ) .
-		        '<br/>' . sprintf( esc_html__( 'Minimal version of PHP required: %s', 'pixelgrade_assistant' ), '<strong>' . $this->minimalRequiredPhpVersion . '</strong>' ) .
-		        '<br/>' . sprintf( esc_html__( 'Your server\'s PHP version: %s', 'pixelgrade_assistant' ), '<strong>' . phpversion() . '</strong>' ) .
+		        sprintf(
+			        /* translators: %s: the plugin name. */
+			        esc_html__( 'Error: plugin "%s" requires a newer version of PHP to be running.', 'pixelgrade_assistant' ), $this->plugin_name ) .
+		        '<br/>' . sprintf(
+			        /* translators: %s: the minimum required PHP version. */
+			        esc_html__( 'Minimal version of PHP required: %s', 'pixelgrade_assistant' ), '<strong>' . $this->minimalRequiredPhpVersion . '</strong>' ) .
+		        '<br/>' . sprintf(
+			        /* translators: %s: the server current PHP version. */
+			        esc_html__( 'Your server\'s PHP version: %s', 'pixelgrade_assistant' ), '<strong>' . phpversion() . '</strong>' ) .
 		        '</div>';
 		echo wp_kses( $html, $allowed );
+	}
+
+	/**
+	 * Calm, dismissible heads-up shown when Pixelgrade Care is active.
+	 *
+	 * Assistant intentionally stays inactive while Care runs, to avoid duplicate dashboards or
+	 * competing license state. This is informational, not an error.
+	 */
+	public function add_care_compatibility_notice() {
+		$message = sprintf(
+			/* translators: 1: Pixelgrade Assistant plugin name, 2: Pixelgrade Care plugin name */
+			esc_html__( '%1$s stays inactive while %2$s is active, so the two never overlap. Your current setup keeps working — no action needed.', 'pixelgrade_assistant' ),
+			'Pixelgrade Assistant',
+			'Pixelgrade Care'
+		);
+
+		printf( '<div class="notice notice-info is-dismissible"><p>%s</p></div>', wp_kses_post( $message ) );
 	}
 
 	/**
@@ -344,25 +356,13 @@ class PixelgradeAssistant {
 			return false;
 		}
 
-		// We can't have it loaded with Pixelgrade Care since all sorts of nasty things would happen.
-		// Normally one should not have both plugins active, but it is best to be safe than sorry.
-		if ( defined( 'PIXELGRADE_CARE__PLUGIN_FILE' ) && class_exists( 'PixelgradeAssistant' ) ) {
-			add_action( 'admin_notices', function () {
-				$allowed = array(
-					'div'    => array(
-						'class' => array(),
-						'id'    => array(),
-					),
-					'p'      => array(),
-					'br'     => array(),
-					'strong' => array(),
-				);
-				$html    = '<div class="updated fade">' .
-				           sprintf( esc_html__( 'Error: plugin "%1$s" can\'t be loaded when "%2$s" is active.', 'pixelgrade_assistant' ), 'Pixelgrade Assistant', 'Pixelgrade Care' ) .
-				           '<br/>' . sprintf( esc_html__( 'Please first deactivate "%s" if you wish to activate this plugin.', 'pixelgrade_assistant' ), 'Pixelgrade Care' ) .
-				           '</div>';
-				echo wp_kses( $html, $allowed );
-			} );
+		// Pixelgrade Care (the legacy commercial companion) owns the experience on existing
+		// premium sites. While it is active, Assistant stays out of the way — it loads no modules,
+		// menu, REST routes, or license state, so there are never duplicate dashboards or competing
+		// license state. We surface a calm, dismissible heads-up instead of a hard error.
+		// TODO (M2): point this toward the Pixelgrade Plus migration path for new LT sites.
+		if ( pixassist_is_care_active() ) {
+			add_action( 'admin_notices', array( $this, 'add_care_compatibility_notice' ) );
 
 			return false;
 		}

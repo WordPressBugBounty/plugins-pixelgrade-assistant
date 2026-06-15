@@ -3,7 +3,9 @@
  * Plugin Name:       Pixelgrade Assistant
  * Plugin URI:        https://github.com/pixelgrade/pixelgrade-assistant
  * Description:       We care about giving you the best experience with your free Pixelgrade theme.
- * Version:           1.4.0
+ * Version:           2.0.0
+ * Requires at least: 5.9
+ * Requires PHP:      7.4
  * Author:            Pixelgrade
  * Author URI:        https://pixelgrade.com
  * License:           GPL-3.0
@@ -27,7 +29,14 @@ defined( 'PIXELGRADE_ASSISTANT__SHOP_BASE' )         || define( 'PIXELGRADE_ASSI
 defined( 'PIXELGRADE_ASSISTANT__SHOP_BASE_DOMAIN' )  || define( 'PIXELGRADE_ASSISTANT__SHOP_BASE_DOMAIN', 'pixelgrade.com' );
 defined( 'PIXELGRADE_ASSISTANT__DEV_MODE' )          || define( 'PIXELGRADE_ASSISTANT__DEV_MODE', false );
 
+// Fail-safe guard for commercial behavior. Default false: the WordPress.org build is free.
+// Commercial features belong in the separate Pixelgrade Plus plugin, not behind this flag.
+defined( 'PIXELGRADE_ASSISTANT__IS_COMMERCIAL' )     || define( 'PIXELGRADE_ASSISTANT__IS_COMMERCIAL', false );
+
 require_once plugin_dir_path( __FILE__ ) . 'vendor/autoload.php';
+
+// Capability helpers: free vs commercial, and Pixelgrade Plus / Care detection.
+require_once plugin_dir_path( __FILE__ ) . 'includes/capabilities.php';
 
 // Include functions that might assist when in dev mode.
 require_once plugin_dir_path( __FILE__ ) . 'includes/integrations/devmode.php';
@@ -44,7 +53,7 @@ function PixelgradeAssistant() {
 	 */
 	require_once plugin_dir_path( __FILE__ ) . 'includes/class-pixelgrade_assistant.php';
 
-	$instance = PixelgradeAssistant::instance( __FILE__, '1.4.0' );
+	$instance = PixelgradeAssistant::instance( __FILE__, '2.0.0' );
 
 	return $instance;
 }

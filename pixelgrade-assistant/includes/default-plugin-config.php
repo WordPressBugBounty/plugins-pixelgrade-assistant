@@ -51,10 +51,10 @@ function pixassist_get_default_config( $original_theme_slug ) {
 		'starterContentImportLabel'                     => esc_html__( 'Import starter content', 'pixelgrade_assistant' ),
 		'starterContentImportSelectedLabel'             => esc_html__( 'Import selected', 'pixelgrade_assistant' ),
 		'setupWizardWelcomeTitle'                       => esc_html__( 'Welcome to the site setup wizard', 'pixelgrade_assistant' ),
-		'setupWizardWelcomeContent'                     => esc_html__( 'Go through this quick setup wizard to make sure you install all the recommended plugins and pre-load the site with helpful demo content. It\'s safe and fast.', 'pixelgrade_assistant' ),
+		'setupWizardWelcomeContent'                     => esc_html__( 'This quick, optional setup helps you install recommended free plugins and load helpful demo content. It\'s safe and fast — and you can skip it anytime.', 'pixelgrade_assistant' ),
 		'setupWizardStartButtonLabel'                   => esc_html__( 'Let\'s get started!', 'pixelgrade_assistant' ),
 		'authenticatorDashboardConnectTitle'            => esc_html__( 'Connect your site to Pixelgrade', 'pixelgrade_assistant' ),
-		'authenticatorDashboardConnectContent'          => wp_kses_post( __( 'Securely connect to {{shopdomain}}, create <strong>a free account</strong>, and make sure you don\'t miss any of the following perks.
+		'authenticatorDashboardConnectContent'          => wp_kses_post( __( 'Optionally connect a free {{shopdomain}} account to unlock a few extras:
 					<ul class="benefits">
 						<li><i></i><span><strong>Hand-picked plugins</strong> to boost your website.</span></li>
 						<li><i></i><span><strong>Starter content</strong> to make your website look like the demo.</span></li>
@@ -66,26 +66,9 @@ function pixassist_get_default_config( $original_theme_slug ) {
 		'authenticatorActivationErrorTitle'             => esc_html__( 'Something Went Wrong!', 'pixelgrade_assistant' ),
 		'authenticatorActivationErrorContent'           => esc_html__( 'We couldn\'t properly activate your theme. Please try again later.', 'pixelgrade_assistant' ),
 		'authenticatorErrorMessage1'                    => esc_html__( 'An error occurred. Please refresh the page to try again. Error: ', 'pixelgrade_assistant' ),
-		'authenticatorErrorMessage2'                    => wp_kses_post( __( 'If the error persists please contact our support team at <a href="mailto:help@pixelgrade.com?Subject=Help%20with%20connecting%20my%20site" target="_top">help@pixelgrade.com</a>.', 'pixelgrade_assistant' ) ),
 	);
 
 	$config['setupWizard'] = array(
-
-		'activation' => array(
-			'stepName' => 'Connect',
-			'blocks'   => array(
-				'authenticator' => array(
-					'class'  => 'full white',
-					'fields' => array(
-						'authenticator_component' => array(
-							'title' => esc_html__( 'Connect to {{shopdomain}}!', 'pixelgrade_assistant' ),
-							'type'  => 'component',
-							'value' => 'authenticator',
-						),
-					),
-				),
-			),
-		),
 
 		'plugins' => array(
 			'stepName' => esc_html__( 'Plugins', 'pixelgrade_assistant' ),
@@ -223,17 +206,7 @@ function pixassist_get_default_config( $original_theme_slug ) {
 		'general' => array(
 			'name'   => esc_html__( 'General', 'pixelgrade_assistant' ),
 			'blocks' => array(
-				'authenticator'  => array(
-					'class'  => 'full white',
-					'fields' => array(
-						'authenticator' => array(
-							'type'  => 'component',
-							'value' => 'authenticator',
-						),
-					),
-				),
 				'plugins'        => array(
-					'notconnected' => 'hidden',
 					'fields'       => array(
 						'recommended_plugins' => array(
 							'type'  => 'component',
@@ -242,7 +215,6 @@ function pixassist_get_default_config( $original_theme_slug ) {
 					),
 				),
 				'starterContent' => array(
-					'notconnected' => 'hidden',
 					'fields'       => array(
 						'title'          => array(
 							'type'             => 'h2',
@@ -262,6 +234,28 @@ function pixassist_get_default_config( $original_theme_slug ) {
 						'starterContent' => array(
 							'type'  => 'component',
 							'value' => 'starter-content',
+						),
+					),
+				),
+				'pixelgradePlus' => array(
+					'class'  => 'full',
+					'fields' => array(
+						'title'   => array(
+							'type'  => 'h2',
+							'value' => esc_html__( 'Pixelgrade Plus', 'pixelgrade_assistant' ),
+							'class' => 'section__title',
+						),
+						'content' => array(
+							'type'  => 'text',
+							'value' => wp_kses_post( __( 'Pixelgrade Plus is the optional premium companion for the Pixelgrade LT stack — advanced design tools that build on everything in the free stack. You can keep using the free stack for as long as you like; Plus is here when you want more.', 'pixelgrade_assistant' ) ),
+							'class' => 'section__content',
+						),
+						'cta'     => array(
+							'type'   => 'button',
+							'class'  => 'btn btn--action  btn--blue',
+							'label'  => esc_html__( 'Explore Pixelgrade Plus', 'pixelgrade_assistant' ),
+							'url'    => trailingslashit( PIXELGRADE_ASSISTANT__SHOP_BASE ) . 'plus/',
+							'target' => '_blank',
 						),
 					),
 				),
@@ -424,7 +418,7 @@ function pixassist_get_default_config( $original_theme_slug ) {
 		'phpRecommendedVersion' => 5.6,
 		'l10n'                  => array(
 			'title'                          => esc_html__( 'System Status', 'pixelgrade_assistant' ),
-			'description'                    => esc_html__( 'Allow Pixelgrade to collect non-sensitive diagnostic data and usage information. This will allow us to provide better assistance when you reach us through our support system. Thanks!', 'pixelgrade_assistant' ),
+			'description'                    => esc_html__( 'Allow Pixelgrade to collect non-sensitive diagnostic data and usage information about your WordPress install. This is entirely optional and helps us improve the free Pixelgrade stack. Thanks!', 'pixelgrade_assistant' ),
 			'phpOutdatedNotice'              => esc_html__( 'This version is a little old. We recommend you update to PHP ', 'pixelgrade_assistant' ),
 			'wordpressOutdatedNoticeContent' => esc_html__( 'We recommend you update to the latest and greatest WordPress version.', 'pixelgrade_assistant' ),
 			'updateAvailable'                => esc_html__( 'There\'s an update available!', 'pixelgrade_assistant' ),
@@ -507,208 +501,15 @@ function pixassist_get_default_config( $original_theme_slug ) {
 		// this will be appended to the starter content source URL if we are not given a baseRestUrl
 	);
 
-	$config['knowledgeBase'] = array(
-		'selfHelp'   => array(
-			'name'   => esc_html__( 'Self Help', 'pixelgrade_assistant' ),
-			'blocks' => array(
-				'search' => array(
-					'class'  => 'support-autocomplete-search',
-					'fields' => array(
-						'placeholder' => esc_html__( 'Search through the Knowledge Base', 'pixelgrade_assistant' ),
-					),
-				),
-				'info'   => array(
-					'class'  => '',
-					'fields' => array(
-						'title'              => array(
-							'type'  => 'h1',
-							'value' => esc_html__( 'Theme Help & Support', 'pixelgrade_assistant' ),
-						),
-						'content_free_theme' => array(
-							'type'            => 'text',
-							'value'           => wp_kses_post( __( 'Your site is <strong>connected to {{shopdomain}}.</strong> This means you\'re able to get <strong>premium support service.</strong><br>We strive to answer as fast as we can, but sometimes it can take a day or two. Be sure to check out the documentation in order to <strong>get quick answers</strong> in no time. Chances are it\'s <strong>already been answered!</strong>', 'pixelgrade_assistant' ) ),
-							'applicableTypes' => array(
-								"theme_wporg",
-								"theme_modular_wporg",
-							),
-						),
-						'subheader'          => array(
-							'type'  => 'h2',
-							'value' => esc_html__( 'How can we help?', 'pixelgrade_assistant' ),
-						),
-					),
-				),
-			),
-		),
-		'openTicket' => array(
-			'name'   => esc_html__( 'Open Ticket', 'pixelgrade_assistant' ),
-			'blocks' => array(
-				'topics'        => array(
-					'class'  => '',
-					'fields' => array(
-						'title'  => array(
-							'type'  => 'h1',
-							'value' => esc_html__( 'What can we help with?', 'pixelgrade_assistant' ),
-						),
-						'topics' => array(
-							'class'  => 'topics-list',
-							'fields' => array(
-								'start'          => array(
-									'type'  => 'text',
-									'value' => esc_html__( 'I have a question about how to start', 'pixelgrade_assistant' ),
-								),
-								'feature'        => array(
-									'type'  => 'text',
-									'value' => esc_html__( 'I have a question about how a distinct feature works', 'pixelgrade_assistant' ),
-								),
-								'plugins'        => array(
-									'type'  => 'text',
-									'value' => esc_html__( 'I have a question about plugins', 'pixelgrade_assistant' ),
-								),
-								'productUpdates' => array(
-									'type'  => 'text',
-									'value' => esc_html__( 'I have a question about theme updates', 'pixelgrade_assistant' ),
-								),
-							),
-						),
-					),
-				),
-				'ticket'        => array(
-					'class'  => '',
-					'fields' => array(
-						'title'             => array(
-							'type'  => 'h1',
-							'value' => esc_html__( 'Give us more details', 'pixelgrade_assistant' ),
-						),
-						'changeTopic'       => array(
-							'type'  => 'button',
-							'label' => esc_html__( 'Change Topic', 'pixelgrade_assistant' ),
-							'class' => 'btn btn__dark',
-							'url'   => '#',
-						),
-						'descriptionHeader' => array(
-							'type'  => 'text',
-							'value' => esc_html__( 'How can we help?', 'pixelgrade_assistant' ),
-						),
-						'descriptionInfo'   => array(
-							'type'  => 'text',
-							'class' => 'label__more-info',
-							'value' => esc_html__( 'Briefly describe how we can help.', 'pixelgrade_assistant' ),
-						),
-						'detailsHeader'     => array(
-							'type'  => 'text',
-							'value' => esc_html__( 'Tell Us More', 'pixelgrade_assistant' ),
-						),
-						'detailsInfo'       => array(
-							'type'  => 'text',
-							'class' => 'label__more-info',
-							'value' => wp_kses_post( __( 'Share all the details. Be specific and include some steps to recreate things and help us get to the bottom of things more quickly! Use a free service like <a href="http://imgur.com/" target="_blank">Imgur</a> or <a href="http://tinypic.com/" target="_blank">Tinypic</a> to upload files and include the link.', 'pixelgrade_assistant' ) ),
-						),
-						'nextButton'        => array(
-							'type'  => 'button',
-							'label' => esc_html__( 'Next Step', 'pixelgrade_assistant' ),
-							'class' => 'form-row submit-wrapper',
-						),
-					),
-				),
-				'searchResults' => array(
-					'class'  => '',
-					'fields' => array(
-						'title'       => array(
-							'type'  => 'h1',
-							'value' => esc_html__( 'Try these solutions first', 'pixelgrade_assistant' ),
-						),
-						'description' => array(
-							'type'  => 'text',
-							'value' => esc_html__( 'Based on the details you provided, we found a set of articles that could help you instantly. Before you submit a ticket, please check these resources first:', 'pixelgrade_assistant' ),
-						),
-						'noResults'   => array(
-							'type'  => 'text',
-							'value' => esc_html__( 'Sorry, we couldn\'t find any articles suitable for your question. Submit your ticket using the button below.', 'pixelgrade_assistant' ),
-						),
-					),
-				),
-				'sticky'        => array(
-					'class'  => 'notification__blue clear sticky',
-					'fields' => array(
-						'notConnected'       => array(
-							'type'  => 'text',
-							'value' => esc_html__( 'Please connect to {{shopdomain}} in order to be able to submit tickets.', 'pixelgrade_assistant' ),
-						),
-						'initialQuestion'    => array(
-							'type'  => 'text',
-							'value' => esc_html__( 'Did any of the above resources answer your question?', 'pixelgrade_assistant' ),
-						),
-						'success'            => array(
-							'type'  => 'text',
-							'value' => '😊 ' . esc_html__( 'Yaaay! You did it by yourself!', 'pixelgrade_assistant' ),
-						),
-						'noSuccess'          => array(
-							'type'  => 'text',
-							'value' => '😕 ' . esc_html__( 'Sorry we couldn\'t find an helpful answer.', 'pixelgrade_assistant' ),
-						),
-						'submitTicket'       => array(
-							'type'  => 'button',
-							'label' => esc_html__( 'Submit ticket', 'pixelgrade_assistant' ),
-							'class' => 'btn btn__dark',
-						),
-						'cancelSubmitTicket' => array(
-							'type'  => 'button',
-							'label' => esc_html__( 'Cancel', 'pixelgrade_assistant' ),
-							'class' => 'btn btn__dark',
-						),
-					),
-				),
-			),
-		),
-		'l10n'       => array(
-			'selfHelp'                  => esc_html__( 'Self Help', 'pixelgrade_assistant' ),
-			'searchResults'             => esc_html__( 'Search Results', 'pixelgrade_assistant' ),
-			'closeLabel'                => esc_html__( 'Close', 'pixelgrade_assistant' ),
-			'backLabel'                 => esc_html__( 'Back to Self Help', 'pixelgrade_assistant' ),
-			'missingTicketDetails'      => esc_html__( 'Customer service is a two-way street. Help us help you and everyone wins. Please fill the boxes with relevant details.', 'pixelgrade_assistant' ),
-			'missingTicketDescription'  => esc_html__( 'You have not described how can we help out. Please enter a description in the box above.', 'pixelgrade_assistant' ),
-			'searchingMessage'          => esc_html__( 'Hang tight! We\'re searching for the best results.', 'pixelgrade_assistant' ),
-			'emailMessage'              => esc_html__( 'the email used to register on {{shopdomain}}.', 'pixelgrade_assistant' ),
-			'ticketSendSuccessTitle'    => esc_html__( '👍 You\'ve got our attention!', 'pixelgrade_assistant' ),
-			'ticketSendSuccessContent'  => wp_kses_post( __( '<p><strong>Your ticket has successfully reached us!</strong></p>
-<p>As soon as a member of our crew has had a chance to review it they will be <strong>in touch with you via email</strong> at {{email_address}}.</p>
-<p>Please bear in mind that we do our best to answer every support request as soon as possible. But, being humans and all, we may take a few hours or, if we are talking about weekends, a day. Thank you for your patience. We don\'t take it lightly.</p>', 'pixelgrade_assistant' ) ),
-			'ticketSendSuccessGreeting' => wp_kses_post( __( 'Keep being awesome,<br><em>The Pixelgrade crew</em>', 'pixelgrade_assistant' ) ),
-			'ticketSendingLabel'        => esc_html__( 'Submitting the ticket...', 'pixelgrade_assistant' ),
-			'ticketSendError'                     => esc_html__( 'Something went wrong and we couldn\'t submit your ticket. If the problem persists, please let us know about it at {{support_email_address_link}}.', 'pixelgrade_assistant' ),
-			'backTo'                    => esc_html__( 'Back to ', 'pixelgrade_assistant' ),
-			'articleHelpfulQuestion'    => esc_html__( 'Was this article helpful?', 'pixelgrade_assistant' ),
-			'articleNotHelpful'         => esc_html__( 'We\'re sorry to hear that. How can we improve this article?', 'pixelgrade_assistant' ),
-			'articleHelpful'            => esc_html__( 'Great! We\'re happy to hear about that.', 'pixelgrade_assistant' ),
-			'articleHelpfulYesLabel'    => esc_html__( 'Yes', 'pixelgrade_assistant' ),
-			'articleHelpfulNoLabel'     => esc_html__( 'No', 'pixelgrade_assistant' ),
-			'sendFeedbackLabel'         => esc_html__( 'Send Feedback', 'pixelgrade_assistant' ),
-			'sendFeedbackPlaceholder'   => esc_html__( 'Send Feedback', 'pixelgrade_assistant' ),
-			'notConnectedTitle'         => esc_html__( 'Not connected!', 'pixelgrade_assistant' ),
-			'notConnectedContent'       => esc_html__( 'You haven\'t connected to {{shopdomain}} yet! Go to your Pixelgrade Dashboard to connect.', 'pixelgrade_assistant' ),
-			'dashboardButtonLabel'      => esc_html__( 'Pixelgrade Dashboard', 'pixelgrade_assistant' ),
-			'backToSelfHelpLabel'       => esc_html__( 'Back to Self Help', 'pixelgrade_assistant' ),
-			'searchFieldLabel'          => esc_html__( 'Search through the documentation', 'pixelgrade_assistant' ),
-			'searchFieldHelper'         => esc_html__( '* type 3+ characters to begin', 'pixelgrade_assistant' ),
-			'searchFieldResetLabel'     => esc_html__( 'Reset the searched text', 'pixelgrade_assistant' ),
-			'searchNoResultsMessage'    => esc_html__( 'Sorry - we couldn\'t find any results in our docs matching your search query.', 'pixelgrade_assistant' ),
-			'errorGetSelection'         => esc_html__( 'An error has occurred while trying to get your selection.', 'pixelgrade_assistant' ),
-			'backToMainSection'         => esc_html__( 'Back to your main section', 'pixelgrade_assistant' ),
-			'errorFetchCategories'      => esc_html__( 'Could not fetch categories!', 'pixelgrade_assistant' ),
-			'errorFetchArticles'        => esc_html__( 'Something went wrong while fetching the knowledge base articles for this theme. If the error persists, please create a ticket from the Open Ticket tab.', 'pixelgrade_assistant' ),
-		),
-	);
-
 	// the authenticator config is based on the component status which can be: not_validated, loading, validated
 	$config['authentication'] = array(
 		// general strings
-		'title'               => esc_html__( 'You are almost finished!', 'pixelgrade_assistant' ),
+		'title'               => esc_html__( 'Connect a Pixelgrade account (optional)', 'pixelgrade_assistant' ),
 		// validated string
 		'validatedTitle'      => '<span class="c-icon c-icon--success"></span> ' . esc_html__( 'Site connected! You\'re all set 👌', 'pixelgrade_assistant' ),
 		'validatedContent'    => wp_kses_post( __( '<strong>Well done, {{username}}!</strong> Your site is successfully connected to {{shopdomain}} and all the tools are available to make it shine.', 'pixelgrade_assistant' ) ),
 		//  not validated strings
-		'notValidatedContent' => wp_kses_post( __( 'In order to get access to <strong>premium support, starter content, in-dashboard documentation,</strong> and many others, your site needs to have <strong>an active connection</strong> to {{shopdomain}}.<br/><br/>This <strong>does not mean</strong> we gain direct (admin) access to this site. You remain the only one who can log in and make changes. <strong>Connecting means</strong> that this site and {{shopdomain}} share a few details needed to communicate securely.', 'pixelgrade_assistant' ) ),
+		'notValidatedContent' => wp_kses_post( __( 'Connecting a free {{shopdomain}} account is <strong>optional</strong>. It unlocks extras like <strong>cloud starter content, in-dashboard documentation, and premium support</strong>.<br/><br/>This <strong>does not mean</strong> we gain direct (admin) access to this site. You remain the only one who can log in and make changes. <strong>Connecting means</strong> that this site and {{shopdomain}} share a few details needed to communicate securely.', 'pixelgrade_assistant' ) ),
 		'notValidatedButton'  => esc_html__( 'Connect to {{shopdomain}}', 'pixelgrade_assistant' ),
 		// no themes from shop
 		'noThemeContent'      => esc_html__( 'Ups! You are logged in, but it seems you don\'t have a license for this theme yet.', 'pixelgrade_assistant' ),
@@ -737,11 +538,49 @@ function pixassist_get_default_config( $original_theme_slug ) {
 		'validatedContent' => wp_kses_post( __( 'You can rest assured that {{theme_name}} can do its best for you and your site.', 'pixelgrade_assistant' ) ),
 	);
 
+	// Local recommended companions for the free LT stack — installed from WordPress.org by slug.
+	// Filterable so the team / a commercial build can adjust the list (e.g. add Style Manager once
+	// it is re-published on wp.org, or add account-gated companions via Pixelgrade Plus).
+	$config['requiredPlugins'] = array(
+		'plugins' => apply_filters( 'pixassist_recommended_plugins', array(
+			array(
+				'name'        => 'Nova Blocks',
+				'slug'        => 'nova-blocks',
+				'required'    => false,
+				'order'       => 10,
+				'selected'    => true,
+				'description' => esc_html__( 'Beautiful, flexible content blocks that power the Pixelgrade LT design experience.', 'pixelgrade_assistant' ),
+			),
+		) ),
+	);
+
 	$update_core = get_site_transient( 'update_core' );
 
 	if ( ! empty( $update_core->updates ) && ! empty( $update_core->updates[0] ) ) {
 		$new_update                                     = $update_core->updates[0];
 		$config['systemStatus']['wpRecommendedVersion'] = $new_update->current;
+	}
+
+	// Adapt the Pixelgrade Plus discovery card to the live Plus status (discovery / set up / manage).
+	// Plus is the source of truth via the `pixelgrade_assistant_plus_status` contract; Assistant only reads it.
+	if ( function_exists( 'pixassist_get_plus_status' ) && ! empty( $config['dashboard']['general']['blocks']['pixelgradePlus']['fields'] ) ) {
+		$plus_status = pixassist_get_plus_status();
+		if ( ! empty( $plus_status['is_plus_active'] ) ) {
+			$plus_url = ! empty( $plus_status['plus_settings_url'] ) ? esc_url_raw( $plus_status['plus_settings_url'] ) : trailingslashit( PIXELGRADE_ASSISTANT__SHOP_BASE ) . 'plus/';
+			if ( ! empty( $plus_status['is_plus_licensed'] ) ) {
+				$plus_label   = esc_html__( 'Manage Pixelgrade Plus', 'pixelgrade_assistant' );
+				$plus_content = wp_kses_post( __( 'Pixelgrade Plus is active. Manage your advanced design tools and settings.', 'pixelgrade_assistant' ) );
+			} else {
+				$plus_label   = esc_html__( 'Set up Pixelgrade Plus', 'pixelgrade_assistant' );
+				$plus_content = wp_kses_post( __( 'Pixelgrade Plus is installed. Activate it to unlock its advanced design tools for your Pixelgrade LT site.', 'pixelgrade_assistant' ) );
+			}
+			$plus_fields                     = &$config['dashboard']['general']['blocks']['pixelgradePlus']['fields'];
+			$plus_fields['content']['value'] = $plus_content;
+			$plus_fields['cta']['label']     = $plus_label;
+			$plus_fields['cta']['url']        = $plus_url;
+			$plus_fields['cta']['target']    = ''; // internal admin URL — not a new tab
+			unset( $plus_fields );
+		}
 	}
 
 	$config = apply_filters( 'pixassist_default_config', $config );

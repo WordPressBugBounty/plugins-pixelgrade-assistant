@@ -270,6 +270,10 @@ class PixelgradeAssistant_StarterContent {
 		$type     = sanitize_text_field( $params['type'] );
 		$args     = $params['args'];
 
+		// Remember the demo base URL so end_import() can rewrite demo links reliably,
+		// even if its own request body carries no `url` (e.g. a JSON request leaves $_POST empty).
+		set_transient( 'pixassist_sce_demo_url', $base_url, HOUR_IN_SECONDS );
+
 		// The default response data
 		$response   = array();
 
@@ -447,7 +451,7 @@ class PixelgradeAssistant_StarterContent {
 			'timeout'   => 5,
 			'blocking'  => true,
 			'body'      => $request_data,
-			'sslverify' => false,
+			'sslverify' => true,
 		);
 
 		// Increase timeout if the target URL is a development one so we can account for slow local (development) installations.
@@ -681,7 +685,7 @@ class PixelgradeAssistant_StarterContent {
 			'timeout'   => 5,
 			'blocking'  => true,
 			'body'      => $request_data,
-			'sslverify' => false,
+			'sslverify' => true,
 		);
 
 		// Increase timeout if the target URL is a development one so we can account for slow local (development) installations.
@@ -945,7 +949,7 @@ class PixelgradeAssistant_StarterContent {
 			'timeout'   => 5,
 			'blocking'  => true,
 			'body'      => $request_data,
-			'sslverify' => false,
+			'sslverify' => true,
 		);
 
 		// Increase timeout if the target URL is a development one so we can account for slow local (development) installations.
@@ -1159,10 +1163,31 @@ class PixelgradeAssistant_StarterContent {
 	private function replace_demo_urls_in_content() {
 		global $wpdb;
 
-		$wpdb->query( $wpdb->prepare( "UPDATE {$wpdb->posts} SET post_content = REPLACE(post_content, %s, %s)", esc_url_raw( $_POST['url'] ), site_url() ) );
+		// Use the demo base URL captured during the import steps; fall back to the request body.
+		$demo_url = get_transient( 'pixassist_sce_demo_url' );
+		if ( empty( $demo_url ) && ! empty( $_POST['url'] ) ) {
+			$demo_url = wp_unslash( $_POST['url'] );
+		}
+		$demo_url = esc_url_raw( $demo_url );
+		if ( empty( $demo_url ) ) {
+			// Without the demo URL there is nothing safe to remap (an empty search would be a no-op).
+			return;
+		}
+		// Match (and replace) with a trailing slash so a sub-path like `/feed` keeps its separator
+		// (a bare site_url() would turn `…/hive-lite/feed` into `…localfeed`).
+		$search  = trailingslashit( $demo_url );
+		$replace = trailingslashit( site_url() );
+
+		// remap absolute demo links inside post content
+		$wpdb->query( $wpdb->prepare( "UPDATE {$wpdb->posts} SET post_content = REPLACE(post_content, %s, %s)", $search, $replace ) );
 
 		// remap enclosure urls
-		$wpdb->query( $wpdb->prepare( "UPDATE {$wpdb->postmeta} SET meta_value = REPLACE(meta_value, %s, %s) WHERE meta_key='enclosure'", esc_url_raw( $_POST['url'] ), site_url() ) );
+		$wpdb->query( $wpdb->prepare( "UPDATE {$wpdb->postmeta} SET meta_value = REPLACE(meta_value, %s, %s) WHERE meta_key='enclosure'", $search, $replace ) );
+
+		// remap custom-link menu item urls (e.g. a "Home" item that still points at the theme demo)
+		$wpdb->query( $wpdb->prepare( "UPDATE {$wpdb->postmeta} SET meta_value = REPLACE(meta_value, %s, %s) WHERE meta_key='_menu_item_url'", $search, $replace ) );
+
+		delete_transient( 'pixassist_sce_demo_url' );
 	}
 
 	/**
@@ -1353,7 +1378,13 @@ class PixelgradeAssistant_StarterContent {
 	 * @return false|int
 	 */
 	public function permission_nonce_callback( $request ) {
-		return wp_verify_nonce( $this->get_nonce( $request ), 'pixelgrade_assistant_rest' );
+		// Defense in depth: starter-content import is an admin-only operation (it creates posts,
+		// uploads media, and writes theme mods/options), so require the capability plus the nonce.
+		if ( ! current_user_can( 'manage_options' ) ) {
+			return false;
+		}
+
+		return (bool) wp_verify_nonce( $this->get_nonce( $request ), 'pixelgrade_assistant_rest' );
 	}
 
 	/**

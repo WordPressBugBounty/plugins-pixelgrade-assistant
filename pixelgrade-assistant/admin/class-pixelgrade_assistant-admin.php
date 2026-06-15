@@ -193,40 +193,6 @@ class PixelgradeAssistant_Admin {
 				    'method' => 'GET',
 				    'url' => PIXELGRADE_ASSISTANT__API_BASE . 'wp-json/pxm/v2/front/get_config',
 			    ),
-			    'createTicket'      => array(
-				    'method' => 'POST',
-				    'url' => PIXELGRADE_ASSISTANT__API_BASE . 'wp-json/pxm/v2/front/create_ticket',
-			    ),
-			    'demoContent'       => array(
-				    'method' => 'GET',
-				    'url' => PIXELGRADE_ASSISTANT__API_BASE . 'wp-json/pxm/v2/front/get_demo_content',
-			    ),
-			    'getHTKBCategories' => array(
-				    'method' => 'GET',
-				    'url' => PIXELGRADE_ASSISTANT__API_BASE . 'wp-json/pxm/v2/front/get_htkb_categories',
-			    ),
-			    'htVoting'          => array(
-				    'method' => 'POST',
-				    'url' => PIXELGRADE_ASSISTANT__API_BASE . 'wp-json/pxm/v2/front/ht_voting',
-			    ),
-			    'htVotingFeedback'  => array(
-				    'method' => 'POST',
-				    'url' => PIXELGRADE_ASSISTANT__API_BASE . 'wp-json/pxm/v2/front/ht_voting_feedback',
-			    ),
-			    'htViews'           => array(
-				    'method' => 'POST',
-				    'url' => PIXELGRADE_ASSISTANT__API_BASE . 'wp-json/pxm/v2/front/ht_views',
-			    ),
-		    ),
-		    'wupl' => array(
-			    'licenses' => array(
-				    'method' => 'POST',
-				    'url' => PIXELGRADE_ASSISTANT__API_BASE . 'wp-json/wupl/v2/front/get_licenses',
-			    ),
-			    'licenseAction' => array(
-				    'method' => 'POST',
-				    'url' => PIXELGRADE_ASSISTANT__API_BASE . 'wp-json/wupl/v2/front/license_action',
-			    ),
 		    ),
 	    ) );
 
@@ -258,21 +224,14 @@ class PixelgradeAssistant_Admin {
 			$this,
 			'transient_remove_theme_version',
 		), 10 );
-		add_filter( 'pre_set_site_transient_update_themes', array(
-			$this,
-			'transient_update_remote_config',
-		), 12 );
+		// Remote config is fetched lazily when the dashboard is opened (cached), and license
+		// details refresh on theme switch / explicit user action — NOT on the theme-update cron —
+		// so Assistant makes no unsolicited remote calls to pixelgrade.com on every update check.
+		// TODO (M2): license refresh ownership moves to the account/Plus path.
 		add_filter( 'pre_set_site_transient_update_themes', array(
 			$this,
 			'transient_maybe_cleanup_oauth_token',
 		), 14 );
-		add_filter( 'pre_set_site_transient_update_themes', array(
-			$this,
-			'transient_update_license_data',
-		), 15 );
-
-		// On theme switch try and get a license and activate it, if the user is connected
-		add_action( 'after_switch_theme', array( 'PixelgradeAssistant_Admin', 'fetch_and_activate_theme_license' ), 10 );
 
 		// On theme switch clear the cache for the remote config
 		add_action( 'after_switch_theme', array( 'PixelgradeAssistant_Admin', 'clear_remote_config_cache' ), 11 );
@@ -282,8 +241,6 @@ class PixelgradeAssistant_Admin {
 
 		// Prevent TGMPA admin notices since we manage plugins in the Pixelgrade Care dashboard.
 		add_filter( 'tgmpa_show_admin_notices', array( $this, 'prevent_tgmpa_notices' ), 10, 1 );
-
-		add_filter( 'plugins_api', array( $this, 'handle_external_required_plugins_ajax_install' ), 100, 3 );
 
 		// Auto-update Pixelgrade Assistant by default.
 		add_filter( 'auto_update_plugin', array( $this, 'handle_plugin_autoupdate' ), 10, 2 );
@@ -411,24 +368,31 @@ class PixelgradeAssistant_Admin {
         $show_bubble = false;
         // If the theme directory has been changed, show bubble.
         $theme_checks = self::get_theme_checks();
-        if ( ! $theme_checks['has_original_name'] || ! $theme_checks['has_original_directory'] ) {
+        // The theme-integrity check yields false positives on legitimate fresh installs
+        // (wp.org / GitHub / Studio), so this bubble is a commercial-only signal — no nag for free users.
+        if ( pixassist_is_commercial() && ( ! $theme_checks['has_original_name'] || ! $theme_checks['has_original_directory'] ) ) {
             $show_bubble = true;
         }
 
-        $current_user = self::get_theme_activation_user();
-		if ( empty( $current_user ) || empty( $current_user->ID ) ) {
-			$show_bubble = true;
-		} else {
-			// Check if we are not connected.
-			$pixelgrade_user_login = get_user_meta( $current_user->ID, 'pixelgrade_user_login', true );
-			if ( empty( $pixelgrade_user_login ) ) {
+		// The account/license "Heads Up" bubble is a commercial concern handled by Pixelgrade Plus.
+		// Free users must never see an account/license nag. Fail-safe: gate behind the commercial flag.
+		// TODO (M2): move account/license bubble ownership into Pixelgrade Plus via an extension point.
+		if ( pixassist_is_commercial() ) {
+			$current_user = self::get_theme_activation_user();
+			if ( empty( $current_user ) || empty( $current_user->ID ) ) {
 				$show_bubble = true;
 			} else {
-				// We are connected.
-				// Show bubble if the license is expired.
-				$license_status = self::get_license_mod_entry( 'license_status' );
-				if ( empty( $license_status ) || in_array( $license_status, array( 'expired' ) ) ) {
+				// Check if we are not connected.
+				$pixelgrade_user_login = get_user_meta( $current_user->ID, 'pixelgrade_user_login', true );
+				if ( empty( $pixelgrade_user_login ) ) {
 					$show_bubble = true;
+				} else {
+					// We are connected.
+					// Show bubble if the license is expired.
+					$license_status = self::get_license_mod_entry( 'license_status' );
+					if ( empty( $license_status ) || in_array( $license_status, array( 'expired' ) ) ) {
+						$show_bubble = true;
+					}
 				}
 			}
 		}
@@ -535,7 +499,6 @@ class PixelgradeAssistant_Admin {
 			    'pixassist_nonce' => $local_plugin->plugin_admin->pixassist_nonce,
 		    ),
 		    'systemStatus'   => PixelgradeAssistant_DataCollector::get_system_status_data(),
-		    'knowledgeBase'  => PixelgradeAssistant_Support::get_knowledgeBase_data(),
 		    'siteUrl'        => home_url( '/' ),
 		    'dashboardUrl'   => admin_url( 'admin.php?page=pixelgrade_assistant' ),
 		    'adminUrl'       => admin_url(),
@@ -1097,273 +1060,6 @@ class PixelgradeAssistant_Admin {
     }
 
 	/**
-	 * Update the remote plugin config for the current theme.
-	 * Hooked into pre_set_site_transient_update_themes.
-	 *
-	 * @param object $transient
-	 *
-	 * @return object
-	 */
-	public function transient_update_remote_config( $transient ) {
-        // Nothing to do here if the checked transient entry is empty
-        if ( empty( $transient->checked ) ) {
-            return $transient;
-        }
-        $this->get_remote_config();
-
-        return $transient;
-    }
-
-	/**
-     * Update the license data on theme update check.
-     * Hooked into pre_set_site_transient_update_themes.
-     *
-     * @param object $transient
-     *
-     * @return object
-     */
-    public function transient_update_license_data( $transient ) {
-        // Nothing to do here if the checked transient entry is empty
-        if ( empty( $transient->checked ) ) {
-            return $transient;
-        }
-        // Check and update the user's license details
-        self::update_theme_license_details();
-
-        return $transient;
-    }
-
-	protected static function _get_user_product_licenses_cache_key( $user_id, $hash_id = '' ) {
-		return 'pixassist_user_product_licenses_' . md5( $user_id . '_' . $hash_id );
-	}
-
-	/**
-	 * A helper function that returns the licenses available for a user and maybe a certain product hash ID.
-	 *
-	 * @param int $user_id The connected user ID.
-	 * @param string $hash_id Optional. The product hash ID.
-	 * @param bool $skip_cache Optional. Whether to skip the cache and fetch new data.
-	 *
-	 * @return array|false
-	 */
-	public static function get_user_product_licenses( $user_id, $hash_id = '', $skip_cache = false ) {
-		// First try and get the cached data
-		$data = get_site_transient( self::_get_user_product_licenses_cache_key( $user_id, $hash_id ) );
-		// The transient isn't set or is expired; we need to fetch fresh data
-		if ( false === $data || true === $skip_cache ) {
-			$request_args = array(
-				'method' => PixelgradeAssistant_Admin::$externalApiEndpoints['wupl']['licenses']['method'],
-				'timeout'   => 5,
-				'blocking'  => true,
-				'body'      => array(
-					'user_id' => $user_id,
-					'hash_id' => $hash_id,
-					'type' => self::get_theme_type(),
-					'theme_headers' => self::get_theme_headers(),
-				),
-				'sslverify' => false,
-			);
-
-			// Increase timeout if the target URL is a development one so we can account for slow local (development) installations.
-			if ( self::is_development_url( PixelgradeAssistant_Admin::$externalApiEndpoints['wupl']['licenses']['url'] ) ) {
-				$request_args['timeout'] = 10;
-			}
-
-			// Get the user's licenses from the server
-			$response = wp_remote_request( PixelgradeAssistant_Admin::$externalApiEndpoints['wupl']['licenses']['url'], $request_args );
-			if ( is_wp_error( $response ) ) {
-				return false;
-			}
-			$response_data = json_decode( wp_remote_retrieve_body( $response ), true );
-			// Bail in case of decode error or failure to retrieve data
-			if ( null === $response_data || empty( $response_data['data']['licenses'] ) || 'success' !== $response_data['code'] ) {
-				return false;
-			}
-
-			$data = $response_data['data']['licenses'];
-
-			// Cache the data in a transient for 1 hour
-			set_site_transient( self::_get_user_product_licenses_cache_key( $user_id, $hash_id ) , $data, 1 * HOUR_IN_SECONDS );
-		}
-
-		return $data;
-	}
-
-	/**
-     * Update the details of the current theme's license.
-	 *
-	 * @param bool $skip_cache Optional. Whether to skip the cache and fetch new data.
-     *
-     * @return bool
-     */
-    public static function update_theme_license_details( $skip_cache = false ) {
-        $theme_hash_id = self::get_theme_hash_id();
-        if ( empty( $theme_hash_id ) ) {
-        	// Something is wrong with the theme or is not one of our themes
-	        return false;
-        }
-        // Get the connected pixelgrade user id
-        $connection_user = self::get_theme_activation_user();
-	    if ( empty( $connection_user ) || empty( $connection_user->ID ) ) {
-	    	return false;
-	    }
-
-        $user_id      = get_user_meta( $connection_user->ID, 'pixassist_user_ID', true );
-        if ( empty( $user_id ) ) {
-            // not authenticated
-            return false;
-        }
-
-        // Get the current license hash used to uniquely identify a license
-	    $current_license_hash = self::get_license_mod_entry( 'license_hash' );
-        // If we have no license hash, we have nothing to update
-        if ( empty( $current_license_hash ) ) {
-        	return false;
-        }
-
-        $subscriptions = self::get_user_product_licenses( $user_id, $theme_hash_id, $skip_cache );
-        if ( ! empty( $subscriptions ) ) {
-            foreach ( $subscriptions as $key => $value ) {
-                if ( ! isset( $value['licenses'] ) || empty( $value['licenses'] ) ) {
-                    // No licenses found in this subscription or marketplace
-                    continue;
-                }
-                foreach ( $value['licenses'] as $license ) {
-                	if ( ! empty( $license['license_hash'] ) && $current_license_hash == $license['license_hash'] && ! empty( $license['license_type'] ) && ! empty( $license['license_status'] ) ) {
-                		// Update the license details
-                		self::set_license_mod( $license );
-
-                		return true;
-	                }
-                }
-            }
-        }
-
-        return false;
-    }
-
-	/**
-	 * Get the user's licenses, select the best one and activate it.
-	 *
-	 * @return bool True when we have successfully fetched and activated a license, false otherwise.
-	 */
-	public static function fetch_and_activate_theme_license() {
-		$current_user = self::get_theme_activation_user();
-		if ( empty( $current_user ) || empty( $current_user->ID ) ) {
-			return false;
-		}
-
-		// First we will delete ny previous license mods. Start fresh.
-		self::delete_license_mod();
-
-		// If they modified anything in the wupdates_gather_ids function - exit.  Cannot activate the theme.
-		if ( ! self::is_wupdates_filter_unchanged() ) {
-			return false;
-		}
-
-		// Determine whether the user is logged in or not. If not logged in - don't bother trying to activate the theme license
-		$pixelgrade_user_id = get_user_meta( $current_user->ID, 'pixassist_user_ID', true );
-		if ( empty( $pixelgrade_user_id ) ) {
-			return false;
-		}
-
-		$wupdates_identification = self::get_wupdates_identification_data();
-		if ( empty( $wupdates_identification ) ) {
-			return false;
-		}
-
-		// Get the user's licenses from the server (grouped by subscription or marketplace - like 'free')
-		$subscriptions = self::get_user_product_licenses( $pixelgrade_user_id, $wupdates_identification['id'], true );
-		if ( empty( $subscriptions ) || is_wp_error( $subscriptions ) ) {
-			return false;
-		}
-
-		$valid_licenses   = array();
-		$active_licenses  = array();
-		$expired_licenses = array();
-
-		foreach ( $subscriptions as $key => $value ) {
-			if ( ! isset( $value['licenses'] ) || empty( $value['licenses'] ) ) {
-				// No licenses found in this subscription or marketplace
-				continue;
-			}
-			foreach ( $value['licenses'] as $license ) {
-				switch ( $license['license_status'] ) {
-					case 'valid':
-						$valid_licenses[] = $license;
-						break;
-					case 'active':
-						$active_licenses[] = $license;
-						break;
-					case 'expired':
-					case 'overused':
-						$expired_licenses[] = $license;
-						break;
-					default:
-						break;
-				}
-			}
-		}
-
-		// try to activate a license and save to theme mod
-		$license_to_activate = array();
-		if ( ! empty( $valid_licenses ) ) {
-			$license_to_activate = reset( $valid_licenses );
-		} elseif ( ! empty( $active_licenses ) ) {
-			$license_to_activate = reset( $active_licenses );
-		} elseif ( ! empty( $expired_licenses ) ) {
-			$license_to_activate = reset( $expired_licenses );
-		}
-		// If we have at least one license - go ahead and activate it
-		if ( ! empty( $license_to_activate ) ) {
-			// Get all kind of details about the active theme
-			$theme_details = self::get_theme_support();
-			$data = array(
-				'action'       => 'activate',
-				'license_hash' => $license_to_activate['license_hash'],
-				'site_url'     => home_url( '/' ),
-				'is_ssl'       => is_ssl(),
-				'hash_id'      => $wupdates_identification['id'],
-			);
-
-			if ( isset( $theme_details['theme_version'] ) ) {
-				$data['current_version'] = $theme_details['theme_version'];
-			}
-			$request_args = array(
-				'method' => PixelgradeAssistant_Admin::$externalApiEndpoints['wupl']['licenseAction']['method'],
-				'timeout'   => 6,
-				'blocking'  => true,
-				'body'      => $data,
-				'sslverify' => false,
-			);
-
-			// Increase timeout if the target URL is a development one so we can account for slow local (development) installations.
-			if ( self::is_development_url( PixelgradeAssistant_Admin::$externalApiEndpoints['wupl']['licenseAction']['url'] ) ) {
-				$request_args['timeout'] = 10;
-			}
-
-			// Activate the license
-			$response = wp_remote_request( PixelgradeAssistant_Admin::$externalApiEndpoints['wupl']['licenseAction']['url'], $request_args );
-			if ( is_wp_error( $response ) ) {
-				return false;
-			}
-
-			$response_data = json_decode( wp_remote_retrieve_body( $response ), true );
-			// Bail in case of decode error or failure
-			if ( null === $response_data || 'success' !== $response_data['code'] ) {
-				return false;
-			}
-
-			// The license has been successfully activated
-			// Save it's details in the theme mods
-			self::set_license_mod( $license_to_activate );
-		}
-
-		// All went well
-		return true;
-	}
-
-	/**
 	 * Returns the config resulted from merging the default config with the remote one
 	 *
 	 * @param bool $skip_cache
@@ -1457,9 +1153,18 @@ class PixelgradeAssistant_Admin {
 	    }
 
         if ( true === $skip_cache || false === $config ) {
-            // Retrieve the config from the server
+            // Retrieve the config from the server. The theme-config endpoint is fixed, so don't depend on
+            // init() having populated the static $externalApiEndpoints property — get_remote_config() can run
+            // on a cold cache before that runs (it would otherwise warn on a null array offset).
+            $get_config = ! empty( self::$externalApiEndpoints['pxm']['getConfig'] )
+                ? self::$externalApiEndpoints['pxm']['getConfig']
+                : array(
+                    'method' => 'GET',
+                    'url'    => PIXELGRADE_ASSISTANT__API_BASE . 'wp-json/pxm/v2/front/get_config',
+                );
+
             $request_args = array(
-                'method' => PixelgradeAssistant_Admin::$externalApiEndpoints['pxm']['getConfig']['method'],
+                'method' => $get_config['method'],
                 'timeout'   => 4,
                 'blocking'  => true,
                 'body' => array(
@@ -1468,16 +1173,16 @@ class PixelgradeAssistant_Admin {
                     // @todo this parameter naming is quite confusing
                     'version' => self::$pixelgrade_assistant_manager_api_version,
                 ),
-                'sslverify' => false,
+                'sslverify' => true,
             );
 
             // Increase timeout when using the PIXELGRADE_ASSISTANT__SKIP_CONFIG_CACHE constant so we can account for slow local (development) installations.
 	        // Also do this if the target URL is a development one.
-	        if ( ( defined( 'PIXELGRADE_ASSISTANT__SKIP_CONFIG_CACHE' ) && PIXELGRADE_ASSISTANT__SKIP_CONFIG_CACHE === true ) || self::is_development_url( PixelgradeAssistant_Admin::$externalApiEndpoints['pxm']['getConfig']['url'] ) ) {
+	        if ( ( defined( 'PIXELGRADE_ASSISTANT__SKIP_CONFIG_CACHE' ) && PIXELGRADE_ASSISTANT__SKIP_CONFIG_CACHE === true ) || self::is_development_url( $get_config['url'] ) ) {
 		        $request_args['timeout'] = 10;
 	        }
 
-            $response = wp_remote_request( PixelgradeAssistant_Admin::$externalApiEndpoints['pxm']['getConfig']['url'], $request_args  );
+            $response = wp_remote_request( $get_config['url'], $request_args  );
             if ( is_wp_error( $response ) ) {
                 return false;
             }
@@ -1737,29 +1442,6 @@ class PixelgradeAssistant_Admin {
 	    }
 
         return $wupdates_identification['name'];
-    }
-
-	/**
-     * Checks if the wupdates_gather_ids filter has been tempered with
-     * This should also be used to block the updates
-	 *
-	 * @param string $slug
-     * @return bool
-     */
-    public static function is_wupdates_filter_unchanged( ) {
-	    $wupdates_identification = self::get_wupdates_identification_data();
-
-        // Check if the wupdates_ids array is missing either of this properties
-        if (  empty( $wupdates_identification ) || ! isset( $wupdates_identification['name'] ) || ! isset( $wupdates_identification['slug'] ) || ! isset( $wupdates_identification['id'] ) || ! isset( $wupdates_identification['type'] ) || ! isset( $wupdates_identification['digest'] ) ) {
-            return false;
-        }
-        // Create the md5 hash from the properties of wupdates_ids and compare it to the digest from that array
-        $md5 = md5( 'name-' . $wupdates_identification['name'] . ';slug-' . $wupdates_identification['slug'] . ';id-' . $wupdates_identification['id'] . ';type-' . $wupdates_identification['type'] );
-        // the md5 hash should be the same one as the digest hash
-        if ( $md5 !== $wupdates_identification['digest'] ) {
-            return false;
-        }
-        return true;
     }
 
 	/**
@@ -2126,6 +1808,16 @@ class PixelgradeAssistant_Admin {
 					continue;
 				}
 
+				// Free build: pin recommendations to WordPress.org. Strip any external (URL) source
+				// so the plugin can only be installed from the wp.org repository by its slug — the
+				// wp.org build must not install plugins from external servers.
+				if ( ! pixassist_is_commercial()
+				     && ! empty( $config['requiredPlugins']['plugins'][ $key ]['source'] )
+				     && false !== filter_var( $config['requiredPlugins']['plugins'][ $key ]['source'], FILTER_VALIDATE_URL ) ) {
+					unset( $config['requiredPlugins']['plugins'][ $key ]['source'] );
+					unset( $config['requiredPlugins']['plugins'][ $key ]['source_type'] );
+				}
+
 				// Make sure that the plugin is not required, only recommended.
 				$config['requiredPlugins']['plugins'][ $key ]['required'] = false;
 			}
@@ -2169,46 +1861,8 @@ class PixelgradeAssistant_Admin {
 		return false;
 	}
 
-	/**
-	 * Since the core AJAX function wp_ajax_install_plugin(), that handles the AJAX installing of plugins,
-	 * only knows to install plugins from the WordPress.org repo, we need to handle the external plugins installation.
-	 * Like from WUpdates.
-	 *
-	 * @param $res
-	 * @param $action
-	 * @param $args
-	 *
-	 * @return mixed
-	 */
-	public function handle_external_required_plugins_ajax_install( $res, $action, $args ) {
-		// This is a key we only put from the Pixelgrade Assistant JS. So we know that the current request is one of ours.
-		if ( empty( $_POST['pixassist_plugin_install'] ) ) {
-			return $res;
-		}
-
-		// Do nothing if this is not an external plugin.
-		if ( empty( $_POST['plugin_source_type'] ) || 'external' !== $_POST['plugin_source_type'] ) {
-			return $res;
-		}
-
-		// Get the TGMPA instance
-		$tgmpa = call_user_func( array( get_class( $GLOBALS['tgmpa'] ), 'get_instance' ) );
-		// If the slug doesn't correspond to a TGMPA registered plugin or it has no source URL, bail.
-		if ( empty( $tgmpa->plugins[ $_POST['slug'] ] ) || empty( $tgmpa->plugins[ $_POST['slug'] ]['source'] ) ) {
-			return $res;
-		}
-
-		// Manufacture a minimal response.
-		$res = array(
-			'slug' => $_POST['slug'],
-			'name' => ! empty( $tgmpa->plugins[ $_POST['slug'] ]['name'] ) ? $tgmpa->plugins[ $_POST['slug'] ]['name'] : $_POST['slug'],
-			'version' => '0.0.1', // We don't really know the plugin version.
-			'download_link' => $tgmpa->plugins[ $_POST['slug'] ]['source'],
-		);
-
-		// The response must be an object.
-		return (object) $res;
-	}
+	// handle_external_required_plugins_ajax_install() was removed (M2 R2): the wp.org build installs
+	// only WordPress.org-hosted plugins through core APIs. External/premium installs belong to Pixelgrade Plus.
 
 	public function handle_plugin_autoupdate( $update, $item ) {
 		// We want to force enable the auto-update feature for Pixelgrade Assistant.

@@ -1,31 +1,44 @@
 === Pixelgrade Assistant ===
-Contributors: pixelgrade, vlad.olaru
-Tags: dashboard, support, pixelgrade, starter-content, demo-data, documentation, interactive
-Requires at least: 4.9.9
-Tested up to: 5.9.4
-Requires PHP: 5.6.40
-Stable tag: 1.4.0
+Contributors: pixelgrade, vlad.olaru, babbardel
+Tags: dashboard, starter-content, demo-content, recommended-plugins, pixelgrade
+Requires at least: 5.9
+Tested up to: 7.0
+Requires PHP: 7.4
+Stable tag: 2.0.0
 License: GPLv3.0
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 
-Help and assistance for Pixelgrade WordPress themes.
+The free companion for the Pixelgrade LT stack — stack health, recommended plugins, and starter content. No account required.
 
 == Description ==
 
-Pixelgrade Assistant is a plugin to go along with any free WordPress theme made by Pixelgrade.
+Pixelgrade Assistant is the free companion for the Pixelgrade LT stack — the Anima LT theme together with the Style Manager and Nova Blocks plugins.
 
-It will elevate the whole experience of setting up your site:
+It gives you a calm, in-dashboard home for getting the most out of your free Pixelgrade site:
 
-* **recommended plugins**
-* **starter/demo content one-click import**
-* **premium support access** right in your WordPress dashboard
-* **theme documentation** right in your WordPress dashboard
-* various functionality and logic that a theme may need to do it's best work.
+* **Stack health** — see at a glance whether Style Manager and Nova Blocks are installed, active, or need an update.
+* **One-click install** of recommended free companions, straight from WordPress.org.
+* **Starter content** to give your new site a head start.
+* **Documentation** links to help you along the way.
+* Behind-the-scenes compatibility logic so your theme and its companion plugins play nicely together.
 
-All these facilities and enhancements are *conditioned* by having your site connected with pixelgrade.com. This way we can leverage our already existing infrastructure to best serve our free themes users also, with the efficiency required by a small team.
-You can chose not to use Pixelgrade Assistant but you will not be able to access the benefits that accompany your Pixelgrade theme.
+**No account required.** Pixelgrade Assistant works out of the box — you do not need a Pixelgrade.com account or a license to use the free stack. Connecting an account is entirely optional and only unlocks extras such as cloud starter content, account sync, and premium support (see *External services* below).
+
+Looking for more? **Pixelgrade Plus** is the optional premium companion that adds advanced design tools on top of the free stack. It is never required, and you can explore it any time from the Pixelgrade screen.
 
 **Made with love by [Pixelgrade](https://pixelgrade.com)**
+
+== External services ==
+
+Pixelgrade Assistant runs almost entirely on your own site — installing recommended plugins (from WordPress.org), documentation links, and the stack-health information never leave your server. A few features reach Pixelgrade-hosted services, described below. No Pixelgrade.com account is required for any of them.
+
+* **Theme configuration (pixelgrade.com).** When you open the Pixelgrade Assistant screen, the plugin requests a small configuration file for your theme from `https://pixelgrade.com` (`/wp-json/pxm/v2/front/get_config`). It sends only your theme identifier, the result is cached locally, and it is not requested on every page load or on a schedule.
+* **Starter content (demos.pixelgrade.com).** When — and only when — you click Import on the starter content, the plugin downloads your theme's demo content (text, settings, menus, and images) from `https://demos.pixelgrade.com`. Nothing is downloaded until you start an import, and no account is required.
+* **Optional usage data (pixelgrade.com).** If — and only if — you opt in, the plugin may share non-identifying information about your WordPress install so we can improve the free Pixelgrade stack and assist you faster. This is off by default.
+
+The WordPress.org build never downloads or installs plugin code from servers other than WordPress.org.
+
+Your use of these Pixelgrade services is subject to Pixelgrade's privacy policy and terms, available at [pixelgrade.com](https://pixelgrade.com/).
 
 == Issues ==
 
@@ -42,20 +55,12 @@ This plugin makes heavy use of JavaScript libraries and packages since it's enti
 * [@material-ui/core](https://www.npmjs.com/package/@material-ui/core) - License: [MIT](http://opensource.org/licenses/mit-license.html)
 * [@material-ui/icons](https://www.npmjs.com/package/@material-ui/icons) - License: [MIT](http://opensource.org/licenses/mit-license.html)
 * [@material-ui/styles](https://www.npmjs.com/package/@material-ui/styles) - License: [MIT](http://opensource.org/licenses/mit-license.html)
-* [aws-sdk](https://www.npmjs.com/package/aws-sdk) - License: [Apache 2.0](https://www.apache.org/licenses/LICENSE-2.0)
-* [bodybuilder](https://www.npmjs.com/package/bodybuilder) - License: [MIT](http://opensource.org/licenses/mit-license.html)
 * [core-js](https://www.npmjs.com/package/core-js) - License: [MIT](http://opensource.org/licenses/mit-license.html)
-* [crypto-js](https://www.npmjs.com/package/crypto-js) - License: [MIT](http://opensource.org/licenses/mit-license.html)
-* [elasticsearch](https://www.npmjs.com/package/elasticsearch) - License: [Apache 2.0](https://www.apache.org/licenses/LICENSE-2.0)
 * [entities](https://www.npmjs.com/package/entities) - License: [MIT](http://opensource.org/licenses/mit-license.html)
-* [http-aws-es](https://www.npmjs.com/package/http-aws-es) - License: [MIT](http://opensource.org/licenses/mit-license.html)
 * [lodash](https://www.npmjs.com/package/lodash) - License: [MIT](http://opensource.org/licenses/mit-license.html)
-* [oauth-1.0a](https://www.npmjs.com/package/oauth-1.0a) - License: [MIT](http://opensource.org/licenses/mit-license.html)
-* [oauth-signature](https://www.npmjs.com/package/oauth-signature) - License: [BSD-3-Clause](https://opensource.org/licenses/BSD-3-Clause)
 * [qs](https://www.npmjs.com/package/qs) - License: [BSD-3-Clause](https://opensource.org/licenses/BSD-3-Clause)
 * [react](https://www.npmjs.com/package/react) - License: [MIT](http://opensource.org/licenses/mit-license.html)
 * [react-dom](https://www.npmjs.com/package/react-dom) - License: [MIT](http://opensource.org/licenses/mit-license.html)
-* [react-cookies](https://www.npmjs.com/package/react-cookies) - License: [MIT](http://opensource.org/licenses/mit-license.html)
 * [react-redux](https://www.npmjs.com/package/react-redux) - License: [MIT](http://opensource.org/licenses/mit-license.html)
 * [redux](https://www.npmjs.com/package/redux) - License: [MIT](http://opensource.org/licenses/mit-license.html)
 
@@ -70,19 +75,21 @@ Installing "Pixelgrade Assistant" can be done either by searching for "Pixelgrad
 
 == Frequently Asked Questions ==
 
-= Is the site connection secure? =
+= Do I need a Pixelgrade.com account or a license? =
 
-Yes. We use a secure authorization protocol (OAuth1.0a) for setting up the connection.
+No. Pixelgrade Assistant works fully without an account or a license. You can install the recommended free plugins, import starter content, and use the dashboard with no connection at all. Connecting an account is optional and only adds extras like cloud starter content and premium support.
 
-= If I connect my site, do you gain access to my site? =
+= What is Pixelgrade Plus? =
 
-No. Connecting your site is just a small exchange of keys meant to establish a way to securely send information, when needed. We don't have your passwords or other methods to gain access to your site.
+Pixelgrade Plus is the optional premium companion for the Pixelgrade LT stack — advanced design tools that build on everything in the free stack. You can keep using the free stack indefinitely; Plus is there if you want more. Learn more at [pixelgrade.com](https://pixelgrade.com/).
 
-If you have a support question that requires us to take a look in your WordPress dashboard, we will ask you for a *temporary username and password* with admin permissions. But **that is up to you to provide.**
+= I'm already using Pixelgrade Care — will this conflict? =
+
+No. If Pixelgrade Care (our legacy companion for premium themes) is active, Pixelgrade Assistant detects it and stays out of the way — it does not load a second dashboard or touch your existing license. Your current setup keeps working exactly as before. New LT-stack sites use Pixelgrade Assistant, with Pixelgrade Plus as the optional premium path.
 
 = Is this plugin tracking me? =
 
-No. We are not tracking you or your site. We ask your permission to share with us non-specific theme usage data and information about your WordPress install so we can resolve support questions faster - we are a small team and need to be as efficient as possible.
+No. We are not tracking you or your site. Sharing is entirely optional and off by default. If you opt in, we collect non-specific theme usage data and information about your WordPress install so we can improve the free Pixelgrade stack and help you faster when you reach out - we are a small team and need to be as efficient as possible.
 
 *It is up to you if you are willing to share this data with us.* We respect your decision. We truly appreciate it if you do, but we will do our best to serve you regardless.
 
@@ -96,6 +103,14 @@ No. We are not tracking you or your site. We ask your permission to share with u
 6. Site setup wizard
 
 == Changelog ==
+
+= 2.0.0 =
+* Reborn as the free, community-first companion for the Pixelgrade LT stack (Anima LT, Style Manager, and Nova Blocks).
+* No account and no license required — install the recommended free plugins from WordPress.org and import starter content right out of the box.
+* Removed the legacy in-dashboard support overlay, the external-plugin installer, and the account/license machinery. Premium design tools now live in the optional Pixelgrade Plus companion.
+* Calmer dashboard — the header reflects your theme's health, with no connection nags.
+* Added a clear "External services" disclosure; usage data is strictly opt-in and off by default.
+* Lighter, faster admin bundle. Now requires WordPress 5.9 and PHP 7.4.
 
 = 1.4.0 =
 * Fixes and improvements throughout the plugin dashboard
