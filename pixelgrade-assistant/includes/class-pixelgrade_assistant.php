@@ -48,6 +48,11 @@ class PixelgradeAssistant {
 	public $plugin_data_collector = null;
 
 	/**
+	 * @var PixelgradeAssistant_Help
+	 */
+	public $plugin_help = null;
+
+	/**
 	 * @var PixelgradeAssistant_Notifications
 	 */
 	public $plugin_notifications = null;
@@ -163,7 +168,9 @@ class PixelgradeAssistant {
 	 * - PixelgradeAssistant_StarterContent. Defines all logic for starter content.
 	 * - PixelgradeAssistant_SetupWizard. Defines all logic for the setup wizard.
 	 * - PixelgradeAssistant_DataCollector. Defines all logic for the data collector.
-	 * - PixelgradeAssistant_Support. Defines all logic for the theme help modal (support).
+	 *
+	 * After the core modules load, the `pixassist_loaded` action fires so companion plugins
+	 * (e.g. Pixelgrade Plus) can register their own modules against the main instance.
 	 *
 	 * @access   private
 	 */
@@ -201,6 +208,12 @@ class PixelgradeAssistant {
 		$this->plugin_data_collector = PixelgradeAssistant_DataCollector::instance( $this );
 
 		/**
+		 * Theme Help: in-dashboard documentation (knowledge base) for the active theme.
+		 */
+		require_once plugin_dir_path( $this->file ) . 'admin/class-pixelgrade_assistant-help.php';
+		$this->plugin_help = PixelgradeAssistant_Help::instance( $this );
+
+		/**
 		 * The class responsible for various admin notifications.
 		 */
 		require_once plugin_dir_path( $this->file ) . 'admin/class-pixelgrade_assistant-notifications.php';
@@ -222,6 +235,17 @@ class PixelgradeAssistant {
 		 * Think of custom post types, shortcodes, and so on. Things that are not theme territory.
 		 */
 		require_once plugin_dir_path( $this->file ) . 'includes/theme-helpers.php';
+
+		/**
+		 * Fires once Pixelgrade Assistant has loaded all of its core modules.
+		 *
+		 * This is the extension point for companion plugins (e.g. Pixelgrade Plus): hook in here to
+		 * register additional modules/behavior. The main plugin instance is passed so add-ons can
+		 * reach the loaded modules (e.g. `PixelgradeAssistant()->plugin_admin`).
+		 *
+		 * @param PixelgradeAssistant $plugin The main plugin instance.
+		 */
+		do_action( 'pixassist_loaded', $this );
 	}
 
 	/**

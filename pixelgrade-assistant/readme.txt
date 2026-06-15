@@ -4,7 +4,7 @@ Tags: dashboard, starter-content, demo-content, recommended-plugins, pixelgrade
 Requires at least: 5.9
 Tested up to: 7.0
 Requires PHP: 7.4
-Stable tag: 2.0.0
+Stable tag: 2.1.0
 License: GPLv3.0
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 
@@ -22,7 +22,7 @@ It gives you a calm, in-dashboard home for getting the most out of your free Pix
 * **Documentation** links to help you along the way.
 * Behind-the-scenes compatibility logic so your theme and its companion plugins play nicely together.
 
-**No account required.** Pixelgrade Assistant works out of the box — you do not need a Pixelgrade.com account or a license to use the free stack. Connecting an account is entirely optional and only unlocks extras such as cloud starter content, account sync, and premium support (see *External services* below).
+**No account required.** Pixelgrade Assistant works out of the box — you do not need a Pixelgrade.com account or a license to use the free stack. Optional commercial features live in a separate plugin, **Pixelgrade Plus** (see below); the free stack never asks you to connect an account.
 
 Looking for more? **Pixelgrade Plus** is the optional premium companion that adds advanced design tools on top of the free stack. It is never required, and you can explore it any time from the Pixelgrade screen.
 
@@ -34,7 +34,7 @@ Pixelgrade Assistant runs almost entirely on your own site — installing recomm
 
 * **Theme configuration (pixelgrade.com).** When you open the Pixelgrade Assistant screen, the plugin requests a small configuration file for your theme from `https://pixelgrade.com` (`/wp-json/pxm/v2/front/get_config`). It sends only your theme identifier, the result is cached locally, and it is not requested on every page load or on a schedule.
 * **Starter content (demos.pixelgrade.com).** When — and only when — you click Import on the starter content, the plugin downloads your theme's demo content (text, settings, menus, and images) from `https://demos.pixelgrade.com`. Nothing is downloaded until you start an import, and no account is required.
-* **Optional usage data (pixelgrade.com).** If — and only if — you opt in, the plugin may share non-identifying information about your WordPress install so we can improve the free Pixelgrade stack and assist you faster. This is off by default.
+* **Optional usage data (cloud.pixelgrade.com).** If — and only if — you opt in, the plugin shares non-identifying information about your WordPress install — and, when you use the Customizer with Style Manager, your custom color-palette and design choices plus your site language — with the Pixelgrade Cloud API (`https://cloud.pixelgrade.com`, `/wp-json/pixcloud/v1/front/stats`) so we can improve the free Pixelgrade stack and assist you faster. This is off by default.
 
 The WordPress.org build never downloads or installs plugin code from servers other than WordPress.org.
 
@@ -103,6 +103,14 @@ No. We are not tracking you or your site. Sharing is entirely optional and off b
 6. Site setup wizard
 
 == Changelog ==
+
+= 2.1.0 =
+* New: Theme Help — browse and search your theme's documentation right inside the WordPress dashboard, no account required.
+* Finished moving account and license features out to the optional Pixelgrade Plus companion; the free plugin is now fully account-free.
+* Added extension points so companion plugins (like Pixelgrade Plus) can build on the dashboard cleanly.
+* The starter content card now always shows, regardless of any leftover connection state.
+* Fixes: bundled translations now load correctly; in-dashboard documentation resolves to the right theme; hardened starter-content downloads against unexpected sources.
+* Under the hood: modernized the build toolchain (Node 20 LTS, Dart Sass) and cleared all dependency security advisories.
 
 = 2.0.0 =
 * Reborn as the free, community-first companion for the Pixelgrade LT stack (Anima LT, Style Manager, and Nova Blocks).
