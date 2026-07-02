@@ -4,7 +4,40 @@
     },
     "scripts": {
         "test": [
-            "php tests/plus-status-contract-test.php"
+            "php tests/plus-status-contract-test.php",
+            "php tests/built-asset-test.php",
+            "php tests/starter-progress-ui-test.php",
+            "php tests/classic-editor-policy-test.php",
+            "php tests/account-test.php",
+            "php tests/host-extension-surface-test.php",
+            "php tests/admin-menu-retirement-test.php",
+            "php tests/admin-hub-test.php",
+            "php tests/admin-overview-test.php",
+            "php tests/admin-styles-test.php",
+            "php tests/admin-plugins-test.php",
+            "php tests/setup-readiness-test.php",
+            "php tests/admin-starter-sites-test.php",
+            "php tests/admin-content-patterns-test.php",
+            "php tests/starter-segments-test.php",
+            "php tests/admin-recipes-test.php",
+            "php tests/admin-layout-units-test.php",
+            "php tests/layout-units-preferences-test.php",
+            "php tests/layout-unit-preview-document-test.php",
+            "php tests/layout-unit-type-group-test.php",
+            "php tests/layout-unit-slot-test.php",
+            "php tests/recipe-test.php",
+            "php tests/layout-unit-import-test.php",
+            "php tests/layout-unit-mix-and-match-test.php",
+            "php tests/starter-content-reset-test.php",
+            "php tests/starter-media-reimport-dedup-test.php",
+            "php tests/thumbnail-backfill-test.php",
+            "php tests/admin-system-status-test.php",
+            "php tests/admin-tools-test.php",
+            "php tests/admin-help-test.php",
+            "php tests/help-kb-fetch-test.php",
+            "php tests/admin-docs-test.php",
+            "php tests/portfolio-cpt-test.php",
+            "php tests/wupdates-identification-test.php"
         ]
     }
 }

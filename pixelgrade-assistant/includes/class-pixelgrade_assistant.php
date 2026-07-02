@@ -208,7 +208,7 @@ class PixelgradeAssistant {
 		$this->plugin_data_collector = PixelgradeAssistant_DataCollector::instance( $this );
 
 		/**
-		 * Theme Help: in-dashboard documentation (knowledge base) for the active theme.
+		 * Pixelgrade Docs: documentation knowledge base helpers for the active theme.
 		 */
 		require_once plugin_dir_path( $this->file ) . 'admin/class-pixelgrade_assistant-help.php';
 		$this->plugin_help = PixelgradeAssistant_Help::instance( $this );
@@ -235,6 +235,13 @@ class PixelgradeAssistant {
 		 * Think of custom post types, shortcodes, and so on. Things that are not theme territory.
 		 */
 		require_once plugin_dir_path( $this->file ) . 'includes/theme-helpers.php';
+
+		/**
+		 * Hub-native onboarding first-run discoverability: the one-time activation redirect to the
+		 * Appearance -> Pixelgrade hub (WooCommerce-modeled). Self-contained; registers its own
+		 * activation hook + admin_init guard so the main plugin file stays untouched.
+		 */
+		require_once plugin_dir_path( $this->file ) . 'includes/onboarding-redirect.php';
 
 		/**
 		 * Fires once Pixelgrade Assistant has loaded all of its core modules.

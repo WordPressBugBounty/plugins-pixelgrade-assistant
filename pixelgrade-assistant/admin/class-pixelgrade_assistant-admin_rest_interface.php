@@ -60,12 +60,81 @@ class PixelgradeAssistant_AdminRestInterface {
 			'show_in_index'       => false, // We don't need others to know about this (API discovery)
 		) );
 
-		// Theme Help: lazily serve the (cached) public documentation categories for the active theme.
+		// Pixelgrade Docs: lazily serve the (cached) public documentation categories for the active theme.
 		register_rest_route( $namespace, '/kb_categories', array(
 			'methods'             => WP_REST_Server::READABLE,
 			'callback'            => array( $this, 'get_kb_categories' ),
+			'permission_callback' => array( $this, 'permission_docs_callback' ),
+			'show_in_index'       => false, // We don't need others to know about this (API discovery)
+		) );
+
+		// Pixelgrade Docs: serve a single article (by id or slug) for the in-editor article pop-up.
+		register_rest_route( $namespace, '/kb_article', array(
+			'methods'             => WP_REST_Server::READABLE,
+			'callback'            => array( $this, 'get_kb_article' ),
+			'permission_callback' => array( $this, 'permission_docs_callback' ),
+			'show_in_index'       => false, // We don't need others to know about this (API discovery)
+		) );
+
+		register_rest_route( $namespace, '/kb_vote', array(
+			'methods'             => WP_REST_Server::CREATABLE,
+			'callback'            => array( $this, 'record_kb_vote' ),
+			'permission_callback' => array( $this, 'permission_docs_callback' ),
+			'show_in_index'       => false, // We don't need others to know about this (API discovery)
+		) );
+
+		register_rest_route( $namespace, '/docs_ticket', array(
+			'methods'             => WP_REST_Server::CREATABLE,
+			'callback'            => array( $this, 'submit_docs_ticket' ),
+			'permission_callback' => array( $this, 'permission_docs_callback' ),
+			'show_in_index'       => false, // We don't need others to know about this (API discovery)
+		) );
+
+		// Hub-native onboarding: persist the "Get started" card dismissal so it stays hidden.
+		register_rest_route( $namespace, '/onboarding_dismiss', array(
+			'methods'             => WP_REST_Server::CREATABLE,
+			'callback'            => array( $this, 'dismiss_onboarding' ),
 			'permission_callback' => array( $this, 'permission_nonce_callback' ),
 			'show_in_index'       => false, // We don't need others to know about this (API discovery)
+		) );
+	}
+
+	/**
+	 * Persist the onboarding "Get started" card dismissal.
+	 *
+	 * Writes only into `pixassist_options['onboarding']` (the Phase 1 marker) — it never touches any
+	 * other option or meta key. The card hides client-side optimistically; this makes it stick.
+	 *
+	 * @param WP_REST_Request $request Request object.
+	 *
+	 * @return WP_REST_Response
+	 */
+	public function dismiss_onboarding( $request ) {
+
+		$onboarding = PixelgradeAssistant_Admin::get_option( 'onboarding' );
+		if ( ! is_array( $onboarding ) ) {
+			$onboarding = array();
+		}
+
+		$onboarding['dismissed']    = true;
+		$onboarding['dismissed_at'] = time();
+
+		PixelgradeAssistant_Admin::set_option( 'onboarding', $onboarding );
+
+		if ( false === PixelgradeAssistant_Admin::save_options() ) {
+			return rest_ensure_response( array(
+				'code'    => 'error_saving',
+				'message' => esc_html__( 'Something went wrong. Could not dismiss the guide.', 'pixelgrade_assistant' ),
+				'data'    => array(),
+			) );
+		}
+
+		return rest_ensure_response( array(
+			'code'    => 'success',
+			'message' => esc_html__( 'Guide dismissed.', 'pixelgrade_assistant' ),
+			'data'    => array(
+				'dismissed' => true,
+			),
 		) );
 	}
 
@@ -89,6 +158,39 @@ class PixelgradeAssistant_AdminRestInterface {
 	}
 
 	/**
+	 * Return a single documentation article (by id or slug/url) for the in-editor pop-up.
+	 *
+	 * @param WP_REST_Request $request
+	 *
+	 * @return WP_REST_Response
+	 */
+	public function get_kb_article( $request ) {
+		return rest_ensure_response( pixassist_get_docs_article( $request ) );
+	}
+
+	/**
+	 * Record a documentation helpful/not-helpful vote.
+	 *
+	 * @param WP_REST_Request $request Request object.
+	 *
+	 * @return WP_REST_Response
+	 */
+	public function record_kb_vote( $request ) {
+		return rest_ensure_response( pixassist_record_docs_vote( $request ) );
+	}
+
+	/**
+	 * Submit a docs-panel support request through the host account.
+	 *
+	 * @param WP_REST_Request $request Request object.
+	 *
+	 * @return WP_REST_Response
+	 */
+	public function submit_docs_ticket( $request ) {
+		return rest_ensure_response( pixassist_submit_docs_ticket( $request ) );
+	}
+
+	/**
 	 * @param WP_REST_Request $request
 	 *
 	 * @return false|int
@@ -97,6 +199,21 @@ class PixelgradeAssistant_AdminRestInterface {
 		// Defense in depth: these are admin dashboard endpoints, so require the dashboard
 		// capability in addition to the custom nonce.
 		if ( ! current_user_can( 'manage_options' ) ) {
+			return false;
+		}
+
+		return (bool) wp_verify_nonce( $this->get_nonce( $request ), 'pixelgrade_assistant_rest' );
+	}
+
+	/**
+	 * Check docs-panel REST permissions.
+	 *
+	 * @param WP_REST_Request $request Request object.
+	 *
+	 * @return bool
+	 */
+	public function permission_docs_callback( $request ) {
+		if ( ! function_exists( 'pixassist_docs_can_access' ) || ! pixassist_docs_can_access() ) {
 			return false;
 		}
 

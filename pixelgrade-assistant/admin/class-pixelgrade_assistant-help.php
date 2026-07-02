@@ -4,7 +4,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * Theme Help: in-dashboard documentation (knowledge base) for the active theme.
+ * Pixelgrade Docs: documentation knowledge base helpers for the active theme.
  *
  * Free and account-free by design: it reads the PUBLIC Pixelgrade docs categories endpoint
  * (`get_htkb_categories`) — no AWS/ElasticSearch, no OAuth, no license, no support tickets
@@ -118,6 +118,11 @@ class PixelgradeAssistant_Help {
 			}
 		}
 
+		// Anima LT (placeholder hash QBAXY) is now a registered pixelgrade.com product whose KB is
+		// resolved by the theme SKU sent below (kb_current_product_sku, e.g. anima-lt) — exactly like
+		// get_remote_config(). With its docs_article_groups populated on the server, the round-trip
+		// returns the full LT knowledge base, so we no longer short-circuit on the placeholder hash.
+		// A genuinely unregistered SKU just comes back empty (missing_sku) and is cached as such. See #59.
 		$endpoint = self::get_categories_endpoint();
 
 		$response = wp_remote_get(
@@ -152,7 +157,7 @@ class PixelgradeAssistant_Help {
 
 	/**
 	 * Expose lightweight help metadata to JS. The full docs payload is NOT shipped on every page
-	 * load — it is fetched lazily over REST when the user opens the Theme Help panel.
+	 * load; it is fetched lazily over REST when the user opens the editor docs panel.
 	 *
 	 * @param array $localized_data
 	 *

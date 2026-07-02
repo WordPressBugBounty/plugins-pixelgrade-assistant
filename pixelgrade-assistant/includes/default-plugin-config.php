@@ -20,19 +20,6 @@ function pixassist_get_default_config( $original_theme_slug ) {
 		'hashidNotFoundNotice'                          => esc_html__( 'Sorry but we could not recognize your theme. This might have happened because you have made changes to the functions.php file. If that is the case - please try to revert to the original contents of that file and retry to validate your theme license.', 'pixelgrade_assistant' ),
 		'themeUpdateButton'                             => esc_html__( 'Update now', 'pixelgrade_assistant' ),
 		'themeChangelogLink'                            => esc_html__( 'View changelog', 'pixelgrade_assistant' ),
-		'kbButton'                                      => esc_html__( 'Theme Help', 'pixelgrade_assistant' ),
-		'themeHelpSearchPlaceholder'                    => esc_html__( 'Search the documentation…', 'pixelgrade_assistant' ),
-		'themeHelpLoading'                              => esc_html__( 'Loading documentation…', 'pixelgrade_assistant' ),
-		'themeHelpAllTopics'                            => esc_html__( 'All topics', 'pixelgrade_assistant' ),
-		'themeHelpBack'                                 => esc_html__( 'Back', 'pixelgrade_assistant' ),
-		'themeHelpNoResults'                            => esc_html__( 'No matching articles.', 'pixelgrade_assistant' ),
-		'themeHelpFeedbackPrompt'                       => esc_html__( 'Was this helpful?', 'pixelgrade_assistant' ),
-		'themeHelpFeedbackYes'                          => esc_html__( 'Yes', 'pixelgrade_assistant' ),
-		'themeHelpFeedbackNo'                           => esc_html__( 'No', 'pixelgrade_assistant' ),
-		'themeHelpFeedbackThanks'                       => esc_html__( 'Thanks for your feedback!', 'pixelgrade_assistant' ),
-		'themeHelpReadOnline'                           => esc_html__( 'Read this article online', 'pixelgrade_assistant' ),
-		'themeHelpFallback'                             => esc_html__( 'Browse the full documentation for step-by-step guides and answers.', 'pixelgrade_assistant' ),
-		'themeHelpBrowseDocs'                           => esc_html__( 'Browse the documentation', 'pixelgrade_assistant' ),
 		'Error500Text'                                  => esc_html__( 'Oh, snap! Something went wrong and we are unable to make sense of the actual problem.', 'pixelgrade_assistant' ),
 		'Error500Link'                                  => trailingslashit( PIXELGRADE_ASSISTANT__SHOP_BASE ) . 'docs/guides-and-resources/server-errors-handling',
 		'Error400Text'                                  => esc_html__( 'There is something wrong with the current setup of this WordPress installation.', 'pixelgrade_assistant' ),
@@ -152,7 +139,7 @@ function pixassist_get_default_config( $original_theme_slug ) {
 							'type'  => 'button',
 							'class' => 'btn btn--large',
 							'label' => esc_html__( 'View and Customize', 'pixelgrade_assistant' ),
-							'url'   => '{{customizer_url}}?return=' . urlencode( admin_url( 'admin.php?page=pixelgrade_assistant' ) ),
+							'url'   => '{{customizer_url}}?return=' . urlencode( admin_url( 'themes.php?page=pixelgrade' ) ),
 						),
 					),
 				),
@@ -450,7 +437,8 @@ function pixassist_get_default_config( $original_theme_slug ) {
 				'required'    => esc_html__( 'Core plugins needed for your website (required).', 'pixelgrade_assistant' ),
 				'recommended' => esc_html__( 'Recommended plugins to enhance your website.', 'pixelgrade_assistant' ),
 			),
-			'noPlugins'                 => esc_html__( 'No plugins needed at this time.', 'pixelgrade_assistant' ),
+			'noPluginsTitle'            => esc_html__( 'You are all set', 'pixelgrade_assistant' ),
+			'noPlugins'                 => esc_html__( 'There are no recommended plugins for this theme right now.', 'pixelgrade_assistant' ),
 		),
 	);
 
@@ -501,8 +489,10 @@ function pixassist_get_default_config( $original_theme_slug ) {
 	);
 
 	// Local recommended companions for the free LT stack — installed from WordPress.org by slug.
-	// Filterable so the team / a commercial build can adjust the list (e.g. add Style Manager once
-	// it is re-published on wp.org, or add account-gated companions via Pixelgrade Plus).
+	// Both power the free Anima starters (Nova Blocks supplies the page blocks, Style Manager the
+	// palette + fonts), so the starter-import dependency gate expects both to be active.
+	// Filterable so the team / a commercial build can adjust the list (e.g. add account-gated
+	// companions via Pixelgrade Plus).
 	$config['requiredPlugins'] = array(
 		'plugins' => apply_filters( 'pixassist_recommended_plugins', array(
 			array(
@@ -512,6 +502,14 @@ function pixassist_get_default_config( $original_theme_slug ) {
 				'order'       => 10,
 				'selected'    => true,
 				'description' => esc_html__( 'Beautiful, flexible content blocks that power the Pixelgrade LT design experience.', 'pixelgrade_assistant' ),
+			),
+			array(
+				'name'        => 'Style Manager',
+				'slug'        => 'style-manager',
+				'required'    => false,
+				'order'       => 20,
+				'selected'    => true,
+				'description' => esc_html__( 'Smart color palettes and font pairings that keep your whole site looking consistent and on-brand.', 'pixelgrade_assistant' ),
 			),
 		) ),
 	);

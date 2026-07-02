@@ -120,8 +120,10 @@ class PixelgradeAssistant_Admin {
 	    // Make sure TGMPA is loaded.
 	    require_once plugin_dir_path( $this->parent->file ) . 'admin/required-plugins/class-tgm-plugin-activation.php';
 
-	    // Make sure the Gutenberg vs Classic Editor logic is loaded.
-	    require_once plugin_dir_path( $this->parent->file ) . 'vendor/classic-editor/classic-editor.php';
+	    // Load the bundled Classic Editor only for themes that explicitly require it.
+	    if ( pixassist_theme_requires_classic_editor( PixelgradeAssistant::get_theme_config() ) ) {
+		    require_once plugin_dir_path( $this->parent->file ) . 'vendor/classic-editor/classic-editor.php';
+	    }
 
 	    // Fill up the WUpdates identification data for missing entities that we can deduce through other means.
 	    // This mostly addresses WordPress.org themes that don't have the WUpdates identification data.
@@ -159,21 +161,73 @@ class PixelgradeAssistant_Admin {
 			    'method' => 'POST',
 			    'url'    => esc_url_raw( rest_url() . 'pixassist/v1/cleanup' ),
 		    ),
+		    'resetStarterContent' => array(
+			    'method' => 'POST',
+			    'url'    => esc_url_raw( rest_url() . 'pixassist/v1/reset_starter_content' ),
+		    ),
 
-		    // Theme Help documentation categories (fetched lazily when the panel opens).
+			    // Pixelgrade Docs documentation categories (fetched lazily when the editor sidebar opens).
 		    'kbCategories'       => array(
 			    'method' => 'GET',
 			    'url'    => esc_url_raw( rest_url() . 'pixassist/v1/kb_categories' ),
 		    ),
 
 		    // Starter content needed endpoints
-		    'import'             => array(
+			    'import'             => array(
+				    'method' => 'POST',
+				    'url'    => esc_url_raw( rest_url() . 'pixassist/v1/import' ),
+			    ),
+			    'importStarter'      => array(
+				    'method' => 'POST',
+				    'url'    => esc_url_raw( rest_url() . 'pixassist/v1/import_starter' ),
+			    ),
+			    'uploadMedia'        => array(
+				    'method' => 'POST',
+				    'url'    => esc_url_raw( rest_url() . 'pixassist/v1/upload_media' ),
+			    ),
+		    'layoutUnits'        => array(
 			    'method' => 'POST',
-			    'url'    => esc_url_raw( rest_url() . 'pixassist/v1/import' ),
+			    'url'    => esc_url_raw( rest_url() . 'pixassist/v1/layout_units' ),
 		    ),
-		    'uploadMedia'        => array(
+		    'contentUnits'       => array(
 			    'method' => 'POST',
-			    'url'    => esc_url_raw( rest_url() . 'pixassist/v1/upload_media' ),
+			    'url'    => esc_url_raw( rest_url() . 'pixassist/v1/content_units' ),
+		    ),
+			    'importUnit'         => array(
+				    'method' => 'POST',
+				    'url'    => esc_url_raw( rest_url() . 'pixassist/v1/import_unit' ),
+			    ),
+		    'importContentUnit'  => array(
+			    'method' => 'POST',
+			    'url'    => esc_url_raw( rest_url() . 'pixassist/v1/import_content_unit' ),
+		    ),
+			    'queueUnit'          => array(
+				    'method' => 'POST',
+				    'url'    => esc_url_raw( rest_url() . 'pixassist/v1/queue_unit' ),
+			    ),
+			    'unitJobStatus'      => array(
+				    'method' => 'POST',
+				    'url'    => esc_url_raw( rest_url() . 'pixassist/v1/unit_job_status' ),
+			    ),
+			    'undoUnit'           => array(
+				    'method' => 'POST',
+				    'url'    => esc_url_raw( rest_url() . 'pixassist/v1/undo_unit' ),
+			    ),
+		    'undoContentUnit'    => array(
+			    'method' => 'POST',
+			    'url'    => esc_url_raw( rest_url() . 'pixassist/v1/undo_content_unit' ),
+		    ),
+		    'recipes'            => array(
+			    'method' => 'POST',
+			    'url'    => esc_url_raw( rest_url() . 'pixassist/v1/recipes' ),
+		    ),
+		    'applyRecipe'        => array(
+			    'method' => 'POST',
+			    'url'    => esc_url_raw( rest_url() . 'pixassist/v1/apply_recipe' ),
+		    ),
+		    'undoRecipe'         => array(
+			    'method' => 'POST',
+			    'url'    => esc_url_raw( rest_url() . 'pixassist/v1/undo_recipe' ),
 		    ),
 
 		    'dataCollect'        => array(
@@ -211,10 +265,13 @@ class PixelgradeAssistant_Admin {
 
 		add_action( 'admin_menu', array( $this, 'add_pixelgrade_assistant_menu' ) );
 
-		add_action( 'current_screen', array( $this, 'add_tabs' ) );
-
 		add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_styles' ) );
 		add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_scripts' ) );
+		add_action( 'enqueue_block_editor_assets', array( $this, 'enqueue_docs_editor_assets' ) );
+		// The docs window follows the user across all of wp-admin: enqueue it on any admin page while
+		// it's open (cookie) or when explicitly opened (?pixassist_open_docs), plus always in the editor.
+		add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_docs_window' ) );
+		add_action( 'admin_bar_menu', array( $this, 'add_docs_admin_bar_node' ), 100 );
 
 		// We we will remember the theme version when the transient is updated
 		add_filter( 'pre_set_site_transient_update_themes', array(
@@ -266,30 +323,73 @@ class PixelgradeAssistant_Admin {
      * Register the stylesheets for the admin area.
      */
     public function enqueue_styles() {
-        if ( self::is_pixelgrade_assistant_dashboard() ) {
-        	$rtl_suffix = is_rtl() ? '-rtl' : '';
-        	wp_enqueue_style( $this->parent->get_plugin_name(), plugin_dir_url( $this->parent->file ) . 'admin/css/pixelgrade_assistant-admin' . $rtl_suffix . '.css', array( 'dashicons' ), $this->parent->get_version(), 'all' );
+        if ( self::is_pixelgrade_admin_hub() ) {
+            // The modern hub shell is built on @wordpress/components; load WP core's component styles.
+            wp_enqueue_style( 'wp-components' );
+            // Self-contained Help/KB panel styles (master-detail layout, feedback, escalation).
+            self::enqueue_help_panel_style();
         }
     }
+
+	/**
+	 * Enqueue the self-contained Help/KB panel stylesheet.
+	 *
+	 * Scoped under .pixelgrade-docs and kept separate from the legacy admin CSS so neither the hub
+	 * nor the editor sidebar inherits the old dashboard globals. Used by the Help hub tab and the
+	 * contextual editor docs sidebar (both render src-modern/docs/KbPanel.js).
+	 */
+	public static function enqueue_help_panel_style() {
+		$relative = 'admin/css/help.css';
+		$path     = PIXELGRADE_ASSISTANT__PLUGIN_DIR . $relative;
+		$version  = file_exists( $path ) ? filemtime( $path ) : false;
+
+		wp_enqueue_style(
+			'pixelgrade-help',
+			plugin_dir_url( PIXELGRADE_ASSISTANT__PLUGIN_FILE ) . $relative,
+			array( 'wp-components' ),
+			$version
+		);
+	}
 
     /**
      * Register the JavaScript for the admin area.
      */
     public function enqueue_scripts() {
-	    $suffix = ( defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ) ? '' : '.min';
-
-        if ( self::is_pixelgrade_assistant_dashboard() ) {
-	        wp_enqueue_script( 'plugin-install' );
+        if ( self::is_pixelgrade_admin_hub() ) {
+            // Modern host shell (admin/src-modern/hub) built via @wordpress/scripts (#41).
+            // Dependencies + cache-busting version come from the build manifest; the visible tab list
+            // is collected/capability-gated/sorted server-side from the #42 registry.
+            wp_enqueue_script( 'plugin-install' );
             wp_enqueue_script( 'updates' );
-            wp_enqueue_script( 'pixelgrade_assistant-dashboard', plugin_dir_url( $this->parent->file ) . 'admin/js/dashboard' . $suffix . '.js', array(
-                'jquery',
-                'wp-util',
-	            'wp-a11y',
-	            'updates',
-	            'plugin-install'
-            ), $this->parent->get_version(), true );
-
-            self::localize_js_data( 'pixelgrade_assistant-dashboard', true, 'dashboard');
+            $handle = pixassist_enqueue_built_script( 'pixelgrade-admin-hub', 'index', array( 'plugin-install', 'updates' ) );
+            wp_localize_script( $handle, 'pixelgradeAdminHub', pixassist_get_admin_hub_data() );
+            // The free Overview tab (#44) reads its own bootstrap payload (theme status, quick links,
+            // Plus discovery card). Tab-specific data channel, kept out of the generic hub bootstrap.
+            wp_localize_script( $handle, 'pixelgradeOverview', pixassist_get_overview_data() );
+            // The free Styles tab keeps the hub navigation stable and routes into the editor only from
+            // explicit style actions.
+            wp_localize_script( $handle, 'pixelgradeStyles', pixassist_get_styles_data() );
+            // The free Plugins tab (#48) reuses the existing TGMPA/recommended-plugins source and
+            // exposes only normalized UI data to the modern tab.
+            wp_localize_script( $handle, 'pixelgradePlugins', pixassist_get_plugins_data() );
+            // The mixed Starter Sites tab (#49) reuses the existing free starter-content config and
+            // lets Plus inject premium starters through the documented PHP filter.
+            wp_localize_script( $handle, 'pixelgradeStarterSites', pixassist_get_starter_sites_data() );
+            // Recipes are source-as-recipe presets over the granular layout-unit importer.
+            wp_localize_script( $handle, 'pixelgradeRecipes', pixassist_get_recipes_data() );
+            wp_localize_script( $handle, 'pixelgradeLayoutUnits', pixassist_get_layout_units_data() );
+            wp_localize_script( $handle, 'pixelgradeContentPatterns', pixassist_get_content_patterns_data() );
+            // Secondary diagnostics/maintenance tabs (#50), sourced from existing Assistant REST
+            // endpoints and data collectors.
+            wp_localize_script( $handle, 'pixelgradeSystemStatus', pixassist_get_system_status_data() );
+            wp_localize_script( $handle, 'pixelgradeTools', pixassist_get_tools_data() );
+            // The free Account tab (#45) reads identity + action URLs only. OAuth credentials stay
+            // PHP-only via pixassist_get_account_credentials() and are never localized.
+            wp_localize_script( $handle, 'pixelgradeAccount', pixassist_get_account_data() );
+            // The free Help tab (#47) reuses the editor docs KB data layer; keep its bootstrap on a
+            // tab-specific global so the hub shell stays generic.
+            wp_localize_script( $handle, 'pixelgradeHelp', pixassist_get_docs_data() );
+            self::localize_js_data( $handle, true, 'hub' );
         }
 
 	    // If we are in a block editor page, we need to localize our data since NovaBlocks might make use of it.
@@ -298,6 +398,74 @@ class PixelgradeAssistant_Admin {
 		    self::localize_js_data( 'wp-block-editor', true, 'editor' );
 	    }
     }
+
+	/**
+	 * Register the contextual Pixelgrade Docs sidebar on block editor screens.
+	 */
+	public function enqueue_docs_editor_assets() {
+		if ( ! function_exists( 'pixassist_docs_can_access' ) || ! pixassist_docs_can_access() ) {
+			return;
+		}
+
+		$handle = pixassist_enqueue_built_script( 'pixelgrade-docs', 'docs' );
+		self::enqueue_help_panel_style();
+		wp_localize_script( $handle, 'pixelgradeDocs', pixassist_get_docs_data() );
+		self::localize_js_data( $handle, true, 'editor' );
+	}
+
+	/**
+	 * Enqueue the editor-agnostic docs WINDOW on any admin page so it can follow the user across
+	 * wp-admin. Loaded only when needed — in the block editor (always), or on a plain admin page while
+	 * the window is open (the `pixassist_docs_open` cookie) or explicitly opened (?pixassist_open_docs)
+	 * — so closed-docs pages pay zero cost. The window bundle has no editor dependencies.
+	 */
+	public function enqueue_docs_window() {
+		if ( ! function_exists( 'pixassist_docs_can_access' ) || ! pixassist_docs_can_access() ) {
+			return;
+		}
+
+		$screen     = function_exists( 'get_current_screen' ) ? get_current_screen() : null;
+		$is_editor  = $screen && method_exists( $screen, 'is_block_editor' ) && $screen->is_block_editor();
+		$cookie_open = ! empty( $_COOKIE['pixassist_docs_open'] );
+		$param_open  = ! empty( $_GET['pixassist_open_docs'] ); // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- read-only UI hint, no state change.
+
+		if ( ! $is_editor && ! $cookie_open && ! $param_open ) {
+			return;
+		}
+
+		$handle = pixassist_enqueue_built_script( 'pixelgrade-docs-window', 'docs-window' );
+		self::enqueue_help_panel_style();
+
+		$data = pixassist_get_docs_data();
+		if ( $param_open ) {
+			// Opened from the admin-bar link on a plain page: tell the window to open the browser.
+			$data['autoOpen'] = true;
+		}
+		wp_localize_script( $handle, 'pixelgradeDocs', $data );
+		self::localize_js_data( $handle, true, 'editor' );
+	}
+
+	/**
+	 * Admin-bar "Pixelgrade Docs" toggle — opens the floating docs window from any wp-admin page
+	 * (where there's no editor toolbar). It links to the current page with ?pixassist_open_docs=1;
+	 * once open, the cookie keeps it following the user. Closing it (the window's × ) clears the cookie.
+	 */
+	public function add_docs_admin_bar_node( $wp_admin_bar ) {
+		if ( ! is_admin() || ! is_admin_bar_showing() ) {
+			return;
+		}
+
+		if ( ! function_exists( 'pixassist_docs_can_access' ) || ! pixassist_docs_can_access() ) {
+			return;
+		}
+
+		$wp_admin_bar->add_node( array(
+			'id'    => 'pixassist-docs',
+			'title' => '<span class="ab-icon dashicons dashicons-art" aria-hidden="true" style="top:2px;"></span>' . esc_html__( 'Design Docs', 'pixelgrade_assistant' ),
+			'href'  => esc_url( add_query_arg( 'pixassist_open_docs', '1' ) ),
+			'meta'  => array( 'title' => esc_attr__( 'Open Pixelgrade design & site-building docs', 'pixelgrade_assistant' ) ),
+		) );
+	}
 
     /**
      * Check if everything is in order with the theme's support for Pixelgrade Assistant.
@@ -357,95 +525,14 @@ class PixelgradeAssistant_Admin {
 	 * Adds the WP Admin menus
 	 */
 	public function add_pixelgrade_assistant_menu() {
-        // First determine if we should show a "Heads Up" bubble next to the main  admin menu item.
-        // We will show it when the license is expired, not connected or activated.
-        $show_bubble = false;
-        // If the theme directory has been changed, show bubble.
-        $theme_checks = self::get_theme_checks();
-        // The theme-integrity check yields false positives on legitimate fresh installs
-        // (wp.org / GitHub / Studio), so this bubble is a commercial-only signal — no nag for free users.
-        if ( pixassist_is_commercial() && ( ! $theme_checks['has_original_name'] || ! $theme_checks['has_original_directory'] ) ) {
-            $show_bubble = true;
-        }
-
-		// The account/license "Heads Up" bubble is a commercial concern handled by Pixelgrade Plus.
-		// Free users must never see an account/license nag. Fail-safe: gate behind the commercial flag.
-		// TODO (M2): move account/license bubble ownership into Pixelgrade Plus via an extension point.
-		if ( pixassist_is_commercial() ) {
-			$current_user = self::get_theme_activation_user();
-			if ( empty( $current_user ) || empty( $current_user->ID ) ) {
-				$show_bubble = true;
-			} else {
-				// Check if we are not connected.
-				$pixelgrade_user_login = get_user_meta( $current_user->ID, 'pixelgrade_user_login', true );
-				if ( empty( $pixelgrade_user_login ) ) {
-					$show_bubble = true;
-				} else {
-					// We are connected.
-					// Show bubble if the license is expired.
-					$license_status = self::get_license_mod_entry( 'license_status' );
-					if ( empty( $license_status ) || in_array( $license_status, array( 'expired' ) ) ) {
-						$show_bubble = true;
-					}
-				}
-			}
-		}
-
-        // Show bubble if we have an update notification.
-        $new_theme_version = get_theme_mod( 'pixassist_new_theme_version' );
-        $theme_support     = self::get_theme_support();
-        if ( ! empty( $new_theme_version['new_version'] ) && ! empty( $theme_support['theme_version'] ) && version_compare( $theme_support['theme_version'], $new_theme_version['new_version'], '<' ) ) {
-            $show_bubble = true;
-        }
-
-        // Show bubble if there are required plugins not activated.
-		/** @var TGM_Plugin_Activation $tgmpa */
-		global $tgmpa;
-		// Bail if we have nothing to work with
-		if ( ! empty( $tgmpa ) && ! empty( $tgmpa->plugins ) ) {
-			foreach ( $tgmpa->plugins as $slug => $plugin ) {
-				if ( $tgmpa->is_plugin_active( $slug ) && false === $tgmpa->does_plugin_have_update( $slug ) ) {
-					continue;
-				}
-
-				if ( ! $tgmpa->is_plugin_installed( $slug ) ) {
-					if ( true === $plugin['required'] ) {
-						$show_bubble = true;
-						break;
-					}
-				} else {
-					if ( ! $tgmpa->is_plugin_active( $slug ) && $tgmpa->can_plugin_activate( $slug ) ) {
-						if ( true === $plugin['required'] ) {
-							$show_bubble = true;
-							break;
-						}
-					}
-
-					if ( $tgmpa->does_plugin_require_update( $slug ) || false !== $tgmpa->does_plugin_have_update( $slug ) ) {
-						if ( true === $plugin['required'] ) {
-							$show_bubble = true;
-							break;
-						}
-					}
-				}
-			}
-		}
-
-        // Allow others to force or prevent the bubble from showing
-		$show_bubble = apply_filters( 'pixassist_show_menu_notification_bubble', $show_bubble );
-
-        $bubble_markup = '';
-        if ( $show_bubble ) {
-            $bubble_markup = ' <span class="awaiting-mod"><span class="pending-count">!!︎</span></span>';
-        }
-        add_menu_page( esc_html__( 'Pixelgrade Assistant Dashboard', 'pixelgrade_assistant' ), esc_html__( 'Pixelgrade', 'pixelgrade_assistant' ) . $bubble_markup, 'install_themes', 'pixelgrade_assistant', array(
-            $this,
-            'pixelgrade_assistant_options_page',
-        ), plugin_dir_url( $this->parent->file ) . 'admin/images/pixelgrade-menu-image.svg', 2 );
-        add_submenu_page( 'pixelgrade_assistant', esc_html__( 'Dashboard', 'pixelgrade_assistant' ), esc_html__( 'Dashboard', 'pixelgrade_assistant' ), 'manage_options', 'pixelgrade_assistant', array(
-            $this,
-            'pixelgrade_assistant_options_page',
-        ) );
+        add_submenu_page(
+            'themes.php',
+            esc_html__( 'Pixelgrade Design', 'pixelgrade_assistant' ),
+            esc_html__( 'Pixelgrade Design', 'pixelgrade_assistant' ),
+            'edit_theme_options',
+            'pixelgrade',
+            array( $this, 'render_admin_hub_page' )
+        );
     }
 
     /**
@@ -494,7 +581,7 @@ class PixelgradeAssistant_Admin {
 		    ),
 		    'systemStatus'   => PixelgradeAssistant_DataCollector::get_system_status_data(),
 		    'siteUrl'        => home_url( '/' ),
-		    'dashboardUrl'   => admin_url( 'admin.php?page=pixelgrade_assistant' ),
+		    'dashboardUrl'   => admin_url( 'themes.php?page=pixelgrade' ),
 		    'adminUrl'       => admin_url(),
 		    'themesUrl'      => admin_url( 'themes.php' ),
 		    'customizerUrl'  => admin_url( 'customize.php' ),
@@ -659,22 +746,14 @@ class PixelgradeAssistant_Admin {
     }
 
     /**
-     * Add Contextual help tabs.
+     * Render the modern Appearance -> Pixelgrade hub page.
+     *
+     * Outputs only the React mount node; the shell (admin/src-modern/hub) renders the tab bar and the
+     * active tab, bootstrapped from the data localized in enqueue_scripts(). See issue #43.
      */
-    public function add_tabs() {
-        $screen = get_current_screen();
-        $screen->add_help_tab( array(
-            'id'      => 'pixelgrade_assistant_setup_wizard_tab',
-            'title'   => esc_html__( 'Pixelgrade Assistant', 'pixelgrade_assistant' ),
-            'content' =>
-                '<h2>' . esc_html__( 'Pixelgrade Assistant Site Setup', 'pixelgrade_assistant' ) . '</h2>' .
-                '<p><a href="' . esc_url( admin_url( 'admin.php?page=pixelgrade_assistant-setup-wizard' ) ) . '" class="button button-primary">' . esc_html__( 'Setup Pixelgrade Assistant', 'pixelgrade_assistant' ) . '</a></p>',
-        ) );
-    }
-
-    public function pixelgrade_assistant_options_page() { ?>
-        <div class="pixelgrade_assistant-wrapper">
-            <div id="pixelgrade_assistant_dashboard"></div>
+    public function render_admin_hub_page() { ?>
+        <div class="wrap">
+            <div id="pixelgrade-admin-hub"></div>
         </div>
         <?php
     }
@@ -851,12 +930,12 @@ class PixelgradeAssistant_Admin {
     }
 
 	/**
-	 * Determine if we are looking at the Pixelgrade Assistant dashboard WP Admin page.
+	 * Determine if we are looking at the modern Appearance -> Pixelgrade hub page (slug `pixelgrade`).
 	 *
 	 * @return bool
 	 */
-	public static function is_pixelgrade_assistant_dashboard() {
-        if ( ! empty( $_GET['page'] ) && 'pixelgrade_assistant' === $_GET['page'] ) {
+	public static function is_pixelgrade_admin_hub() {
+        if ( ! empty( $_GET['page'] ) && 'pixelgrade' === $_GET['page'] ) {
             return true;
         }
         return false;
@@ -1048,9 +1127,16 @@ class PixelgradeAssistant_Admin {
 		if ( ! empty( $final_config['starterContent']['demos'] ) ) {
 			foreach ( $final_config['starterContent']['demos'] as $key => $demo_config ) {
 
-				// By default all demos are applicable to our premium theme types.
+				// A demo with no explicit applicableTypes applies to every theme variant it is served
+				// for — including free wp.org themes (theme_wporg / theme_modular_wporg). Defaulting to
+				// premium-only types here wrongly hid free starter sites for Anima LT. See #59.
 				if ( empty( $demo_config['applicableTypes'] ) ) {
-					$final_config['starterContent']['demos'][ $key ]['applicableTypes'] = $demo_config['applicableTypes'] = array('theme', 'theme_modular');
+					$default_types = array( 'theme', 'theme_modular', 'theme_wporg', 'theme_modular_wporg' );
+					$current_type  = self::get_theme_type();
+					if ( ! empty( $current_type ) && ! in_array( $current_type, $default_types, true ) ) {
+						$default_types[] = $current_type;
+					}
+					$final_config['starterContent']['demos'][ $key ]['applicableTypes'] = $demo_config['applicableTypes'] = $default_types;
 				}
 
 				if ( ! self::isApplicableToCurrentThemeType( $demo_config ) ) {
@@ -1085,6 +1171,11 @@ class PixelgradeAssistant_Admin {
             return false;
         }
 
+	    // Anima (placeholder hash QBAXY) is now resolvable for get_config via its registered
+	    // pixelgrade.com product, disambiguated by the theme SKU sent in the request body below — so we
+	    // no longer skip the round-trip here. The KB (get_htkb_categories) likewise resolves by SKU now
+	    // that the Anima LT product's docs_article_groups are populated. See #59.
+
 	    $config = false;
 
         // We will cache this config for a little while, just enough to avoid getting hammered by a broken theme mod entry
@@ -1109,6 +1200,10 @@ class PixelgradeAssistant_Admin {
                 'blocking'  => true,
                 'body' => array(
                     'hash_id' => $theme_id,
+                    // The theme SKU (e.g. anima-lt) disambiguates products that share a hash. Anima's
+                    // hash (QBAXY) is shared by every premium LT product, so without the SKU the
+                    // Manager cannot resolve which product config to return. See #59.
+                    'sku'     => self::get_original_theme_slug(),
                     // This is the Pixelgrade Assistant Manager configuration version, not the API version
                     // @todo this parameter naming is quite confusing
                     'version' => self::$pixelgrade_assistant_manager_api_version,
@@ -1165,6 +1260,23 @@ class PixelgradeAssistant_Admin {
 
 	    return delete_transient( self::_get_remote_config_cache_key( $theme_id ) );
     }
+
+	/**
+	 * Whether a theme hash is a known placeholder for a theme that is NOT (yet) registered as a
+	 * pixelgrade.com product, so remote get_config / KB lookups would fail (invalid_hash_id /
+	 * missing_sku). Currently only Anima's placeholder `QBAXY` (anima / anima-lt) — Anima was never
+	 * sold. Replaced with the real hash once Anima is registered, at which point this guard
+	 * auto-disables. See issue #59.
+	 *
+	 * @param string $hash Theme hash id.
+	 *
+	 * @return bool
+	 */
+	public static function is_unregistered_product_hash( $hash ) {
+		$placeholders = array( 'QBAXY' );
+
+		return in_array( (string) $hash, $placeholders, true );
+	}
 
 	/**
      * Gets the default, hardcoded config.
@@ -1471,6 +1583,9 @@ class PixelgradeAssistant_Admin {
 	}
 
 	public static function maybe_fill_up_wupdates_identification_data( $wupdates_data ) {
+		if ( ! is_array( $wupdates_data ) ) {
+			$wupdates_data = array();
+		}
 
     	// Maybe tackle the current active theme.
 		$theme_slug = basename( get_template_directory() );
@@ -1482,7 +1597,7 @@ class PixelgradeAssistant_Admin {
 			// We need to know if we have made changes to the data.
 			$theme_data_changed = false;
 
-			if ( ! isset( $wupdates_data[ $theme_slug ] ) ) {
+			if ( ! isset( $wupdates_data[ $theme_slug ] ) || ! is_array( $wupdates_data[ $theme_slug ] ) ) {
 				$wupdates_data[ $theme_slug ] = array();
 			}
 
@@ -1509,6 +1624,11 @@ class PixelgradeAssistant_Admin {
 			if ( empty( $wupdates_data[ $theme_slug ]['id'] ) ) {
 				// We will use this hardcoded list of slugs and matching hash IDs.
 				$slug_to_hashid_map = array(
+					// Anima ships a commercial distribution (slug `anima`) and a bare WordPress.org
+					// distribution (slug `anima-lt`) that omits the embedded WUpdates registration;
+					// both resolve to the same product hash so the free LT build is still recognized.
+					'anima' => 'QBAXY',
+					'anima-lt' => 'QBAXY',
 					'gema' => 'ML4Gm',
 					'gema-lite' => 'ML4Gm',
 					'hive' => 'PMAGv',
@@ -1647,7 +1767,7 @@ class PixelgradeAssistant_Admin {
                 <div class="notice notice-warning is-dismissible">
                     <h3><?php esc_html_e( 'New Theme Update is Available!', 'pixelgrade_assistant' ); ?></h3>
                     <hr>
-                    <p><?php printf( wp_kses_post( __( 'Great news! A new theme update is available for your <strong>%s</strong> theme, version <strong>%s</strong>. To update go to your <a href="%s">Theme Dashboard</a>.', 'pixelgrade_assistant' ) ), esc_html( $theme_name ), esc_html( $new_theme_version['new_version'] ), esc_url( admin_url( 'admin.php?page=pixelgrade_assistant' ) ) ); ?></p>
+                    <p><?php printf( wp_kses_post( __( 'Great news! A new theme update is available for your <strong>%s</strong> theme, version <strong>%s</strong>. To update go to your <a href="%s">Theme Dashboard</a>.', 'pixelgrade_assistant' ) ), esc_html( $theme_name ), esc_html( $new_theme_version['new_version'] ), esc_url( admin_url( 'themes.php?page=pixelgrade' ) ) ); ?></p>
                 </div>
                 <?php
             }

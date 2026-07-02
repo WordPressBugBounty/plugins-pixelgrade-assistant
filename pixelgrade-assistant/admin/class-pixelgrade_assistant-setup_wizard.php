@@ -55,15 +55,26 @@ class PixelgradeAssistant_SetupWizard {
 		add_action( 'admin_menu', array( $this, 'add_admin_menu' ) );
 		add_action( 'admin_init', array( $this, 'setup_wizard' ) );
 
-		// Handle the previous URL for the setup wizard:
-		// index.php?page=pixelgrade_assistant-setup-wizard
-		// instead of the new
-		// admin.php?page=pixelgrade_assistant-setup-wizard
+		// Handle previous URLs for the setup wizard and redirect to the Appearance parent.
 		add_action( 'admin_page_access_denied', array( $this, 'redirect_to_correct_url' ), 0 );
 	}
 
 	public function add_admin_menu() {
-		add_submenu_page( 'pixelgrade_assistant', '', '', 'manage_options', 'pixelgrade_assistant-setup-wizard', null );
+		// Register the setup wizard as a hidden page: it needs a valid menu slug so the URL resolves
+		// and the capability is enforced, but it must not show up as a blank submenu entry under
+		// Appearance. Empty titles still rendered an empty link, so register with real titles and
+		// then remove the item from the visible menu (the page stays registered + accessible).
+		add_submenu_page(
+			'themes.php',
+			esc_html__( 'Setup Wizard', 'pixelgrade_assistant' ),
+			esc_html__( 'Setup Wizard', 'pixelgrade_assistant' ),
+			'manage_options',
+			'pixelgrade_assistant-setup-wizard',
+			null
+		);
+		if ( function_exists( 'remove_submenu_page' ) ) {
+			remove_submenu_page( 'themes.php', 'pixelgrade_assistant-setup-wizard' );
+		}
 	}
 
 	public function setup_wizard() {
@@ -99,7 +110,7 @@ class PixelgradeAssistant_SetupWizard {
 
 	public function redirect_to_correct_url() {
 		if ( ! empty( $_GET['page'] ) && 'pixelgrade_assistant-setup-wizard' === $_GET['page'] && 0 === strpos( wp_unslash( $_SERVER['REQUEST_URI'] ), '/wp-admin/index.php' ) ) {
-			wp_safe_redirect( admin_url( 'admin.php?page=pixelgrade_assistant-setup-wizard' ) );
+			wp_safe_redirect( admin_url( 'themes.php?page=pixelgrade_assistant-setup-wizard' ) );
 			die;
 		}
 	}
