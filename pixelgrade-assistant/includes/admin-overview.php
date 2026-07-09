@@ -2,11 +2,11 @@
 /**
  * The free Overview tab — the Appearance -> Pixelgrade hub's landing tab (#44).
  *
- * Overview is the free landing surface: it shows the active theme / FSE status, a few quick links
- * into the design tools (the Site Editor for block themes, the Customizer for classic ones) and the
- * sibling hub tabs (Starter Sites, Help) when present, and a Pixelgrade Plus discovery/manage card
- * driven by the 4-key `pixassist_get_plus_status()` read (Assistant only READS Plus's status — it
- * never owns license/commercial logic).
+ * Home is deliberately calm: one onboarding spotlight (the Get Started checklist, server-modeled
+ * below), one "At a glance" status card (a few quiet label/value rows + quick actions into the
+ * sibling tabs), and a small Pixelgrade Plus invitation only while Plus is not installed. The
+ * Plus state is the 4-key `pixassist_get_plus_status()` read (Assistant only READS Plus's status —
+ * it never owns license/commercial logic).
  *
  * The React tab (admin/src-modern/hub/tabs/Overview.js) is presentational; the logic + copy live
  * here so they stay testable (tests/admin-overview-test.php) and so URLs/capabilities/strings have a
@@ -60,7 +60,7 @@ if ( ! function_exists( 'pixassist_get_overview_data' ) ) {
 	 *     @type array $theme   Active theme status: name, version, isBlockTheme (bool), screenshot.
 	 *     @type array $links   Ordered quick links ({ id, label, url, primary }). The first is the
 	 *                          canvas link (Site Editor for block themes, else the Customizer);
-	 *                          Starter Sites / Help resolve to hub deep links.
+	 *                          Design Library / Help resolve to hub deep links.
 	 *     @type array $plus    Pixelgrade Plus discovery card derived from the 4-key status read:
 	 *                          state (discover|setup|manage), label, description, url, productLabel,
 	 *                          isActive (bool), isLicensed (bool).
@@ -74,28 +74,124 @@ if ( ! function_exists( 'pixassist_get_overview_data' ) ) {
 		$base_url   = isset( $hub['baseUrl'] ) ? $hub['baseUrl'] : '';
 		$is_block   = function_exists( 'wp_is_block_theme' ) ? (bool) wp_is_block_theme() : false;
 
+		$onboarding = pixassist_get_onboarding_data( $base_url );
+		$summary    = pixassist_get_overview_state_summary( $tabs, $base_url, $is_block );
+		$site       = pixassist_get_overview_site();
+
 		return array(
 			'theme'      => pixassist_get_overview_theme( $is_block ),
 			'links'      => pixassist_get_overview_links( $tabs, $base_url, $is_block ),
 			'plus'       => pixassist_get_overview_plus_card(),
 			'account'    => function_exists( 'pixassist_get_account' ) ? pixassist_get_account() : array( 'is_connected' => false ),
-			'onboarding' => pixassist_get_onboarding_data( $base_url ),
-			'stateSummary' => pixassist_get_overview_state_summary( $tabs, $base_url, $is_block ),
-			'nextAction'   => pixassist_get_overview_next_action( $tabs, $base_url, $is_block ),
-			'safety'       => pixassist_get_overview_safety_notes(),
+			'onboarding' => $onboarding,
+			'stateSummary' => $summary,
+			'site'         => $site,
+			'greeting'     => pixassist_get_overview_greeting( $summary, $onboarding, $site['title'] ),
 		);
+	}
+}
+
+if ( ! function_exists( 'pixassist_get_overview_site' ) ) {
+	/**
+	 * The user's OWN site, for Home's live preview thumbnail and personalized copy.
+	 *
+	 * `previewUrl` is the homepage with `pixassist_site_preview=1`, which only strips the
+	 * logged-in admin bar (see pixassist_overview_site_preview_setup()) so the thumbnail shows
+	 * the page exactly as a visitor sees it. Guarded so it degrades to empties outside WP.
+	 *
+	 * @return array { url, previewUrl, title }
+	 */
+	function pixassist_get_overview_site() {
+		$url = function_exists( 'home_url' ) ? (string) home_url( '/' ) : '';
+
+		$preview = '';
+		if ( '' !== $url ) {
+			$preview = $url . ( false === strpos( $url, '?' ) ? '?' : '&' ) . 'pixassist_site_preview=1';
+		}
+
+		return array(
+			'url'        => $url,
+			'previewUrl' => $preview,
+			'title'      => function_exists( 'get_bloginfo' ) ? (string) get_bloginfo( 'name' ) : '',
+		);
+	}
+}
+
+if ( ! function_exists( 'pixassist_overview_site_preview_setup' ) ) {
+	/**
+	 * Render the homepage admin-bar-free for Home's thumbnail iframe.
+	 *
+	 * `?pixassist_site_preview=1` HIDES chrome only — the page is otherwise the public
+	 * front page exactly as any visitor gets it, so no capability or nonce is required.
+	 *
+	 * @return void
+	 */
+	function pixassist_overview_site_preview_setup() {
+		// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- read-only presentation flag, value unused.
+		if ( empty( $_GET['pixassist_site_preview'] ) ) {
+			return;
+		}
+
+		if ( function_exists( 'show_admin_bar' ) ) {
+			show_admin_bar( false );
+		}
+	}
+}
+
+if ( ! function_exists( 'pixassist_get_overview_greeting' ) ) {
+	/**
+	 * One calm, state-aware line above the At a glance rows — the page's voice.
+	 *
+	 * Three moods only, so the line stays trustworthy: something below carries the
+	 * needs-attention tone; onboarding is still in progress (the checklist above owns the
+	 * specifics); or everything is quiet — where the line greets the site by name.
+	 *
+	 * @param array  $items      State summary rows (tones are read from here).
+	 * @param array  $onboarding Onboarding payload (completion is read from here).
+	 * @param string $site_title Site title for the settled greeting; '' falls back to generic copy.
+	 *
+	 * @return string
+	 */
+	function pixassist_get_overview_greeting( $items, $onboarding, $site_title = '' ) {
+		foreach ( (array) $items as $item ) {
+			if ( isset( $item['tone'] ) && 'needs-attention' === $item['tone'] ) {
+				return esc_html__( 'One thing below needs your attention.', 'pixelgrade_assistant' );
+			}
+		}
+
+		if ( empty( $onboarding['completed'] ) ) {
+			return esc_html__( 'Here is where your site stands.', 'pixelgrade_assistant' );
+		}
+
+		if ( '' !== (string) $site_title ) {
+			return sprintf(
+				/* translators: %s: the site title. */
+				esc_html__( '%s is set up and ready to work on.', 'pixelgrade_assistant' ),
+				(string) $site_title
+			);
+		}
+
+		return esc_html__( 'Your site is set up and ready to work on.', 'pixelgrade_assistant' );
 	}
 }
 
 if ( ! function_exists( 'pixassist_get_overview_state_summary' ) ) {
 	/**
-	 * Build the compact command-center state summary for Home.
+	 * Build the quiet "At a glance" rows for Home.
+	 *
+	 * Deliberately few and calm: Theme, Site setup, Started from, Your style, Last change,
+	 * Diagnostics, Account — plus a Pixelgrade Plus row only once Plus is installed (while absent,
+	 * the single Plus presence on Home is the small invitation card, not a status row). The three
+	 * promise rows (style / last change / diagnostics) are conditional: each renders only when it
+	 * has a real fact to state, so the steady card never grows filler. `detail` is reserved for
+	 * actionable situations; `tone` is `needs-attention` only when required setup is pending or a
+	 * diagnostics check is blocked — everything else stays quiet.
 	 *
 	 * @param array  $tabs     Normalized hub tabs.
 	 * @param string $base_url Hub page URL.
 	 * @param bool   $is_block Whether the active theme is a block theme.
 	 *
-	 * @return array[] Summary items: id, label, value, detail, tone, url.
+	 * @return array[] Summary items: id, label, value, detail, tone, url (+ swatches on the style row).
 	 */
 	function pixassist_get_overview_state_summary( $tabs, $base_url, $is_block ) {
 		$theme         = pixassist_get_overview_theme( $is_block );
@@ -103,9 +199,6 @@ if ( ! function_exists( 'pixassist_get_overview_state_summary' ) ) {
 		$plus          = pixassist_get_overview_plus_card();
 		$plugin_state  = pixassist_get_overview_plugin_state();
 		$starter_state = pixassist_get_overview_starter_state();
-		$layout_state  = pixassist_get_overview_layout_state( $starter_state );
-		$content_state = pixassist_get_overview_content_state( $starter_state );
-		$content_tab   = pixassist_find_overview_tab( $tabs, array( 'content' ) );
 
 		$theme_value = ! empty( $theme['name'] ) ? (string) $theme['name'] : esc_html__( 'Active theme', 'pixelgrade_assistant' );
 		if ( ! empty( $theme['version'] ) ) {
@@ -115,209 +208,73 @@ if ( ! function_exists( 'pixassist_get_overview_state_summary' ) ) {
 				(string) $theme['version']
 			);
 		}
+		$theme_value .= ' · ' . ( ! empty( $theme['isBlockTheme'] ) ? esc_html__( 'Block theme', 'pixelgrade_assistant' ) : esc_html__( 'Classic theme', 'pixelgrade_assistant' ) );
 
-		return array(
+		$items = array(
 			array(
 				'id'     => 'theme',
 				'label'  => esc_html__( 'Theme', 'pixelgrade_assistant' ),
 				'value'  => $theme_value,
-				'detail' => ! empty( $theme['isBlockTheme'] ) ? esc_html__( 'Block theme editing is available.', 'pixelgrade_assistant' ) : esc_html__( 'Classic theme editing is available.', 'pixelgrade_assistant' ),
+				'detail' => '',
 				'tone'   => 'ok',
 				'url'    => pixassist_get_styles_url( $is_block ),
 			),
 			array(
-				'id'     => 'account',
-				'label'  => esc_html__( 'Account', 'pixelgrade_assistant' ),
-				'value'  => ! empty( $account['is_connected'] ) ? esc_html__( 'Connected', 'pixelgrade_assistant' ) : esc_html__( 'Not connected', 'pixelgrade_assistant' ),
-				'detail' => ! empty( $account['is_connected'] ) ? pixassist_get_overview_account_label( $account ) : esc_html__( 'Connect for support and account services.', 'pixelgrade_assistant' ),
-				'tone'   => ! empty( $account['is_connected'] ) ? 'ok' : 'neutral',
-				'url'    => pixassist_overview_tab_url_by_id( $tabs, $base_url, 'account' ),
-			),
-			array(
-				'id'     => 'plus',
-				'label'  => ! empty( $plus['productLabel'] ) ? $plus['productLabel'] : 'Pixelgrade Plus',
-				'value'  => pixassist_get_overview_plus_state_label( $plus ),
-				'detail' => pixassist_get_overview_plus_state_detail( $plus ),
-				'tone'   => ! empty( $plus['isLicensed'] ) ? 'ok' : 'neutral',
-				'url'    => ! empty( $plus['url'] ) ? $plus['url'] : '',
-			),
-			array(
 				'id'     => 'setup',
-				'label'  => esc_html__( 'Setup', 'pixelgrade_assistant' ),
+				'label'  => esc_html__( 'Site Setup', 'pixelgrade_assistant' ),
 				'value'  => pixassist_get_overview_plugin_state_value( $plugin_state ),
-				'detail' => pixassist_get_overview_plugin_state_detail( $plugin_state ),
+				'detail' => $plugin_state['ready'] ? '' : pixassist_get_overview_plugin_state_detail( $plugin_state ),
 				'tone'   => $plugin_state['ready'] ? 'ok' : 'needs-attention',
 				'url'    => pixassist_overview_tab_url_by_id( $tabs, $base_url, 'plugins' ),
 			),
 			array(
 				'id'     => 'starter',
-				'label'  => esc_html__( 'Starter', 'pixelgrade_assistant' ),
+				'label'  => esc_html__( 'Started from', 'pixelgrade_assistant' ),
 				'value'  => pixassist_get_overview_starter_state_value( $starter_state ),
-				'detail' => pixassist_get_overview_starter_state_detail( $starter_state ),
+				'detail' => '',
 				'tone'   => $starter_state['has_imported'] ? 'ok' : 'neutral',
 				'url'    => pixassist_overview_tab_url_by_id( $tabs, $base_url, 'starter-sites' ),
 			),
-			array(
-				'id'     => 'layouts',
-				'label'  => esc_html__( 'Layouts', 'pixelgrade_assistant' ),
-				'value'  => pixassist_get_overview_count_label( $layout_state['count'], esc_html__( 'applied', 'pixelgrade_assistant' ), esc_html__( 'applied', 'pixelgrade_assistant' ) ),
-				'detail' => $layout_state['count'] > 0 ? esc_html__( 'Applied frames can be replaced or removed.', 'pixelgrade_assistant' ) : esc_html__( 'No individual layouts applied yet.', 'pixelgrade_assistant' ),
-				'tone'   => $layout_state['count'] > 0 ? 'ok' : 'neutral',
-				'url'    => pixassist_overview_tab_url_by_id( $tabs, $base_url, 'layouts' ),
-			),
-			array(
-				'id'     => 'content',
-				'label'  => esc_html__( 'Content', 'pixelgrade_assistant' ),
-				'value'  => pixassist_get_overview_content_state_value( $content_state ),
-				'detail' => pixassist_get_overview_content_state_detail( $content_state ),
-				'tone'   => $content_state['count'] > 0 ? 'ok' : 'neutral',
-				'url'    => $content_tab ? pixassist_overview_tab_url( $content_tab, $base_url ) : '',
-			),
 		);
-	}
-}
 
-if ( ! function_exists( 'pixassist_get_overview_next_action' ) ) {
-	/**
-	 * Choose the single highest-priority Home recommendation from current state.
-	 *
-	 * @param array  $tabs     Normalized hub tabs.
-	 * @param string $base_url Hub page URL.
-	 * @param bool   $is_block Whether the active theme is a block theme.
-	 *
-	 * @return array { id, label, title, description, url, safety, kind }.
-	 */
-	function pixassist_get_overview_next_action( $tabs, $base_url, $is_block ) {
-		$plugin_state  = pixassist_get_overview_plugin_state();
-		$starter_state = pixassist_get_overview_starter_state();
-		$layout_state  = pixassist_get_overview_layout_state( $starter_state );
-		$account       = function_exists( 'pixassist_get_account' ) ? pixassist_get_account() : array( 'is_connected' => false );
-		$plus          = pixassist_get_overview_plus_card();
-		$content_tab   = pixassist_find_overview_tab( $tabs, array( 'content' ) );
-
-		if ( ! $plugin_state['ready'] ) {
-			return array(
-				'id'          => 'setup',
-				'kind'        => 'setup',
-				'label'       => esc_html__( 'Review setup', 'pixelgrade_assistant' ),
-				'title'       => esc_html__( 'Finish the required setup first', 'pixelgrade_assistant' ),
-				'description' => esc_html__( 'One or more recommended plugins still need attention before the design tools can work as intended.', 'pixelgrade_assistant' ),
-				'url'         => pixassist_overview_tab_url_by_id( $tabs, $base_url, 'plugins' ),
-				'safety'      => esc_html__( 'This only installs or activates plugins. It does not import content or change your pages.', 'pixelgrade_assistant' ),
-			);
+		// The promise rows render only when they have a real fact to state (never filler).
+		$style_row = pixassist_get_overview_style_row( $tabs, $base_url );
+		if ( null !== $style_row ) {
+			$items[] = $style_row;
 		}
 
-		if ( ! $starter_state['has_imported'] && $starter_state['starters_count'] > 0 ) {
-			return array(
-				'id'          => 'starter',
-				'kind'        => 'starter',
-				'label'       => esc_html__( 'Choose a starter site', 'pixelgrade_assistant' ),
-				'title'       => esc_html__( 'Start from a complete direction', 'pixelgrade_assistant' ),
-				'description' => esc_html__( 'Your site has starter options available. Pick one when you want a full content and design baseline.', 'pixelgrade_assistant' ),
-				'url'         => pixassist_overview_tab_url_by_id( $tabs, $base_url, 'starter-sites' ),
-				'safety'      => esc_html__( 'Starter content can be reset from Tools; account and license data stay untouched.', 'pixelgrade_assistant' ),
-			);
+		$last_change_row = pixassist_get_overview_last_change_row( $tabs, $base_url );
+		if ( null !== $last_change_row ) {
+			$items[] = $last_change_row;
 		}
 
-		if ( $starter_state['has_imported'] && $content_tab ) {
-			return array(
-				'id'          => 'content',
-				'kind'        => 'content',
-				'label'       => esc_html__( 'Add a page pattern', 'pixelgrade_assistant' ),
-				'title'       => esc_html__( 'Build the next page from a pattern', 'pixelgrade_assistant' ),
-				'description' => esc_html__( 'A starter is already in place. Add a focused page pattern next instead of importing another full site.', 'pixelgrade_assistant' ),
-				'url'         => pixassist_overview_tab_url( $content_tab, $base_url ),
-				'safety'      => esc_html__( 'Page patterns add focused content and can be removed like normal WordPress pages.', 'pixelgrade_assistant' ),
-			);
+		$diagnostics_row = pixassist_get_overview_diagnostics_row( $tabs, $base_url );
+		if ( null !== $diagnostics_row ) {
+			$items[] = $diagnostics_row;
 		}
 
-		if ( 0 === $layout_state['count'] && pixassist_find_overview_tab( $tabs, array( 'layouts' ) ) ) {
-			return array(
-				'id'          => 'layouts',
-				'kind'        => 'layouts',
-				'label'       => esc_html__( 'Browse layouts', 'pixelgrade_assistant' ),
-				'title'       => esc_html__( 'Try one reusable layout', 'pixelgrade_assistant' ),
-				'description' => esc_html__( 'Apply a header, footer, or template without importing a whole starter site.', 'pixelgrade_assistant' ),
-				'url'         => pixassist_overview_tab_url_by_id( $tabs, $base_url, 'layouts' ),
-				'safety'      => esc_html__( 'Layouts are journaled and can be replaced or removed from the Layouts tab.', 'pixelgrade_assistant' ),
-			);
-		}
-
-		if ( empty( $account['is_connected'] ) ) {
-			return array(
-				'id'          => 'account',
-				'kind'        => 'account',
-				'label'       => esc_html__( 'Connect account', 'pixelgrade_assistant' ),
-				'title'       => esc_html__( 'Connect for support', 'pixelgrade_assistant' ),
-				'description' => esc_html__( 'Connect a pixelgrade.com account so support and account services know this site.', 'pixelgrade_assistant' ),
-				'url'         => pixassist_overview_tab_url_by_id( $tabs, $base_url, 'account' ),
-				'safety'      => esc_html__( 'Assistant stores account identity separately from Plus license state.', 'pixelgrade_assistant' ),
-			);
-		}
-
-		if ( ! empty( $plus['url'] ) && ! empty( $plus['isActive'] ) && empty( $plus['isLicensed'] ) ) {
-			return array(
-				'id'          => 'plus',
-				'kind'        => 'plus',
-				'label'       => ! empty( $plus['label'] ) ? $plus['label'] : esc_html__( 'Set up Pixelgrade Plus', 'pixelgrade_assistant' ),
-				'title'       => esc_html__( 'Unlock premium features', 'pixelgrade_assistant' ),
-				'description' => esc_html__( 'Pixelgrade Plus is installed but not licensed yet. Activate it when you are ready to use its premium features on top of your free Pixelgrade theme.', 'pixelgrade_assistant' ),
-				'url'         => $plus['url'],
-				'safety'      => esc_html__( 'Pixelgrade Plus handles its own licensing — this just takes you there.', 'pixelgrade_assistant' ),
-			);
-		}
-
-		if ( pixassist_find_overview_tab( $tabs, array( 'styles' ) ) ) {
-			return array(
-				'id'          => 'styles',
-				'kind'        => 'styles',
-				'label'       => esc_html__( 'Refine styles', 'pixelgrade_assistant' ),
-				'title'       => esc_html__( 'Tune the design system', 'pixelgrade_assistant' ),
-				'description' => esc_html__( 'Adjust colors, typography, and spacing after the site structure is in place.', 'pixelgrade_assistant' ),
-				'url'         => pixassist_overview_tab_url_by_id( $tabs, $base_url, 'styles' ),
-				'safety'      => esc_html__( 'Style changes stay in WordPress design settings and can be adjusted again later.', 'pixelgrade_assistant' ),
-			);
-		}
-
-		if ( ! empty( $plus['url'] ) && ( empty( $plus['isActive'] ) || empty( $plus['isLicensed'] ) ) ) {
-			return array(
-				'id'          => 'plus',
-				'kind'        => 'plus',
-				'label'       => ! empty( $plus['label'] ) ? $plus['label'] : esc_html__( 'Explore Pixelgrade Plus', 'pixelgrade_assistant' ),
-				'title'       => esc_html__( 'See what Plus unlocks', 'pixelgrade_assistant' ),
-				'description' => esc_html__( 'Pixelgrade Plus adds premium features on top of your free Pixelgrade theme.', 'pixelgrade_assistant' ),
-				'url'         => $plus['url'],
-				'safety'      => esc_html__( 'Exploring Plus does not change anything on your site.', 'pixelgrade_assistant' ),
-			);
-		}
-
-		return array(
-			'id'          => 'help',
-			'kind'        => 'help',
-			'label'       => esc_html__( 'Get help', 'pixelgrade_assistant' ),
-			'title'       => esc_html__( 'Find the next answer', 'pixelgrade_assistant' ),
-			'description' => esc_html__( 'Open documentation and support when you need guidance for this site.', 'pixelgrade_assistant' ),
-			'url'         => pixassist_overview_tab_url_by_id( $tabs, $base_url, 'help' ),
-			'safety'      => esc_html__( 'Support requests include site context so the team can answer faster.', 'pixelgrade_assistant' ),
+		$items[] = array(
+			'id'     => 'account',
+			'label'  => esc_html__( 'Account', 'pixelgrade_assistant' ),
+			'value'  => ! empty( $account['is_connected'] ) ? pixassist_get_overview_account_label( $account ) : esc_html__( 'Not connected', 'pixelgrade_assistant' ),
+			'detail' => '',
+			'tone'   => ! empty( $account['is_connected'] ) ? 'ok' : 'neutral',
+			'url'    => pixassist_overview_tab_url_by_id( $tabs, $base_url, 'account' ),
 		);
-	}
-}
 
-if ( ! function_exists( 'pixassist_get_overview_safety_notes' ) ) {
-	/**
-	 * Shared Home safety/reversibility notes.
-	 *
-	 * @return array
-	 */
-	function pixassist_get_overview_safety_notes() {
-		return array(
-			'title' => esc_html__( 'What is safe to change', 'pixelgrade_assistant' ),
-			'items' => array(
-				esc_html__( 'Starter imports are tracked and can be reset from Tools without disconnecting your account.', 'pixelgrade_assistant' ),
-				esc_html__( 'Individual layouts are tracked, so they can be replaced or removed later.', 'pixelgrade_assistant' ),
-				esc_html__( 'Color, font, and spacing changes live in your WordPress design settings and can be adjusted again anytime.', 'pixelgrade_assistant' ),
-			),
-		);
+		// Plus earns a status row only once it is installed; discovery stays with the invitation card.
+		if ( ! empty( $plus['isActive'] ) ) {
+			$items[] = array(
+				'id'     => 'plus',
+				'label'  => ! empty( $plus['productLabel'] ) ? $plus['productLabel'] : 'Pixelgrade Plus',
+				'value'  => pixassist_get_overview_plus_state_label( $plus ),
+				'detail' => ! empty( $plus['isLicensed'] ) ? '' : pixassist_get_overview_plus_state_detail( $plus ),
+				'tone'   => ! empty( $plus['isLicensed'] ) ? 'ok' : 'neutral',
+				'url'    => ! empty( $plus['url'] ) ? $plus['url'] : '',
+			);
+		}
+
+		return $items;
 	}
 }
 
@@ -370,8 +327,8 @@ if ( ! function_exists( 'pixassist_get_overview_links' ) ) {
 	 * Assemble the Overview quick links.
 	 *
 	 * The first link is the canvas entry point — where design actually happens (the Site Editor for
-	 * block themes, the Customizer for classic ones). Then the sibling Starter Sites / Help hub tabs
-	 * resolve to in-hub `?tab=` deep links.
+	 * block themes, the Customizer for classic ones). Then the sibling Design Library / Help hub
+	 * tabs resolve to in-hub `?tab=` deep links.
 	 *
 	 * @param array  $tabs     Normalized hub tabs (from pixassist_get_admin_hub_data()).
 	 * @param string $base_url Hub page URL (carries `?page=pixelgrade`), for `&tab=` deep links.
@@ -407,13 +364,14 @@ if ( ! function_exists( 'pixassist_get_overview_links' ) ) {
 			);
 		}
 
-		// 2. Starter Sites — only when the sibling tab is registered.
-		$starter = pixassist_find_overview_tab( $tabs, array( 'starter-sites', 'starter', 'starters' ) );
-		if ( $starter ) {
+		// 2. Design Library — the merged content destination (#60d4c0f IA); legacy Starter Sites
+		// tab ids still resolve for companions that have not moved to the merged tab yet.
+		$library = pixassist_find_overview_tab( $tabs, array( 'design-library', 'starter-sites', 'starter', 'starters' ) );
+		if ( $library ) {
 			$links[] = array(
-				'id'      => 'starter-sites',
-				'label'   => esc_html__( 'Browse Starter Sites', 'pixelgrade_assistant' ),
-				'url'     => pixassist_overview_tab_url( $starter, $base_url ),
+				'id'      => 'design-library',
+				'label'   => esc_html__( 'Browse the Design Library', 'pixelgrade_assistant' ),
+				'url'     => pixassist_overview_tab_url( $library, $base_url ),
 				'primary' => false,
 			);
 		}
@@ -498,16 +456,34 @@ if ( ! function_exists( 'pixassist_overview_tab_url_by_id' ) ) {
 	}
 }
 
-if ( ! function_exists( 'pixassist_get_overview_content_url' ) ) {
+if ( ! function_exists( 'pixassist_filter_overview_setup_plugins' ) ) {
 	/**
-	 * Return the shared Page Patterns route.
+	 * Keep only the plugins that count toward required free-path setup readiness.
 	 *
-	 * @return string
+	 * External-action hand-offs (the optional Pixelgrade Plus download row) can never be installed in
+	 * wp-admin, so they must not gate setup completion — otherwise a free user with Nova Blocks + Style
+	 * Manager active can never reach 100% and the Home "Setup" card nags forever. Guarded so the
+	 * standalone Overview test (which does not load includes/admin-plugins.php) keeps its behavior.
+	 *
+	 * @param array[] $plugins Normalized plugin rows.
+	 *
+	 * @return array[]
 	 */
-	function pixassist_get_overview_content_url() {
-		return function_exists( 'admin_url' )
-			? admin_url( 'admin.php?page=pixelgrade&tab=content' )
-			: 'admin.php?page=pixelgrade&tab=content';
+	function pixassist_filter_overview_setup_plugins( $plugins ) {
+		$plugins = is_array( $plugins ) ? $plugins : array();
+
+		if ( ! function_exists( 'pixassist_plugin_counts_for_setup' ) ) {
+			return $plugins;
+		}
+
+		$counted = array();
+		foreach ( $plugins as $plugin ) {
+			if ( pixassist_plugin_counts_for_setup( $plugin ) ) {
+				$counted[] = $plugin;
+			}
+		}
+
+		return $counted;
 	}
 }
 
@@ -520,6 +496,9 @@ if ( ! function_exists( 'pixassist_get_overview_plugin_state' ) ) {
 	function pixassist_get_overview_plugin_state() {
 		$data    = function_exists( 'pixassist_get_plugins_data' ) ? pixassist_get_plugins_data() : array();
 		$plugins = isset( $data['plugins'] ) && is_array( $data['plugins'] ) ? $data['plugins'] : array();
+		// Only the required free-path plugins count toward readiness — the optional Pixelgrade Plus
+		// hand-off row is excluded so the Home "Setup" card is not stuck in "needs attention".
+		$plugins = pixassist_filter_overview_setup_plugins( $plugins );
 		$total   = count( $plugins );
 		$ready   = 0;
 
@@ -582,9 +561,13 @@ if ( ! function_exists( 'pixassist_get_overview_plugin_state_detail' ) ) {
 			return esc_html__( 'Recommended plugins are installed and active.', 'pixelgrade_assistant' );
 		}
 
+		if ( 1 === (int) $state['pending'] ) {
+			return esc_html__( '1 plugin needs setup.', 'pixelgrade_assistant' );
+		}
+
 		return sprintf(
 			/* translators: %d: number of plugins needing setup. */
-			esc_html__( '%d plugin needs setup.', 'pixelgrade_assistant' ),
+			esc_html__( '%d plugins need setup.', 'pixelgrade_assistant' ),
 			(int) $state['pending']
 		);
 	}
@@ -610,11 +593,33 @@ if ( ! function_exists( 'pixassist_get_overview_starter_state' ) ) {
 			'has_imported'   => ! empty( $imported ) || '' !== $active_id,
 			'active_id'      => $active_id,
 			'active_title'   => pixassist_get_overview_starter_title( $starters, $active_id ),
+			'imported_at'    => pixassist_get_overview_starter_imported_at( $imported, $active_id ),
 			'imported_count' => count( $imported ),
 			'content_count'  => isset( $analysis['contentCount'] ) ? (int) $analysis['contentCount'] : 0,
 			'classification' => isset( $analysis['classification'] ) ? sanitize_key( $analysis['classification'] ) : '',
 			'applied'        => $applied,
 		);
+	}
+}
+
+if ( ! function_exists( 'pixassist_get_overview_starter_imported_at' ) ) {
+	/**
+	 * When the active starter's full-demo journal entry was written, if the entry is dated.
+	 *
+	 * Imports made before the `importedAt` field existed carry no date — the row then shows the
+	 * starter name alone. Never fabricate a date.
+	 *
+	 * @param array  $imported  Imported starter journal.
+	 * @param string $active_id Active starter id.
+	 *
+	 * @return int UNIX timestamp, or 0 when unknown.
+	 */
+	function pixassist_get_overview_starter_imported_at( $imported, $active_id ) {
+		if ( '' === (string) $active_id || empty( $imported[ $active_id ] ) || ! is_array( $imported[ $active_id ] ) ) {
+			return 0;
+		}
+
+		return ! empty( $imported[ $active_id ]['importedAt'] ) ? (int) $imported[ $active_id ]['importedAt'] : 0;
 	}
 }
 
@@ -662,162 +667,40 @@ if ( ! function_exists( 'pixassist_get_overview_starter_title' ) ) {
 
 if ( ! function_exists( 'pixassist_get_overview_starter_state_value' ) ) {
 	/**
-	 * Build the starter state value.
+	 * Build the "Started from" row value.
 	 *
-	 * @param array $state Starter state.
+	 * The row label carries the verb ("Started from"), so the value is the design's name alone —
+	 * dated when the import journal knows when it happened ("Rosa LT · 3 weeks ago"), undated for
+	 * imports that predate the `importedAt` journal field.
+	 *
+	 * @param array    $state Starter state.
+	 * @param int|null $now   Current UNIX timestamp; null reads the clock (injectable for tests).
 	 *
 	 * @return string
 	 */
-	function pixassist_get_overview_starter_state_value( $state ) {
+	function pixassist_get_overview_starter_state_value( $state, $now = null ) {
 		if ( ! empty( $state['has_imported'] ) ) {
-			$title = ! empty( $state['active_title'] ) ? (string) $state['active_title'] : esc_html__( 'Starter', 'pixelgrade_assistant' );
+			$title = ! empty( $state['active_title'] ) ? (string) $state['active_title'] : esc_html__( 'A starter design', 'pixelgrade_assistant' );
 
-			return sprintf(
-				/* translators: %s: starter site title. */
-				esc_html__( '%s applied', 'pixelgrade_assistant' ),
-				$title
-			);
+			$imported_at = ! empty( $state['imported_at'] ) ? (int) $state['imported_at'] : 0;
+			if ( $imported_at > 0 ) {
+				return $title . ' · ' . pixassist_overview_relative_time( $imported_at, null === $now ? time() : (int) $now );
+			}
+
+			return $title;
 		}
 
 		if ( ! empty( $state['starters_count'] ) ) {
-			return esc_html__( 'Ready to choose', 'pixelgrade_assistant' );
+			return esc_html__( 'Ready to choose a design', 'pixelgrade_assistant' );
 		}
 
-		return esc_html__( 'No starters available', 'pixelgrade_assistant' );
-	}
-}
-
-if ( ! function_exists( 'pixassist_get_overview_starter_state_detail' ) ) {
-	/**
-	 * Build the starter state detail.
-	 *
-	 * @param array $state Starter state.
-	 *
-	 * @return string
-	 */
-	function pixassist_get_overview_starter_state_detail( $state ) {
-		if ( ! empty( $state['has_imported'] ) ) {
-			return esc_html__( 'Imported starter content is tracked for reset and cleanup.', 'pixelgrade_assistant' );
-		}
-
-		if ( ! empty( $state['starters_count'] ) ) {
-			return esc_html__( 'Starter sites can add content, media, layouts, and design settings.', 'pixelgrade_assistant' );
-		}
-
-		return esc_html__( 'This theme does not expose starter sites.', 'pixelgrade_assistant' );
-	}
-}
-
-if ( ! function_exists( 'pixassist_get_overview_layout_state' ) ) {
-	/**
-	 * Summarize applied layout-unit state.
-	 *
-	 * @param array $starter_state Starter state.
-	 *
-	 * @return array
-	 */
-	function pixassist_get_overview_layout_state( $starter_state ) {
-		$layout_data = function_exists( 'pixassist_get_layout_units_data' ) ? pixassist_get_layout_units_data() : array();
-		$applied     = isset( $layout_data['applied'] ) && is_array( $layout_data['applied'] ) ? $layout_data['applied'] : array();
-
-		if ( empty( $applied ) && ! empty( $starter_state['applied']['layoutUnits'] ) && is_array( $starter_state['applied']['layoutUnits'] ) ) {
-			$applied = $starter_state['applied']['layoutUnits'];
-		}
-
-		return array(
-			'count'   => count( $applied ),
-			'applied' => $applied,
-		);
-	}
-}
-
-if ( ! function_exists( 'pixassist_get_overview_content_state' ) ) {
-	/**
-	 * Summarize visible content state when known.
-	 *
-	 * @param array $starter_state Starter state.
-	 *
-	 * @return array
-	 */
-	function pixassist_get_overview_content_state( $starter_state ) {
-		return array(
-			'count'          => isset( $starter_state['content_count'] ) ? (int) $starter_state['content_count'] : 0,
-			'has_imported'   => ! empty( $starter_state['has_imported'] ),
-			'classification' => isset( $starter_state['classification'] ) ? (string) $starter_state['classification'] : '',
-		);
-	}
-}
-
-if ( ! function_exists( 'pixassist_get_overview_content_state_value' ) ) {
-	/**
-	 * Build the content state value.
-	 *
-	 * @param array $state Content state.
-	 *
-	 * @return string
-	 */
-	function pixassist_get_overview_content_state_value( $state ) {
-		if ( ! empty( $state['count'] ) ) {
-			return pixassist_get_overview_count_label( (int) $state['count'], esc_html__( 'item present', 'pixelgrade_assistant' ), esc_html__( 'items present', 'pixelgrade_assistant' ) );
-		}
-
-		if ( ! empty( $state['has_imported'] ) ) {
-			return esc_html__( 'Starter content present', 'pixelgrade_assistant' );
-		}
-
-		return esc_html__( 'No imported content', 'pixelgrade_assistant' );
-	}
-}
-
-if ( ! function_exists( 'pixassist_get_overview_content_state_detail' ) ) {
-	/**
-	 * Build the content state detail.
-	 *
-	 * @param array $state Content state.
-	 *
-	 * @return string
-	 */
-	function pixassist_get_overview_content_state_detail( $state ) {
-		if ( ! empty( $state['has_imported'] ) ) {
-			return esc_html__( 'Add focused page patterns without replacing the whole site.', 'pixelgrade_assistant' );
-		}
-
-		return esc_html__( 'Page Patterns can add focused pages after your baseline is ready.', 'pixelgrade_assistant' );
-	}
-}
-
-if ( ! function_exists( 'pixassist_get_overview_count_label' ) ) {
-	/**
-	 * Build a simple count label.
-	 *
-	 * @param int    $count    Count.
-	 * @param string $singular Singular noun phrase.
-	 * @param string $plural   Plural noun phrase.
-	 *
-	 * @return string
-	 */
-	function pixassist_get_overview_count_label( $count, $singular, $plural ) {
-		if ( 1 === (int) $count ) {
-			return sprintf(
-				/* translators: 1: count, 2: singular item label. */
-				esc_html__( '%1$d %2$s', 'pixelgrade_assistant' ),
-				(int) $count,
-				$singular
-			);
-		}
-
-		return sprintf(
-			/* translators: 1: count, 2: plural item label. */
-			esc_html__( '%1$d %2$s', 'pixelgrade_assistant' ),
-			(int) $count,
-			$plural
-		);
+		return esc_html__( 'No designs available', 'pixelgrade_assistant' );
 	}
 }
 
 if ( ! function_exists( 'pixassist_get_overview_account_label' ) ) {
 	/**
-	 * Build account detail label.
+	 * Build the connected-account row value.
 	 *
 	 * @param array $account Account payload.
 	 *
@@ -833,12 +716,12 @@ if ( ! function_exists( 'pixassist_get_overview_account_label' ) ) {
 		}
 
 		if ( '' === $name ) {
-			return esc_html__( 'Pixelgrade account is connected.', 'pixelgrade_assistant' );
+			return esc_html__( 'Connected', 'pixelgrade_assistant' );
 		}
 
 		return sprintf(
 			/* translators: %s: account display name, login, or email. */
-			esc_html__( 'Connected as %s.', 'pixelgrade_assistant' ),
+			esc_html__( 'Connected as %s', 'pixelgrade_assistant' ),
 			$name
 		);
 	}
@@ -904,13 +787,13 @@ if ( ! function_exists( 'pixassist_get_overview_plus_card' ) ) {
 		$settings_url  = ! empty( $status['plus_settings_url'] ) ? (string) $status['plus_settings_url'] : '';
 		$shop_base     = defined( 'PIXELGRADE_ASSISTANT__SHOP_BASE' ) ? PIXELGRADE_ASSISTANT__SHOP_BASE : 'https://pixelgrade.com/';
 		$discover_url  = trailingslashit( $shop_base ) . 'plus/';
-		$account_url   = admin_url( 'themes.php?page=pixelgrade&tab=account&section=plus' );
+		$account_url   = pixassist_get_hub_url( 'account', 'plus' );
 
 		if ( empty( $status['is_plus_active'] ) ) {
 			$card = array(
 				'state'       => 'discover',
 				'label'       => esc_html__( 'Explore Pixelgrade Plus', 'pixelgrade_assistant' ),
-				'description' => esc_html__( 'Unlock advanced design tools, starter sites, and premium support for your Pixelgrade site.', 'pixelgrade_assistant' ),
+				'description' => esc_html__( 'Premium design tools and support that extend your free theme — there when you want them.', 'pixelgrade_assistant' ),
 				'url'         => $discover_url,
 			);
 		} elseif ( empty( $status['is_plus_licensed'] ) ) {
@@ -934,6 +817,469 @@ if ( ! function_exists( 'pixassist_get_overview_plus_card' ) ) {
 		$card['isLicensed']   = ! empty( $status['is_plus_licensed'] );
 
 		return $card;
+	}
+}
+
+/*
+ * ---------------------------------------------------------------------------
+ * Promise rows (#hub-home-promises) — quiet facts backed by existing product reads.
+ *
+ * Each of the three conditional rows below maps one settled pixelgrade.com homepage promise to
+ * live data the plugin already has: "Your style" (set your style once — Style Manager / theme.json
+ * read), "Last change" (everything is reversible — the import/parts journals), and "Diagnostics"
+ * (catches problems — the Setup tab's readiness checks, minus the plugins check the Site Setup row
+ * already owns). PURE builders take injected data (unit-testable); guarded gatherers degrade to
+ * null — a row that has nothing real to say simply does not render.
+ * ---------------------------------------------------------------------------
+ */
+
+if ( ! function_exists( 'pixassist_overview_relative_time' ) ) {
+	/**
+	 * A calm, coarse relative-time phrase for journal timestamps. Pure.
+	 *
+	 * Coarse on purpose: Home states facts, not a stopwatch. Buckets keep every string
+	 * plural-safe without needing _n() ("2–13 days", "2–8 weeks", "2–12 months").
+	 *
+	 * @param int $timestamp Event UNIX timestamp.
+	 * @param int $now       Current UNIX timestamp.
+	 *
+	 * @return string
+	 */
+	function pixassist_overview_relative_time( $timestamp, $now ) {
+		$day  = 86400;
+		$diff = max( 0, (int) $now - (int) $timestamp );
+
+		if ( $diff < $day ) {
+			return esc_html__( 'today', 'pixelgrade_assistant' );
+		}
+
+		if ( $diff < 2 * $day ) {
+			return esc_html__( 'yesterday', 'pixelgrade_assistant' );
+		}
+
+		if ( $diff < 14 * $day ) {
+			/* translators: %d: number of days (always 2 or more). */
+			return sprintf( esc_html__( '%d days ago', 'pixelgrade_assistant' ), (int) floor( $diff / $day ) );
+		}
+
+		if ( $diff < 61 * $day ) {
+			/* translators: %d: number of weeks (always 2 or more). */
+			return sprintf( esc_html__( '%d weeks ago', 'pixelgrade_assistant' ), (int) floor( $diff / ( 7 * $day ) ) );
+		}
+
+		if ( $diff < 365 * $day ) {
+			/* translators: %d: number of months (always 2 or more). */
+			return sprintf( esc_html__( '%d months ago', 'pixelgrade_assistant' ), (int) floor( $diff / ( 30 * $day ) ) );
+		}
+
+		if ( $diff < 730 * $day ) {
+			return esc_html__( 'a year ago', 'pixelgrade_assistant' );
+		}
+
+		/* translators: %d: number of years (always 2 or more). */
+		return sprintf( esc_html__( '%d years ago', 'pixelgrade_assistant' ), (int) floor( $diff / ( 365 * $day ) ) );
+	}
+}
+
+if ( ! function_exists( 'pixassist_get_overview_last_change_entry' ) ) {
+	/**
+	 * Pick the most recent dated design change across the journals. Pure.
+	 *
+	 * Sources are the shapes the existing journals already expose: applied layout units, content
+	 * units, and recipe bundles (all carry `appliedAt`), plus full-demo imports (dated only once
+	 * the `importedAt` field exists — undated imports are silently skipped, never guessed).
+	 *
+	 * @param array $sources { layoutUnits, contentUnits, recipes, imports, starters }.
+	 * @param int   $now     Current UNIX timestamp (for the relative phrase).
+	 *
+	 * @return array|null { value, timestamp }, or null when no dated change exists.
+	 */
+	function pixassist_get_overview_last_change_entry( $sources, $now ) {
+		$sources = is_array( $sources ) ? $sources : array();
+		$best    = null;
+
+		$collections = array(
+			/* translators: %s: layout part title (a header, footer, or template). */
+			'layoutUnits'  => esc_html__( '%s applied', 'pixelgrade_assistant' ),
+			/* translators: %s: page/content pattern title. */
+			'contentUnits' => esc_html__( '%s added', 'pixelgrade_assistant' ),
+			/* translators: %s: layout recipe title. */
+			'recipes'      => esc_html__( '%s applied', 'pixelgrade_assistant' ),
+		);
+
+		foreach ( $collections as $key => $template ) {
+			$collection = isset( $sources[ $key ] ) && is_array( $sources[ $key ] ) ? $sources[ $key ] : array();
+			foreach ( $collection as $slot => $entry ) {
+				if ( ! is_array( $entry ) || empty( $entry['appliedAt'] ) ) {
+					continue;
+				}
+
+				$timestamp = (int) $entry['appliedAt'];
+				if ( null !== $best && $timestamp <= $best['timestamp'] ) {
+					continue;
+				}
+
+				$title = '';
+				foreach ( array( 'title', 'sourceTitle' ) as $title_key ) {
+					if ( ! empty( $entry[ $title_key ] ) ) {
+						$title = (string) $entry[ $title_key ];
+						break;
+					}
+				}
+				if ( '' === $title ) {
+					$title = (string) $slot;
+				}
+
+				$best = array(
+					'timestamp' => $timestamp,
+					'text'      => sprintf( $template, $title ),
+				);
+			}
+		}
+
+		$imports  = isset( $sources['imports'] ) && is_array( $sources['imports'] ) ? $sources['imports'] : array();
+		$starters = isset( $sources['starters'] ) && is_array( $sources['starters'] ) ? $sources['starters'] : array();
+		foreach ( $imports as $demo_key => $entry ) {
+			if ( ! is_array( $entry ) || empty( $entry['importedAt'] ) ) {
+				continue;
+			}
+
+			$timestamp = (int) $entry['importedAt'];
+			if ( null !== $best && $timestamp <= $best['timestamp'] ) {
+				continue;
+			}
+
+			$title = pixassist_get_overview_starter_title( $starters, sanitize_key( (string) $demo_key ) );
+			if ( '' === $title ) {
+				$title = (string) $demo_key;
+			}
+
+			$best = array(
+				'timestamp' => $timestamp,
+				/* translators: %s: starter design title. */
+				'text'      => sprintf( esc_html__( '%s imported', 'pixelgrade_assistant' ), $title ),
+			);
+		}
+
+		if ( null === $best ) {
+			return null;
+		}
+
+		return array(
+			'value'     => $best['text'] . ' · ' . pixassist_overview_relative_time( $best['timestamp'], $now ),
+			'timestamp' => $best['timestamp'],
+		);
+	}
+}
+
+if ( ! function_exists( 'pixassist_get_overview_last_change_row' ) ) {
+	/**
+	 * The "Last change" row — quiet proof the design journal exists ("everything is reversible").
+	 *
+	 * Guarded gatherer over the existing journals; returns null (no row) until a dated change
+	 * exists. Undo itself stays where each change was made (Design Library) — Home only states
+	 * the fact.
+	 *
+	 * @param array  $tabs     Normalized hub tabs.
+	 * @param string $base_url Hub page URL.
+	 *
+	 * @return array|null Summary row, or null.
+	 */
+	function pixassist_get_overview_last_change_row( $tabs, $base_url ) {
+		if ( ! function_exists( 'pixassist_get_starter_sites_data' ) ) {
+			return null;
+		}
+
+		$data    = pixassist_get_starter_sites_data();
+		$applied = isset( $data['applied'] ) && is_array( $data['applied'] ) ? $data['applied'] : array();
+
+		$entry = pixassist_get_overview_last_change_entry(
+			array(
+				'layoutUnits'  => isset( $applied['layoutUnits'] ) ? $applied['layoutUnits'] : array(),
+				'recipes'      => isset( $applied['recipes'] ) ? $applied['recipes'] : array(),
+				'contentUnits' => function_exists( 'pixassist_get_content_patterns_applied' ) ? pixassist_get_content_patterns_applied() : array(),
+				'imports'      => isset( $data['imported'] ) ? $data['imported'] : array(),
+				'starters'     => isset( $data['starters'] ) ? $data['starters'] : array(),
+			),
+			time()
+		);
+
+		if ( null === $entry ) {
+			return null;
+		}
+
+		$library = pixassist_find_overview_tab( $tabs, array( 'design-library', 'starter-sites', 'starter', 'starters' ) );
+
+		return array(
+			'id'     => 'last-change',
+			'label'  => esc_html__( 'Last change', 'pixelgrade_assistant' ),
+			'value'  => $entry['value'],
+			'detail' => '',
+			'tone'   => 'ok',
+			'url'    => $library ? pixassist_overview_tab_url( $library, $base_url ) : $base_url . '&tab=design-library',
+		);
+	}
+}
+
+if ( ! function_exists( 'pixassist_overview_sample_swatches' ) ) {
+	/**
+	 * Keep valid hex colors and sample them evenly down to a display handful. Pure.
+	 *
+	 * @param array $colors Candidate color strings.
+	 * @param int   $count  How many swatches to keep.
+	 *
+	 * @return string[] Up to $count hex colors, source order preserved.
+	 */
+	function pixassist_overview_sample_swatches( $colors, $count = 5 ) {
+		$valid = array();
+		foreach ( (array) $colors as $color ) {
+			if ( is_string( $color ) && preg_match( '/^#(?:[0-9a-fA-F]{3}|[0-9a-fA-F]{6}|[0-9a-fA-F]{8})$/', $color ) ) {
+				$valid[] = $color;
+			}
+		}
+
+		$count = max( 1, (int) $count );
+		$total = count( $valid );
+		if ( $total <= $count ) {
+			return $valid;
+		}
+
+		$sampled = array();
+		for ( $i = 0; $i < $count; $i ++ ) {
+			$sampled[] = $valid[ (int) round( $i * ( $total - 1 ) / ( $count - 1 ) ) ];
+		}
+
+		return $sampled;
+	}
+}
+
+if ( ! function_exists( 'pixassist_get_overview_style_facts' ) ) {
+	/**
+	 * Read the site's current style — Style Manager first, theme.json truth otherwise. Guarded.
+	 *
+	 * Style Manager's derived palette (`sm_get_saved_palettes()`, the Brand Primary group) is the
+	 * live design system when SM is active; without SM, WordPress global settings surface the
+	 * theme.json palette, which is honestly labeled "Theme defaults". Font names are deliberately
+	 * absent for now: SM stores only a preset slug and resolving it to family names needs a small
+	 * SM-side display-safe accessor (cross-repo follow-up).
+	 *
+	 * @return array|null { swatches (string[]), source ('sm'|'theme') }, or null when unreadable.
+	 */
+	function pixassist_get_overview_style_facts() {
+		// Style Manager's live palette.
+		if ( function_exists( 'sm_get_saved_palettes' ) ) {
+			$palettes = sm_get_saved_palettes();
+			if ( is_array( $palettes ) ) {
+				foreach ( $palettes as $palette ) {
+					// SM json-decodes its palettes without assoc, so entries arrive as stdClass.
+					if ( is_object( $palette ) ) {
+						$palette = (array) $palette;
+					}
+
+					// The user's palette group carries a numeric id; semantic groups use '_info' etc.
+					if ( ! is_array( $palette ) || ! isset( $palette['id'] ) || ! is_numeric( $palette['id'] ) ) {
+						continue;
+					}
+
+					$colors   = isset( $palette['colors'] ) && is_array( $palette['colors'] ) ? $palette['colors'] : array();
+					$swatches = pixassist_overview_sample_swatches( $colors );
+					if ( count( $swatches ) < 2 && isset( $palette['source'] ) && is_array( $palette['source'] ) ) {
+						$swatches = pixassist_overview_sample_swatches( $palette['source'] );
+					}
+
+					if ( count( $swatches ) >= 2 ) {
+						return array( 'swatches' => $swatches, 'source' => 'sm' );
+					}
+				}
+			}
+		}
+
+		// Theme truth: the theme.json palette via core global settings.
+		if ( function_exists( 'wp_get_global_settings' ) ) {
+			$palette = wp_get_global_settings( array( 'color', 'palette' ) );
+			$colors  = array();
+
+			if ( is_array( $palette ) ) {
+				// Origin-keyed shape: prefer user customizations, then the theme's own palette —
+				// core defaults are not "your style", so they never power the row.
+				$entries = array();
+				foreach ( array( 'custom', 'theme' ) as $origin ) {
+					if ( ! empty( $palette[ $origin ] ) && is_array( $palette[ $origin ] ) ) {
+						$entries = $palette[ $origin ];
+						break;
+					}
+				}
+				// Flat shape (no origin keys): a plain list of palette entries.
+				if ( empty( $entries ) && isset( $palette[0] ) ) {
+					$entries = $palette;
+				}
+
+				foreach ( $entries as $entry ) {
+					if ( is_array( $entry ) && ! empty( $entry['color'] ) ) {
+						$colors[] = (string) $entry['color'];
+					}
+				}
+			}
+
+			$swatches = pixassist_overview_sample_swatches( $colors );
+			if ( count( $swatches ) >= 2 ) {
+				return array( 'swatches' => $swatches, 'source' => 'theme' );
+			}
+		}
+
+		return null;
+	}
+}
+
+if ( ! function_exists( 'pixassist_get_overview_style_row' ) ) {
+	/**
+	 * The "Your style" row — the user's own palette ("set your style once, everything follows").
+	 *
+	 * Returns null when no truthful palette is readable (row simply absent — never placeholder
+	 * swatches). The row routes to the Design System tab where the style is actually edited.
+	 *
+	 * @param array  $tabs     Normalized hub tabs.
+	 * @param string $base_url Hub page URL.
+	 *
+	 * @return array|null Summary row (with the extra `swatches` key), or null.
+	 */
+	function pixassist_get_overview_style_row( $tabs, $base_url ) {
+		$facts = pixassist_get_overview_style_facts();
+		if ( null === $facts ) {
+			return null;
+		}
+
+		return array(
+			'id'       => 'style',
+			'label'    => esc_html__( 'Your style', 'pixelgrade_assistant' ),
+			'value'    => 'sm' === $facts['source'] ? esc_html__( 'Your palette', 'pixelgrade_assistant' ) : esc_html__( 'Theme defaults', 'pixelgrade_assistant' ),
+			'detail'   => '',
+			'tone'     => 'ok',
+			'url'      => pixassist_overview_tab_url_by_id( $tabs, $base_url, 'styles' ),
+			'swatches' => $facts['swatches'],
+		);
+	}
+}
+
+if ( ! function_exists( 'pixassist_get_overview_diagnostics_parts' ) ) {
+	/**
+	 * Roll the readiness checks (minus the plugins check) into one quiet diagnostics fact. Pure.
+	 *
+	 * The plugins check is excluded because the Site Setup row already owns that fact — one fact
+	 * never appears twice on Home. "No known conflicts" is precise, not a vague all-clear: it means
+	 * no Care conflict, companions within their theme-tested ranges, and no environment blocker.
+	 *
+	 * @param array[] $checks Checks from pixassist_build_setup_checks() (id/status/label/value).
+	 *
+	 * @return array|null { value, detail, tone }, or null when there is nothing to report on.
+	 */
+	function pixassist_get_overview_diagnostics_parts( $checks ) {
+		$relevant = array();
+		foreach ( (array) $checks as $check ) {
+			if ( ! is_array( $check ) || ( isset( $check['id'] ) && 'plugins' === $check['id'] ) ) {
+				continue;
+			}
+			$relevant[] = $check;
+		}
+
+		if ( empty( $relevant ) ) {
+			return null;
+		}
+
+		$blocked  = array();
+		$warnings = array();
+		foreach ( $relevant as $check ) {
+			$status = isset( $check['status'] ) ? (string) $check['status'] : 'ok';
+			if ( 'blocked' === $status ) {
+				$blocked[] = $check;
+			} elseif ( 'warning' === $status ) {
+				$warnings[] = $check;
+			}
+		}
+
+		if ( ! empty( $blocked ) ) {
+			return array(
+				'value'  => esc_html__( 'Needs your attention', 'pixelgrade_assistant' ),
+				'detail' => pixassist_overview_diagnostics_check_summary( $blocked[0] ),
+				'tone'   => 'needs-attention',
+			);
+		}
+
+		if ( ! empty( $warnings ) ) {
+			$count = count( $warnings );
+
+			return array(
+				'value'  => 1 === $count
+					? esc_html__( '1 check to review', 'pixelgrade_assistant' )
+					/* translators: %d: number of readiness checks with warnings (always 2 or more). */
+					: sprintf( esc_html__( '%d checks to review', 'pixelgrade_assistant' ), $count ),
+				'detail' => pixassist_overview_diagnostics_check_summary( $warnings[0] ),
+				'tone'   => 'neutral',
+			);
+		}
+
+		return array(
+			'value'  => esc_html__( 'No known conflicts', 'pixelgrade_assistant' ),
+			'detail' => '',
+			'tone'   => 'ok',
+		);
+	}
+}
+
+if ( ! function_exists( 'pixassist_overview_diagnostics_check_summary' ) ) {
+	/**
+	 * One-line summary of a readiness check ("Companion plugin versions — 1 outside the tested
+	 * range"). Pure.
+	 *
+	 * @param array $check Check descriptor.
+	 *
+	 * @return string
+	 */
+	function pixassist_overview_diagnostics_check_summary( $check ) {
+		$label = isset( $check['label'] ) ? (string) $check['label'] : '';
+		$value = isset( $check['value'] ) ? (string) $check['value'] : '';
+
+		if ( '' !== $label && '' !== $value ) {
+			return $label . ' — ' . $value;
+		}
+
+		return '' !== $value ? $value : $label;
+	}
+}
+
+if ( ! function_exists( 'pixassist_get_overview_diagnostics_row' ) ) {
+	/**
+	 * The "Diagnostics" row — the free tier's promise ("catches problems") as a quiet fact.
+	 *
+	 * Reads the Setup tab's existing readiness engine (setup-readiness.php — real, local checks
+	 * only; no new detection is built here). Absent when the engine is unavailable.
+	 *
+	 * @param array  $tabs     Normalized hub tabs.
+	 * @param string $base_url Hub page URL.
+	 *
+	 * @return array|null Summary row, or null.
+	 */
+	function pixassist_get_overview_diagnostics_row( $tabs, $base_url ) {
+		if ( ! function_exists( 'pixassist_get_setup_readiness_data' ) ) {
+			return null;
+		}
+
+		$readiness = pixassist_get_setup_readiness_data();
+		$checks    = isset( $readiness['checks'] ) && is_array( $readiness['checks'] ) ? $readiness['checks'] : array();
+
+		$parts = pixassist_get_overview_diagnostics_parts( $checks );
+		if ( null === $parts ) {
+			return null;
+		}
+
+		return array(
+			'id'     => 'diagnostics',
+			'label'  => esc_html__( 'Diagnostics', 'pixelgrade_assistant' ),
+			'value'  => $parts['value'],
+			'detail' => $parts['detail'],
+			'tone'   => $parts['tone'],
+			'url'    => pixassist_overview_tab_url_by_id( $tabs, $base_url, 'system-status' ),
+		);
 	}
 }
 
@@ -974,6 +1320,14 @@ if ( ! function_exists( 'pixassist_get_onboarding_steps' ) ) {
 				'done'        => ! empty( $facts['account_connected'] ),
 				'optional'    => true,
 			),
+			array(
+				'id'          => 'plugins',
+				'title'       => esc_html__( 'Install recommended plugins', 'pixelgrade_assistant' ),
+				'description' => esc_html__( 'Add the plugins this theme is designed to use.', 'pixelgrade_assistant' ),
+				'url'         => $base_url . '&tab=plugins',
+				'done'        => ! empty( $facts['plugins_ready'] ),
+				'optional'    => false,
+			),
 		);
 
 		// Starter step only when the theme exposes demos (the wizard hides it otherwise).
@@ -987,15 +1341,6 @@ if ( ! function_exists( 'pixassist_get_onboarding_steps' ) ) {
 				'optional'    => false,
 			);
 		}
-
-		$steps[] = array(
-			'id'          => 'plugins',
-			'title'       => esc_html__( 'Install recommended plugins', 'pixelgrade_assistant' ),
-			'description' => esc_html__( 'Add the plugins this theme is designed to use.', 'pixelgrade_assistant' ),
-			'url'         => $base_url . '&tab=plugins',
-			'done'        => ! empty( $facts['plugins_ready'] ),
-			'optional'    => false,
-		);
 
 		return $steps;
 	}
@@ -1150,6 +1495,10 @@ if ( ! function_exists( 'pixassist_onboarding_plugins_ready' ) ) {
 
 		$data    = pixassist_get_plugins_data();
 		$plugins = isset( $data['plugins'] ) && is_array( $data['plugins'] ) ? $data['plugins'] : array();
+		// Exclude the optional Pixelgrade Plus hand-off row (an external-action download that cannot be
+		// installed in wp-admin) so the free-path "Install recommended plugins" step is completable once
+		// Nova Blocks + Style Manager are active.
+		$plugins = pixassist_filter_overview_setup_plugins( $plugins );
 
 		if ( empty( $plugins ) ) {
 			return true;
@@ -1237,4 +1586,9 @@ if ( ! function_exists( 'pixassist_get_onboarding_data' ) ) {
 // the time plugin files load.
 if ( function_exists( 'add_filter' ) ) {
 	add_filter( 'pixelgrade/admin_hub/tabs', 'pixassist_register_overview_tab' );
+}
+
+// Front-end affordance for Home's live site thumbnail (this file loads on every request).
+if ( function_exists( 'add_action' ) ) {
+	add_action( 'init', 'pixassist_overview_site_preview_setup' );
 }

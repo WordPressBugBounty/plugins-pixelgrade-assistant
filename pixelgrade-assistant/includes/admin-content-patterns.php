@@ -12,25 +12,22 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 if ( ! function_exists( 'pixassist_register_content_patterns_tab' ) ) {
 	/**
-	 * Register the Page Patterns tab on the Appearance -> Pixelgrade hub registry.
+	 * Preserve the legacy registration callback without exposing Page Patterns in navigation.
+	 *
+	 * Page Patterns now surface as a section of the merged Design Library tab
+	 * (`?tab=design-library&section=content`; legacy `?tab=content` links are aliased — see
+	 * pixassist_get_admin_hub_data()). The payload and REST descriptors below remain available (the
+	 * privileged import endpoints keep their own manage_options checks); this callback no longer
+	 * appends a visible hub tab.
 	 *
 	 * @param array $tabs Tab descriptors collected so far.
 	 *
-	 * @return array Tab descriptors with the Page Patterns tab appended.
+	 * @return array Unchanged tab descriptors.
 	 */
 	function pixassist_register_content_patterns_tab( $tabs ) {
 		if ( ! is_array( $tabs ) ) {
 			$tabs = array();
 		}
-
-		$tabs[] = array(
-			'id'         => 'content',
-			'label'      => esc_html__( 'Page Patterns', 'pixelgrade_assistant' ),
-			'capability' => 'manage_options',
-			'component'  => 'contentPatterns',
-			'gate'       => '',
-			'order'      => 40,
-		);
 
 		return $tabs;
 	}
@@ -78,7 +75,7 @@ if ( ! function_exists( 'pixassist_get_content_patterns_copy' ) ) {
 	function pixassist_get_content_patterns_copy() {
 		return array(
 			'title'          => esc_html__( 'Page Patterns', 'pixelgrade_assistant' ),
-			'description'    => esc_html__( 'Add ready-made content — a single page or post from a starter — instead of importing a whole starter site. For reusable parts like headers, footers, and templates, use the Layouts tab.', 'pixelgrade_assistant' ),
+			'description'    => esc_html__( 'Add ready-made content — a single page or post from a starter — instead of importing a whole starter site. For reusable parts like headers, footers, and templates, use the Site Parts section.', 'pixelgrade_assistant' ),
 			'sourceLabel'    => esc_html__( 'Source', 'pixelgrade_assistant' ),
 			'typeLabel'      => esc_html__( 'Type', 'pixelgrade_assistant' ),
 			'allSources'     => esc_html__( 'All sources', 'pixelgrade_assistant' ),
@@ -110,8 +107,7 @@ if ( ! function_exists( 'pixassist_get_content_patterns_copy' ) ) {
 			'activeBadge'    => esc_html__( 'Active', 'pixelgrade_assistant' ),
 			'sectionNoneApplied' => esc_html__( 'None applied yet', 'pixelgrade_assistant' ),
 			'sourceHeading'  => esc_html__( 'Source', 'pixelgrade_assistant' ),
-			'premiumLabel'   => esc_html__( 'Premium', 'pixelgrade_assistant' ),
-			'freeLabel'      => esc_html__( 'Free', 'pixelgrade_assistant' ),
+			'premiumLabel'   => esc_html__( 'Plus', 'pixelgrade_assistant' ),
 			'lockedLabel'    => esc_html__( 'Unavailable', 'pixelgrade_assistant' ),
 			'mediaLabel'     => esc_html__( 'media', 'pixelgrade_assistant' ),
 			'previewLabel'   => esc_html__( 'Expand', 'pixelgrade_assistant' ),

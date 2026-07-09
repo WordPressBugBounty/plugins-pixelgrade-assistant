@@ -4,7 +4,7 @@ Tags: dashboard, starter-content, demo-content, recommended-plugins, pixelgrade
 Requires at least: 5.9
 Tested up to: 7.0
 Requires PHP: 7.4
-Stable tag: 2.2.0
+Stable tag: 2.2.1
 License: GPLv3.0
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 
@@ -103,6 +103,15 @@ No. We are not tracking you or your site. Sharing is entirely optional and off b
 6. Site setup wizard
 
 == Changelog ==
+
+= 2.2.1 =
+* Fix: remote theme-configuration lookups are now strictly rate-limited with a cached fallback, eliminating the excessive background requests to pixelgrade.com that some installs generated.
+* Fix: a PHP 8.2 deprecation notice (dynamic property) in the navigation menu integration.
+* Fix: the editor docs launcher now uses WordPress core's interface package, avoiding a duplicate `core/interface` store warning in the Site Editor.
+* Onboarding: a failed starter import can be retried right from the error state, without re-asking the "already imported?" confirmation.
+* Onboarding: after a full starter import, the default WordPress sample content is moved to trash and the Layouts card correctly reflects the import.
+* Onboarding: recommended plugins now install inline within the starter apply flow, a Get Started checklist guides the free path, and the duplicate "Install Plugins" menu item is gone.
+* Smaller release package — internal development docs are no longer bundled.
 
 = 2.2.0 =
 * Fix: Anima LT is now recognized out of the box — the free WordPress.org build no longer comes up unrecognized, so starter sites, recommended plugins, and the setup wizard all work as intended.

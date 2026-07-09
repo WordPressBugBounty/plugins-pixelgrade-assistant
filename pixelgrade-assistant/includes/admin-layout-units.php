@@ -15,25 +15,22 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 if ( ! function_exists( 'pixassist_register_layout_units_tab' ) ) {
 	/**
-	 * Register the Layouts tab on the Appearance -> Pixelgrade hub registry.
+	 * Preserve the legacy registration callback without exposing Site Parts in navigation.
+	 *
+	 * Site Parts (formerly Layouts) now surfaces as a section of the merged Design Library tab
+	 * (`?tab=design-library&section=layouts`; legacy `?tab=layouts` links are aliased — see
+	 * pixassist_get_admin_hub_data()). The `layouts` id/route is kept for deep-link compatibility.
+	 * The payload and REST descriptors below remain available; this callback no longer appends a
+	 * visible hub tab.
 	 *
 	 * @param array $tabs Tab descriptors collected so far.
 	 *
-	 * @return array Tab descriptors with the Layouts tab appended.
+	 * @return array Unchanged tab descriptors.
 	 */
 	function pixassist_register_layout_units_tab( $tabs ) {
 		if ( ! is_array( $tabs ) ) {
 			$tabs = array();
 		}
-
-		$tabs[] = array(
-			'id'         => 'layouts',
-			'label'      => esc_html__( 'Layouts', 'pixelgrade_assistant' ),
-			'capability' => 'edit_theme_options',
-			'component'  => 'layoutUnits',
-			'gate'       => '',
-			'order'      => 35,
-		);
 
 		return $tabs;
 	}
@@ -82,13 +79,13 @@ if ( ! function_exists( 'pixassist_get_layout_units_preview' ) ) {
 
 if ( ! function_exists( 'pixassist_get_layout_units_copy' ) ) {
 	/**
-	 * Build Layouts tab copy.
+	 * Build Site Parts (formerly Layouts) section copy.
 	 *
 	 * @return array
 	 */
 	function pixassist_get_layout_units_copy() {
 		return array(
-			'title'         => esc_html__( 'Layouts', 'pixelgrade_assistant' ),
+			'title'         => esc_html__( 'Site Parts', 'pixelgrade_assistant' ),
 			'description'   => esc_html__( 'Apply a single reusable part — a header, footer, or full page template — without importing a whole site. For complete ready-made pages, use Page Patterns; for an entire site, use Starter Sites.', 'pixelgrade_assistant' ),
 			'sourceLabel'   => esc_html__( 'Source', 'pixelgrade_assistant' ),
 			'loadLabel'     => esc_html__( 'Load layouts', 'pixelgrade_assistant' ),
@@ -114,8 +111,7 @@ if ( ! function_exists( 'pixassist_get_layout_units_copy' ) ) {
 			'featureLabel'  => esc_html__( 'Feature', 'pixelgrade_assistant' ),
 			'sampleLabel'   => esc_html__( 'Include sample projects', 'pixelgrade_assistant' ),
 			'sourceHeading' => esc_html__( 'Source', 'pixelgrade_assistant' ),
-			'premiumLabel'  => esc_html__( 'Premium', 'pixelgrade_assistant' ),
-			'freeLabel'     => esc_html__( 'Free', 'pixelgrade_assistant' ),
+			'premiumLabel'  => esc_html__( 'Plus', 'pixelgrade_assistant' ),
 		);
 	}
 }

@@ -264,6 +264,14 @@ class PixelgradeAssistant_Admin {
 		add_action( 'admin_notices', array( $this, 'admin_notices' ) );
 
 		add_action( 'admin_menu', array( $this, 'add_pixelgrade_assistant_menu' ) );
+		// Light up the submenu item matching the hub's `?tab=` deep link on server-rendered loads.
+		add_filter( 'submenu_file', array( $this, 'highlight_hub_submenu' ) );
+		// Canonicalize the hub's pre-top-level URLs (themes.php?page=pixelgrade): core still renders
+		// a top-level plugin page under any parent file, so admin_init fires and can 302 old links
+		// to the admin.php form. admin_page_access_denied is the safety net for flows where core
+		// denies the orphaned parent instead (it runs before admin_init).
+		add_action( 'admin_init', array( $this, 'redirect_legacy_hub_url' ) );
+		add_action( 'admin_page_access_denied', array( $this, 'redirect_legacy_hub_url' ) );
 
 		add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_styles' ) );
 		add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_scripts' ) );
@@ -292,6 +300,12 @@ class PixelgradeAssistant_Admin {
 
 		// Prevent TGMPA admin notices since we manage plugins in the Pixelgrade Care dashboard.
 		add_filter( 'tgmpa_show_admin_notices', array( $this, 'prevent_tgmpa_notices' ), 10, 1 );
+
+		// The Pixelgrade hub's Setup tab is the single place to install recommended plugins. Remove
+		// TGMPA's redundant standalone "Install Plugins" menu item so there aren't two surfaces doing
+		// the same job. TGMPA's install machinery stays intact (the hub install path relies on it) —
+		// only the duplicate menu link is hidden. Late priority so it runs after TGMPA::admin_menu().
+		add_action( 'admin_menu', array( $this, 'hide_tgmpa_install_menu' ), 999 );
 
 		// Auto-update Pixelgrade Assistant by default.
 		add_filter( 'auto_update_plugin', array( $this, 'handle_plugin_autoupdate' ), 10, 2 );
@@ -522,18 +536,124 @@ class PixelgradeAssistant_Admin {
     }
 
 	/**
-	 * Adds the WP Admin menus
+	 * Adds the WP Admin menus.
+	 *
+	 * The hub is a top-level menu right above Appearance (position 60), at 59.1 so it sits BELOW
+	 * core's group separator (position 59) — grouped with the site/design menus, not dangling off
+	 * the content group —
+	 * it holds the plugin's entire surface (Design System, Design Library, Site Setup, Account,
+	 * Help, docs), which outgrew a single Appearance submenu entry. The submenus mirror the hub's
+	 * visible tabs from the same registry the in-app tab bar reads, so labels, capabilities and
+	 * order never drift.
 	 */
 	public function add_pixelgrade_assistant_menu() {
-        add_submenu_page(
-            'themes.php',
-            esc_html__( 'Pixelgrade Design', 'pixelgrade_assistant' ),
-            esc_html__( 'Pixelgrade Design', 'pixelgrade_assistant' ),
-            'edit_theme_options',
-            'pixelgrade',
-            array( $this, 'render_admin_hub_page' )
-        );
-    }
+		// The sidebar label is the bare brand — one line at the sidebar's 160px (the full name
+		// wraps), and the ecosystem convention for a suite's home (Jetpack, WooCommerce). The
+		// page title (H1 / browser tab) keeps the functional "Pixelgrade Design".
+		add_menu_page(
+			esc_html__( 'Pixelgrade Design', 'pixelgrade_assistant' ),
+			esc_html__( 'Pixelgrade', 'pixelgrade_assistant' ),
+			'edit_theme_options',
+			'pixelgrade',
+			array( $this, 'render_admin_hub_page' ),
+			self::get_menu_icon(),
+			'59.1'
+		);
+
+		if ( ! function_exists( 'pixassist_get_admin_hub_submenu_items' ) ) {
+			return;
+		}
+
+		foreach ( pixassist_get_admin_hub_submenu_items() as $item ) {
+			// The default tab re-registers the parent slug, renaming the auto-added first entry
+			// (e.g. to "Home"); the rest are plain deep links routed by the hub's tab router.
+			add_submenu_page(
+				'pixelgrade',
+				$item['label'],
+				$item['label'],
+				$item['capability'],
+				$item['slug'],
+				'pixelgrade' === $item['slug'] ? array( $this, 'render_admin_hub_page' ) : ''
+			);
+		}
+	}
+
+	/**
+	 * The sidebar menu icon: the Pixelgrade grid mark as a bold 3×3 square grid (Dashicon-weight
+	 * evolution of the legacy 4×4 dot grid), inlined as a data URI so core's svg-painter recolors
+	 * it with the menu state instead of it staying a fixed color.
+	 *
+	 * @return string
+	 */
+	public static function get_menu_icon() {
+		$svg = '<svg width="20" height="20" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M2.01 2.01H6.22V6.22H2.01Z M7.9 2.01H12.11V6.22H7.9Z M13.79 2.01H18V6.22H13.79Z M2.01 7.9H6.22V12.11H2.01Z M7.9 7.9H12.11V12.11H7.9Z M13.79 7.9H18V12.11H13.79Z M2.01 13.79H6.22V18H2.01Z M7.9 13.79H12.11V18H7.9Z M13.79 13.79H18V18H13.79Z" fill="#a7aaad" fill-rule="evenodd"/></svg>';
+
+		return 'data:image/svg+xml;base64,' . base64_encode( $svg );
+	}
+
+	/**
+	 * Keep the sidebar submenu highlight in sync with the hub's `?tab=` deep links.
+	 *
+	 * WP highlights the submenu item whose slug matches `$submenu_file`; for the tab deep links
+	 * that slug is the full `admin.php?page=pixelgrade&tab=…` URL, so resolve the requested tab
+	 * (through the legacy-alias map) to the matching registered slug. Client-side tab switches
+	 * are synced by the hub app itself (menuHighlight.js).
+	 *
+	 * @param string|null $submenu_file The submenu file WP resolved.
+	 *
+	 * @return string|null
+	 */
+	public function highlight_hub_submenu( $submenu_file ) {
+		if ( ! self::is_pixelgrade_admin_hub() || empty( $_GET['tab'] ) || ! function_exists( 'pixassist_get_admin_hub_submenu_items' ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- read-only UI highlight.
+			return $submenu_file;
+		}
+
+		$tab     = sanitize_key( wp_unslash( $_GET['tab'] ) ); // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+		$aliases = function_exists( 'pixassist_get_admin_hub_tab_aliases' ) ? pixassist_get_admin_hub_tab_aliases() : array();
+
+		if ( isset( $aliases[ $tab ] ) ) {
+			$tab = is_array( $aliases[ $tab ] ) ? $aliases[ $tab ]['tab'] : $aliases[ $tab ];
+		}
+
+		foreach ( pixassist_get_admin_hub_submenu_items() as $item ) {
+			if ( $item['tab'] === $tab ) {
+				return $item['slug'];
+			}
+		}
+
+		return $submenu_file;
+	}
+
+	/**
+	 * Redirect the legacy `themes.php?page=pixelgrade` URLs to their top-level home.
+	 *
+	 * The hub lived under Appearance before becoming a top-level menu; old bookmarks, remote
+	 * config content and companion links still carry the themes.php form. Core happens to render
+	 * a top-level plugin page under any parent file, so this mostly canonicalizes (302 on
+	 * admin_init) rather than rescues — but it also hooks `admin_page_access_denied` (which runs
+	 * before `admin_init`, in wp-admin/includes/menu.php) for flows where core denies the
+	 * orphaned parent instead.
+	 */
+	public function redirect_legacy_hub_url() {
+		global $pagenow;
+
+		// phpcs:disable WordPress.Security.NonceVerification.Recommended -- read-only redirect of a legacy URL.
+		if ( 'themes.php' !== $pagenow || empty( $_GET['page'] ) || 'pixelgrade' !== $_GET['page'] ) {
+			return;
+		}
+
+		$tab     = ! empty( $_GET['tab'] ) ? sanitize_key( wp_unslash( $_GET['tab'] ) ) : '';
+		$section = ! empty( $_GET['section'] ) ? sanitize_key( wp_unslash( $_GET['section'] ) ) : '';
+		$url     = pixassist_get_hub_url( $tab, $section );
+
+		if ( ! empty( $_GET['pixassist_open_docs'] ) ) {
+			$url = add_query_arg( 'pixassist_open_docs', '1', $url );
+		}
+		// phpcs:enable WordPress.Security.NonceVerification.Recommended
+
+		wp_safe_redirect( $url );
+		exit;
+	}
 
     /**
      * Localize a script with or just return the `pixassist` data.
@@ -581,7 +701,7 @@ class PixelgradeAssistant_Admin {
 		    ),
 		    'systemStatus'   => PixelgradeAssistant_DataCollector::get_system_status_data(),
 		    'siteUrl'        => home_url( '/' ),
-		    'dashboardUrl'   => admin_url( 'themes.php?page=pixelgrade' ),
+		    'dashboardUrl'   => pixassist_get_hub_url(),
 		    'adminUrl'       => admin_url(),
 		    'themesUrl'      => admin_url( 'themes.php' ),
 		    'customizerUrl'  => admin_url( 'customize.php' ),
@@ -1160,94 +1280,168 @@ class PixelgradeAssistant_Admin {
      */
     public static function get_remote_config( $skip_cache = false ) {
 
-    	if ( defined( 'PIXELGRADE_ASSISTANT__SKIP_CONFIG_CACHE' ) && PIXELGRADE_ASSISTANT__SKIP_CONFIG_CACHE === true ) {
-    		$skip_cache = true;
-	    }
+		if ( defined( 'PIXELGRADE_ASSISTANT__SKIP_CONFIG_CACHE' ) && PIXELGRADE_ASSISTANT__SKIP_CONFIG_CACHE === true ) {
+			$skip_cache = true;
+		}
 
-        // Get the theme hash ID
-        $theme_id = self::get_theme_hash_id();
-        // If we have no hash ID present, bail
-        if ( empty( $theme_id ) ) {
-            return false;
-        }
+		// Get the theme hash ID.
+		$theme_id = self::get_theme_hash_id();
+		// If we have no hash ID present, bail.
+		if ( empty( $theme_id ) ) {
+			return false;
+		}
 
-	    // Anima (placeholder hash QBAXY) is now resolvable for get_config via its registered
-	    // pixelgrade.com product, disambiguated by the theme SKU sent in the request body below — so we
-	    // no longer skip the round-trip here. The KB (get_htkb_categories) likewise resolves by SKU now
-	    // that the Anima LT product's docs_article_groups are populated. See #59.
+		// Anima (placeholder hash QBAXY) is now resolvable for get_config via its registered
+		// pixelgrade.com product, disambiguated by the theme SKU sent in the request body below — so we
+		// no longer skip the round-trip here. The KB (get_htkb_categories) likewise resolves by SKU now
+		// that the Anima LT product's docs_article_groups are populated. See #59.
 
-	    $config = false;
+		$config       = false;
+		$cache_key    = self::_get_remote_config_cache_key( $theme_id );
+		$stale_config = false;
 
-        // We will cache this config for a little while, just enough to avoid getting hammered by a broken theme mod entry
-	    if ( false === $skip_cache ) {
-		    $config = get_transient( self::_get_remote_config_cache_key( $theme_id ) );
-	    }
+		// Keep a normal cache for fresh reads, plus a stale fallback and a short lock to avoid
+		// stampedes. The lock is a non-autoloaded option (not a transient) and is NOT released after
+		// a fetch attempt — it expires on its own, so it doubles as a hard floor of at most one
+		// remote attempt per minute per theme even on installs where transients never persist
+		// (broken object-cache drop-ins) — the very sites that used to hammer PXM on every request.
+		if ( false === $skip_cache ) {
+			$config = get_transient( $cache_key );
+			if ( false !== $config ) {
+				return $config;
+			}
 
-        if ( true === $skip_cache || false === $config ) {
-            // Retrieve the config from the server. The theme-config endpoint is fixed, so don't depend on
-            // init() having populated the static $externalApiEndpoints property — get_remote_config() can run
-            // on a cold cache before that runs (it would otherwise warn on a null array offset).
-            $get_config = ! empty( self::$externalApiEndpoints['pxm']['getConfig'] )
-                ? self::$externalApiEndpoints['pxm']['getConfig']
-                : array(
-                    'method' => 'GET',
-                    'url'    => PIXELGRADE_ASSISTANT__API_BASE . 'wp-json/pxm/v2/front/get_config',
-                );
+			$stale_config = get_transient( self::_get_remote_config_stale_cache_key( $theme_id ) );
+			if ( false !== get_transient( self::_get_remote_config_failure_cache_key( $theme_id ) ) ) {
+				return false !== $stale_config ? $stale_config : false;
+			}
 
-            $request_args = array(
-                'method' => $get_config['method'],
-                'timeout'   => 4,
-                'blocking'  => true,
-                'body' => array(
-                    'hash_id' => $theme_id,
-                    // The theme SKU (e.g. anima-lt) disambiguates products that share a hash. Anima's
-                    // hash (QBAXY) is shared by every premium LT product, so without the SKU the
-                    // Manager cannot resolve which product config to return. See #59.
-                    'sku'     => self::get_original_theme_slug(),
-                    // This is the Pixelgrade Assistant Manager configuration version, not the API version
-                    // @todo this parameter naming is quite confusing
-                    'version' => self::$pixelgrade_assistant_manager_api_version,
-                ),
-                'sslverify' => true,
-            );
+			if ( false === self::_acquire_remote_config_lock( $theme_id ) ) {
+				return false !== $stale_config ? $stale_config : false;
+			}
+		}
 
-            // Increase timeout when using the PIXELGRADE_ASSISTANT__SKIP_CONFIG_CACHE constant so we can account for slow local (development) installations.
-	        // Also do this if the target URL is a development one.
-	        if ( ( defined( 'PIXELGRADE_ASSISTANT__SKIP_CONFIG_CACHE' ) && PIXELGRADE_ASSISTANT__SKIP_CONFIG_CACHE === true ) || self::is_development_url( $get_config['url'] ) ) {
-		        $request_args['timeout'] = 10;
-	        }
+		// Retrieve the config from the server. The theme-config endpoint is fixed, so don't depend on
+		// init() having populated the static $externalApiEndpoints property — get_remote_config() can run
+		// on a cold cache before that runs (it would otherwise warn on a null array offset).
+		$get_config = ! empty( self::$externalApiEndpoints['pxm']['getConfig'] )
+			? self::$externalApiEndpoints['pxm']['getConfig']
+			: array(
+				'method' => 'GET',
+				'url'    => PIXELGRADE_ASSISTANT__API_BASE . 'wp-json/pxm/v2/front/get_config',
+			);
 
-            $response = wp_remote_request( $get_config['url'], $request_args  );
-            if ( is_wp_error( $response ) ) {
-                return false;
-            }
-            $response_data = json_decode( wp_remote_retrieve_body( $response ), true );
-            if ( null === $response_data || empty( $response_data['data']['config'] ) || 'success' !== $response_data['code'] ) {
-                // This means the json_decode has failed
-                return false;
-            }
-            $config = $response_data['data']['config'];
+		$request_args = array(
+			'method'    => $get_config['method'],
+			'timeout'   => 4,
+			'blocking'  => true,
+			'body'      => array(
+				'hash_id' => $theme_id,
+				// The theme SKU (e.g. anima-lt) disambiguates products that share a hash. Anima's
+				// hash (QBAXY) is shared by every premium LT product, so without the SKU the
+				// Manager cannot resolve which product config to return. See #59.
+				'sku'     => self::get_original_theme_slug(),
+				// This is the Pixelgrade Assistant Manager configuration version, not the API version.
+				// @todo this parameter naming is quite confusing.
+				'version' => self::$pixelgrade_assistant_manager_api_version,
+			),
+			'sslverify' => true,
+		);
 
-            // For now, we don't need anything related to dashboard or setup wizard. We will just use the plugin defaults.
-	        if ( isset( $config['dashboard'] ) ) {
-		        unset( $config['dashboard'] );
-	        }
-	        if ( isset( $config['setupWizard'] ) ) {
-		        unset( $config['setupWizard'] );
-	        }
+		// Increase timeout when using the PIXELGRADE_ASSISTANT__SKIP_CONFIG_CACHE constant so we can account for slow local (development) installations.
+		// Also do this if the target URL is a development one.
+		if ( ( defined( 'PIXELGRADE_ASSISTANT__SKIP_CONFIG_CACHE' ) && PIXELGRADE_ASSISTANT__SKIP_CONFIG_CACHE === true ) || self::is_development_url( $get_config['url'] ) ) {
+			$request_args['timeout'] = 10;
+		}
 
-            // Sanitize it
-	        $config = self::sanitize_theme_mods_holding_content( $config, array() );
-            // Cache it
-            set_transient( self::_get_remote_config_cache_key( $theme_id ), $config, 6 * HOUR_IN_SECONDS );
-        }
+		$response = wp_remote_request( $get_config['url'], $request_args );
+		if ( is_wp_error( $response ) ) {
+			// Throttle repeated attempts against a failing endpoint. The lock is deliberately left
+			// in place to expire on its own (see above).
+			if ( false === $skip_cache ) {
+				self::_mark_remote_config_failure( $theme_id );
+			}
 
-        return $config;
+			return false !== $stale_config ? $stale_config : false;
+		}
+
+		$response_data = json_decode( wp_remote_retrieve_body( $response ), true );
+		if ( null === $response_data || empty( $response_data['data']['config'] ) || 'success' !== $response_data['code'] ) {
+			if ( false === $skip_cache ) {
+				self::_mark_remote_config_failure( $theme_id );
+			}
+
+			return false !== $stale_config ? $stale_config : false;
+		}
+
+		$config = $response_data['data']['config'];
+
+		// For now, we don't need anything related to dashboard or setup wizard. We will just use the plugin defaults.
+		if ( isset( $config['dashboard'] ) ) {
+			unset( $config['dashboard'] );
+		}
+		if ( isset( $config['setupWizard'] ) ) {
+			unset( $config['setupWizard'] );
+		}
+
+		// Sanitize it.
+		$config = self::sanitize_theme_mods_holding_content( $config, array() );
+		// Cache it.
+		set_transient( $cache_key, $config, 6 * HOUR_IN_SECONDS );
+		set_transient( self::_get_remote_config_stale_cache_key( $theme_id ), $config, 7 * DAY_IN_SECONDS );
+
+		// A successful fetch lifts the failure throttle. The lock is deliberately left in place to
+		// expire on its own (see above) — with a healthy cache the fresh transient short-circuits
+		// way before the lock is ever consulted.
+		delete_transient( self::_get_remote_config_failure_cache_key( $theme_id ) );
+
+		return $config;
     }
 
 	protected static function _get_remote_config_cache_key( $theme_id ) {
         return 'pixassist_theme_config_' . $theme_id;
     }
+
+	protected static function _get_remote_config_stale_cache_key( $theme_id ) {
+		return 'pixassist_theme_config_stale_' . $theme_id;
+	}
+
+	protected static function _get_remote_config_failure_cache_key( $theme_id ) {
+		return 'pixassist_theme_config_failure_' . $theme_id;
+	}
+
+	protected static function _get_remote_config_lock_key( $theme_id ) {
+		return 'pixassist_theme_config_lock_' . $theme_id;
+	}
+
+	protected static function _acquire_remote_config_lock( $theme_id ) {
+		$lock_key = self::_get_remote_config_lock_key( $theme_id );
+		$now      = time();
+		$lock     = absint( get_option( $lock_key ) );
+
+		if ( ! empty( $lock ) && $lock > $now - MINUTE_IN_SECONDS ) {
+			return false;
+		}
+
+		if ( add_option( $lock_key, $now, '', 'no' ) ) {
+			return true;
+		}
+
+		$lock = absint( get_option( $lock_key ) );
+		if ( ! empty( $lock ) && $lock <= $now - MINUTE_IN_SECONDS ) {
+			return update_option( $lock_key, $now, false );
+		}
+
+		return false;
+	}
+
+	protected static function _release_remote_config_lock( $theme_id ) {
+		delete_option( self::_get_remote_config_lock_key( $theme_id ) );
+	}
+
+	protected static function _mark_remote_config_failure( $theme_id ) {
+		set_transient( self::_get_remote_config_failure_cache_key( $theme_id ), time(), 5 * MINUTE_IN_SECONDS );
+	}
 
 	public static function clear_remote_config_cache() {
 
@@ -1258,7 +1452,12 @@ class PixelgradeAssistant_Admin {
 		    return false;
 	    }
 
-	    return delete_transient( self::_get_remote_config_cache_key( $theme_id ) );
+		$deleted = delete_transient( self::_get_remote_config_cache_key( $theme_id ) );
+		delete_transient( self::_get_remote_config_stale_cache_key( $theme_id ) );
+		delete_transient( self::_get_remote_config_failure_cache_key( $theme_id ) );
+		self::_release_remote_config_lock( $theme_id );
+
+		return $deleted;
     }
 
 	/**
@@ -1767,7 +1966,7 @@ class PixelgradeAssistant_Admin {
                 <div class="notice notice-warning is-dismissible">
                     <h3><?php esc_html_e( 'New Theme Update is Available!', 'pixelgrade_assistant' ); ?></h3>
                     <hr>
-                    <p><?php printf( wp_kses_post( __( 'Great news! A new theme update is available for your <strong>%s</strong> theme, version <strong>%s</strong>. To update go to your <a href="%s">Theme Dashboard</a>.', 'pixelgrade_assistant' ) ), esc_html( $theme_name ), esc_html( $new_theme_version['new_version'] ), esc_url( admin_url( 'themes.php?page=pixelgrade' ) ) ); ?></p>
+                    <p><?php printf( wp_kses_post( __( 'Great news! A new theme update is available for your <strong>%s</strong> theme, version <strong>%s</strong>. To update go to your <a href="%s">Theme Dashboard</a>.', 'pixelgrade_assistant' ) ), esc_html( $theme_name ), esc_html( $new_theme_version['new_version'] ), esc_url( pixassist_get_hub_url() ) ); ?></p>
                 </div>
                 <?php
             }
@@ -1905,6 +2104,27 @@ class PixelgradeAssistant_Admin {
 		}
 
 		return false;
+	}
+
+	/**
+	 * Hide TGMPA's standalone "Install Plugins" admin menu item.
+	 *
+	 * Recommended-plugin install now lives in one place — the Pixelgrade hub's Setup tab — so the
+	 * duplicate TGMPA menu under Appearance is removed to avoid two surfaces doing the same job. This
+	 * only removes the menu LINK; TGMPA's registered plugin sources + install handlers stay intact
+	 * (the hub install path relies on them), and the page remains reachable by direct URL.
+	 *
+	 * @return void
+	 */
+	public function hide_tgmpa_install_menu() {
+		if ( ! function_exists( 'remove_submenu_page' ) || ! class_exists( 'TGM_Plugin_Activation' ) || ! is_callable( array( 'TGM_Plugin_Activation', 'get_instance' ) ) ) {
+			return;
+		}
+
+		$tgmpa = TGM_Plugin_Activation::get_instance();
+		$menu  = ! empty( $tgmpa->menu ) ? $tgmpa->menu : 'tgmpa-install-plugins';
+		// TGMPA registers its page with add_theme_page(), i.e. under the Appearance (themes.php) menu.
+		remove_submenu_page( 'themes.php', $menu );
 	}
 
 	// handle_external_required_plugins_ajax_install() was removed (M2 R2): the wp.org build installs

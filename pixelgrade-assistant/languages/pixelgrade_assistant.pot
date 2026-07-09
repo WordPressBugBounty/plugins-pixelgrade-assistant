@@ -2,14 +2,14 @@
 # This file is distributed under the GPL-3.0.
 msgid ""
 msgstr ""
-"Project-Id-Version: Pixelgrade Assistant 2.2.0\n"
+"Project-Id-Version: Pixelgrade Assistant 2.2.1\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/pixelgrade-assistant\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2026-07-01T09:00:05+00:00\n"
+"POT-Creation-Date: 2026-07-09T11:52:51+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.12.0\n"
 "X-Domain: pixelgrade_assistant\n"
@@ -31,6 +31,7 @@ msgstr ""
 
 #. Author of the plugin
 #: pixelgrade-assistant.php
+#: admin/class-pixelgrade_assistant-admin.php:555
 msgid "Pixelgrade"
 msgstr ""
 
@@ -39,94 +40,101 @@ msgstr ""
 msgid "https://pixelgrade.com"
 msgstr ""
 
-#: admin/class-pixelgrade_assistant-admin.php:464
+#: admin/class-pixelgrade_assistant-admin.php:478
 msgid "Design Docs"
 msgstr ""
 
-#: admin/class-pixelgrade_assistant-admin.php:466
+#: admin/class-pixelgrade_assistant-admin.php:480
 msgid "Open Pixelgrade design & site-building docs"
 msgstr ""
 
-#: admin/class-pixelgrade_assistant-admin.php:530
-#: admin/class-pixelgrade_assistant-admin.php:531
+#: admin/class-pixelgrade_assistant-admin.php:554
 msgid "Pixelgrade Design"
 msgstr ""
 
-#: admin/class-pixelgrade_assistant-admin.php:715
+#: admin/class-pixelgrade_assistant-admin.php:835
 #: includes/default-plugin-config.php:152
 #: includes/default-plugin-config.php:272
 msgid "Learn more"
 msgstr ""
 
-#: admin/class-pixelgrade_assistant-admin.php:1768
+#: admin/class-pixelgrade_assistant-admin.php:1967
 msgid "New Theme Update is Available!"
 msgstr ""
 
-#: admin/class-pixelgrade_assistant-admin.php:1770
+#: admin/class-pixelgrade_assistant-admin.php:1969
 #, php-format
 msgid "Great news! A new theme update is available for your <strong>%s</strong> theme, version <strong>%s</strong>. To update go to your <a href=\"%s\">Theme Dashboard</a>."
 msgstr ""
 
-#: admin/class-pixelgrade_assistant-admin.php:1943
-#: admin/class-pixelgrade_assistant-admin.php:1950
+#: admin/class-pixelgrade_assistant-admin.php:2163
+#: admin/class-pixelgrade_assistant-admin.php:2170
 #: admin/class-pixelgrade_assistant-notifications.php:436
 #: admin/class-pixelgrade_assistant-notifications.php:444
 #: admin/class-pixelgrade_assistant-setup_wizard.php:215
 #: admin/class-pixelgrade_assistant-setup_wizard.php:223
-#: admin/class-pixelgrade_assistant-starter_content.php:12352
-#: admin/class-pixelgrade_assistant-starter_content.php:12360
+#: admin/class-pixelgrade_assistant-starter_content.php:13443
+#: admin/class-pixelgrade_assistant-starter_content.php:13451
 #: includes/class-pixelgrade_assistant-data-collector.php:471
 #: includes/class-pixelgrade_assistant-data-collector.php:479
 #: includes/class-pixelgrade_assistant-i18n.php:86
 #: includes/class-pixelgrade_assistant-i18n.php:94
-#: includes/class-pixelgrade_assistant.php:429
-#: includes/class-pixelgrade_assistant.php:437
+#: includes/class-pixelgrade_assistant.php:436
+#: includes/class-pixelgrade_assistant.php:444
 #: includes/modules/conditional-updates/class-pixelgrade_assistant-conditional-updates.php:785
 #: includes/modules/conditional-updates/class-pixelgrade_assistant-conditional-updates.php:795
 #: includes/theme-helpers/jetpack-fallbacks/portfolio-shortcode/class-jetpack-portfolio-shortcode.php:372
 #: includes/theme-helpers/jetpack-fallbacks/portfolio-shortcode/class-jetpack-portfolio-shortcode.php:379
 #: includes/theme-helpers/jetpack_customization.php:176
 #: includes/theme-helpers/jetpack_customization.php:184
-#: includes/theme-helpers/nova-menu/class-nova-menu.php:734
-#: includes/theme-helpers/nova-menu/class-nova-menu.php:743
+#: includes/theme-helpers/nova-menu/class-nova-menu.php:736
+#: includes/theme-helpers/nova-menu/class-nova-menu.php:745
 #: includes/theme-helpers/theme_support.php:95
 #: includes/theme-helpers/theme_support.php:103
 msgid "You should not do that!"
 msgstr ""
 
-#: admin/class-pixelgrade_assistant-admin_rest_interface.php:127
+#: admin/class-pixelgrade_assistant-admin_rest_interface.php:136
 msgid "Something went wrong. Could not dismiss the guide."
 msgstr ""
 
-#: admin/class-pixelgrade_assistant-admin_rest_interface.php:134
+#: admin/class-pixelgrade_assistant-admin_rest_interface.php:143
 msgid "Guide dismissed."
 msgstr ""
 
-#: admin/class-pixelgrade_assistant-admin_rest_interface.php:277
+#: admin/class-pixelgrade_assistant-admin_rest_interface.php:179
+msgid "Something went wrong. Could not record the collection as seen."
+msgstr ""
+
+#: admin/class-pixelgrade_assistant-admin_rest_interface.php:186
+msgid "Collection recorded as seen."
+msgstr ""
+
+#: admin/class-pixelgrade_assistant-admin_rest_interface.php:329
 msgid "State saved successfully!"
 msgstr ""
 
-#: admin/class-pixelgrade_assistant-admin_rest_interface.php:320
+#: admin/class-pixelgrade_assistant-admin_rest_interface.php:372
 msgid "State deleted successfully!"
 msgstr ""
 
-#: admin/class-pixelgrade_assistant-admin_rest_interface.php:377
+#: admin/class-pixelgrade_assistant-admin_rest_interface.php:429
 msgid "You haven't provided the necessary data."
 msgstr ""
 
-#: admin/class-pixelgrade_assistant-admin_rest_interface.php:390
+#: admin/class-pixelgrade_assistant-admin_rest_interface.php:442
 msgid "Something went wrong. Could not save the option."
 msgstr ""
 
-#: admin/class-pixelgrade_assistant-admin_rest_interface.php:397
+#: admin/class-pixelgrade_assistant-admin_rest_interface.php:449
 msgid "Data saved successfully!"
 msgstr ""
 
-#: admin/class-pixelgrade_assistant-admin_rest_interface.php:421
+#: admin/class-pixelgrade_assistant-admin_rest_interface.php:473
 msgid "Your need to do better on your math."
 msgstr ""
 
-#: admin/class-pixelgrade_assistant-admin_rest_interface.php:448
+#: admin/class-pixelgrade_assistant-admin_rest_interface.php:500
 msgid "All nice and clean!"
 msgstr ""
 
@@ -266,15 +274,15 @@ msgstr ""
 #: admin/class-pixelgrade_assistant-starter_content.php:750
 #: admin/class-pixelgrade_assistant-starter_content.php:1516
 #: admin/class-pixelgrade_assistant-starter_content.php:1672
-#: admin/class-pixelgrade_assistant-starter_content.php:1806
-#: admin/class-pixelgrade_assistant-starter_content.php:1832
-#: admin/class-pixelgrade_assistant-starter_content.php:1856
-#: admin/class-pixelgrade_assistant-starter_content.php:2790
-#: admin/class-pixelgrade_assistant-starter_content.php:5002
-#: admin/class-pixelgrade_assistant-starter_content.php:5059
-#: admin/class-pixelgrade_assistant-starter_content.php:5286
-#: admin/class-pixelgrade_assistant-starter_content.php:6253
-#: admin/class-pixelgrade_assistant-starter_content.php:7176
+#: admin/class-pixelgrade_assistant-starter_content.php:1815
+#: admin/class-pixelgrade_assistant-starter_content.php:1841
+#: admin/class-pixelgrade_assistant-starter_content.php:1865
+#: admin/class-pixelgrade_assistant-starter_content.php:2799
+#: admin/class-pixelgrade_assistant-starter_content.php:5240
+#: admin/class-pixelgrade_assistant-starter_content.php:5297
+#: admin/class-pixelgrade_assistant-starter_content.php:5524
+#: admin/class-pixelgrade_assistant-starter_content.php:6491
+#: admin/class-pixelgrade_assistant-starter_content.php:8020
 msgid "You need to provide all the needed parameters."
 msgstr ""
 
@@ -310,306 +318,306 @@ msgstr ""
 
 #: admin/class-pixelgrade_assistant-starter_content.php:1551
 #: admin/class-pixelgrade_assistant-starter_content.php:1590
-#: admin/class-pixelgrade_assistant-starter_content.php:5099
-#: admin/class-pixelgrade_assistant-starter_content.php:5321
-#: admin/class-pixelgrade_assistant-starter_content.php:5539
-#: admin/class-pixelgrade_assistant-starter_content.php:6148
+#: admin/class-pixelgrade_assistant-starter_content.php:5337
+#: admin/class-pixelgrade_assistant-starter_content.php:5559
+#: admin/class-pixelgrade_assistant-starter_content.php:5777
+#: admin/class-pixelgrade_assistant-starter_content.php:6386
 msgid "The layout unit request is invalid."
 msgstr ""
 
 #: admin/class-pixelgrade_assistant-starter_content.php:1598
 #: admin/class-pixelgrade_assistant-starter_content.php:1753
-#: admin/class-pixelgrade_assistant-starter_content.php:1896
-#: admin/class-pixelgrade_assistant-starter_content.php:5107
-#: admin/class-pixelgrade_assistant-starter_content.php:5329
-#: admin/class-pixelgrade_assistant-starter_content.php:5547
-#: admin/class-pixelgrade_assistant-starter_content.php:5823
-#: admin/class-pixelgrade_assistant-starter_content.php:6292
-#: admin/class-pixelgrade_assistant-starter_content.php:7191
+#: admin/class-pixelgrade_assistant-starter_content.php:1905
+#: admin/class-pixelgrade_assistant-starter_content.php:5345
+#: admin/class-pixelgrade_assistant-starter_content.php:5567
+#: admin/class-pixelgrade_assistant-starter_content.php:5785
+#: admin/class-pixelgrade_assistant-starter_content.php:6061
+#: admin/class-pixelgrade_assistant-starter_content.php:6530
+#: admin/class-pixelgrade_assistant-starter_content.php:8035
 msgid "The starter content source is not allowed."
 msgstr ""
 
 #: admin/class-pixelgrade_assistant-starter_content.php:1705
 #: admin/class-pixelgrade_assistant-starter_content.php:1745
-#: admin/class-pixelgrade_assistant-starter_content.php:5815
-#: admin/class-pixelgrade_assistant-starter_content.php:6058
+#: admin/class-pixelgrade_assistant-starter_content.php:6053
+#: admin/class-pixelgrade_assistant-starter_content.php:6296
 msgid "The content unit request is invalid."
 msgstr ""
 
-#: admin/class-pixelgrade_assistant-starter_content.php:1888
+#: admin/class-pixelgrade_assistant-starter_content.php:1897
 msgid "The layout bundle request is invalid."
 msgstr ""
 
-#: admin/class-pixelgrade_assistant-starter_content.php:1905
+#: admin/class-pixelgrade_assistant-starter_content.php:1914
 msgid "The layout bundle endpoint is not available."
 msgstr ""
 
-#: admin/class-pixelgrade_assistant-starter_content.php:2158
-#: includes/admin-starter-sites.php:884
+#: admin/class-pixelgrade_assistant-starter_content.php:2167
+#: includes/admin-starter-sites.php:1000
 #: includes/theme-helpers/jetpack-fallbacks/portfolios.php:277
 #: includes/theme-helpers/jetpack-fallbacks/portfolios.php:453
 #: includes/theme-helpers/portfolio-cpt.php:72
 msgid "Portfolio"
 msgstr ""
 
-#: admin/class-pixelgrade_assistant-starter_content.php:2362
-#: admin/class-pixelgrade_assistant-starter_content.php:5892
+#: admin/class-pixelgrade_assistant-starter_content.php:2371
+#: admin/class-pixelgrade_assistant-starter_content.php:6130
 msgid "This page pattern requires a capability that is not available yet."
 msgstr ""
 
-#: admin/class-pixelgrade_assistant-starter_content.php:2414
+#: admin/class-pixelgrade_assistant-starter_content.php:2423
 msgid "Page"
 msgstr ""
 
-#: admin/class-pixelgrade_assistant-starter_content.php:2418
+#: admin/class-pixelgrade_assistant-starter_content.php:2427
 msgid "Post"
 msgstr ""
 
-#: admin/class-pixelgrade_assistant-starter_content.php:2422
+#: admin/class-pixelgrade_assistant-starter_content.php:2431
 #: includes/theme-helpers/jetpack-fallbacks/portfolios.php:276
 #: includes/theme-helpers/jetpack-fallbacks/portfolios.php:408
 #: includes/theme-helpers/portfolio-cpt.php:71
 msgid "Project"
 msgstr ""
 
-#: admin/class-pixelgrade_assistant-starter_content.php:2426
+#: admin/class-pixelgrade_assistant-starter_content.php:2435
 #: includes/class-pixelgrade_assistant-data-collector.php:149
 msgid "Product"
 msgstr ""
 
-#: admin/class-pixelgrade_assistant-starter_content.php:2517
+#: admin/class-pixelgrade_assistant-starter_content.php:2526
 msgid "The page pattern terms could not be imported."
 msgstr ""
 
-#: admin/class-pixelgrade_assistant-starter_content.php:2905
+#: admin/class-pixelgrade_assistant-starter_content.php:2914
 msgid "WooCommerce layouts require WooCommerce to be active and the Pixelgrade Plus WooCommerce integration."
 msgstr ""
 
-#: admin/class-pixelgrade_assistant-starter_content.php:2957
+#: admin/class-pixelgrade_assistant-starter_content.php:2962
 msgid "Premium page pattern — preview unavailable."
 msgstr ""
 
-#: admin/class-pixelgrade_assistant-starter_content.php:3033
+#: admin/class-pixelgrade_assistant-starter_content.php:3045
 msgid "Premium layout — preview unavailable."
 msgstr ""
 
-#: admin/class-pixelgrade_assistant-starter_content.php:4366
+#: admin/class-pixelgrade_assistant-starter_content.php:4604
 msgid "Author"
 msgstr ""
 
-#: admin/class-pixelgrade_assistant-starter_content.php:4464
+#: admin/class-pixelgrade_assistant-starter_content.php:4702
 msgid "The demo media record could not be reached."
 msgstr ""
 
 #. translators: %s: comma-separated list of plugin names.
-#: admin/class-pixelgrade_assistant-starter_content.php:5120
-#: admin/class-pixelgrade_assistant-starter_content.php:5342
-#: admin/class-pixelgrade_assistant-starter_content.php:5560
-#: admin/class-pixelgrade_assistant-starter_content.php:5836
-#: admin/class-pixelgrade_assistant-starter_content.php:6305
-#: admin/class-pixelgrade_assistant-starter_content.php:7208
+#: admin/class-pixelgrade_assistant-starter_content.php:5358
+#: admin/class-pixelgrade_assistant-starter_content.php:5580
+#: admin/class-pixelgrade_assistant-starter_content.php:5798
+#: admin/class-pixelgrade_assistant-starter_content.php:6074
+#: admin/class-pixelgrade_assistant-starter_content.php:6543
+#: admin/class-pixelgrade_assistant-starter_content.php:8052
 #, php-format
 msgid "This starter needs these plugins installed and active first: %s. Please install and activate them, then import again."
 msgstr ""
 
-#: admin/class-pixelgrade_assistant-starter_content.php:5168
+#: admin/class-pixelgrade_assistant-starter_content.php:5406
 msgid "Layout import queued."
 msgstr ""
 
-#: admin/class-pixelgrade_assistant-starter_content.php:5189
-#: admin/class-pixelgrade_assistant-starter_content.php:5261
+#: admin/class-pixelgrade_assistant-starter_content.php:5427
+#: admin/class-pixelgrade_assistant-starter_content.php:5499
 msgid "The layout import job could not be found."
 msgstr ""
 
-#: admin/class-pixelgrade_assistant-starter_content.php:5197
+#: admin/class-pixelgrade_assistant-starter_content.php:5435
 msgid "The layout import job token is invalid."
 msgstr ""
 
-#: admin/class-pixelgrade_assistant-starter_content.php:5370
+#: admin/class-pixelgrade_assistant-starter_content.php:5608
 msgid "The requested layout unit could not be found."
 msgstr ""
 
-#: admin/class-pixelgrade_assistant-starter_content.php:5487
+#: admin/class-pixelgrade_assistant-starter_content.php:5725
 msgid "The layout unit could not be imported."
 msgstr ""
 
-#: admin/class-pixelgrade_assistant-starter_content.php:5506
+#: admin/class-pixelgrade_assistant-starter_content.php:5744
 msgid "Layout imported."
 msgstr ""
 
-#: admin/class-pixelgrade_assistant-starter_content.php:5589
+#: admin/class-pixelgrade_assistant-starter_content.php:5827
 msgid "The requested feature unit could not be found."
 msgstr ""
 
-#: admin/class-pixelgrade_assistant-starter_content.php:5660
+#: admin/class-pixelgrade_assistant-starter_content.php:5898
 msgid "The feature templates could not be imported."
 msgstr ""
 
-#: admin/class-pixelgrade_assistant-starter_content.php:5784
+#: admin/class-pixelgrade_assistant-starter_content.php:6022
 msgid "Feature imported."
 msgstr ""
 
-#: admin/class-pixelgrade_assistant-starter_content.php:5864
+#: admin/class-pixelgrade_assistant-starter_content.php:6102
 msgid "The requested page pattern could not be found."
 msgstr ""
 
-#: admin/class-pixelgrade_assistant-starter_content.php:5877
+#: admin/class-pixelgrade_assistant-starter_content.php:6115
 msgid "This page pattern has been hidden by the starter source."
 msgstr ""
 
-#: admin/class-pixelgrade_assistant-starter_content.php:6002
+#: admin/class-pixelgrade_assistant-starter_content.php:6240
 msgid "The page pattern could not be imported."
 msgstr ""
 
-#: admin/class-pixelgrade_assistant-starter_content.php:6024
+#: admin/class-pixelgrade_assistant-starter_content.php:6262
 msgid "Page pattern imported."
 msgstr ""
 
-#: admin/class-pixelgrade_assistant-starter_content.php:6067
-#: admin/class-pixelgrade_assistant-starter_content.php:6076
+#: admin/class-pixelgrade_assistant-starter_content.php:6305
+#: admin/class-pixelgrade_assistant-starter_content.php:6314
 msgid "The requested page pattern is not applied."
 msgstr ""
 
-#: admin/class-pixelgrade_assistant-starter_content.php:6122
-#: includes/admin-content-patterns.php:105
+#: admin/class-pixelgrade_assistant-starter_content.php:6360
+#: includes/admin-content-patterns.php:102
 msgid "Page pattern removed."
 msgstr ""
 
-#: admin/class-pixelgrade_assistant-starter_content.php:6157
-#: admin/class-pixelgrade_assistant-starter_content.php:6166
+#: admin/class-pixelgrade_assistant-starter_content.php:6395
+#: admin/class-pixelgrade_assistant-starter_content.php:6404
 msgid "The requested layout unit is not applied."
 msgstr ""
 
-#: admin/class-pixelgrade_assistant-starter_content.php:6217
+#: admin/class-pixelgrade_assistant-starter_content.php:6455
 msgid "Layout reverted."
 msgstr ""
 
-#: admin/class-pixelgrade_assistant-starter_content.php:6235
+#: admin/class-pixelgrade_assistant-starter_content.php:6473
 #: includes/admin-tools.php:110
 msgid "Starter content was reset."
 msgstr ""
 
-#: admin/class-pixelgrade_assistant-starter_content.php:6284
+#: admin/class-pixelgrade_assistant-starter_content.php:6522
 msgid "The starter import request is invalid."
 msgstr ""
 
-#: admin/class-pixelgrade_assistant-starter_content.php:6325
+#: admin/class-pixelgrade_assistant-starter_content.php:6563
 msgid "The starter source did not provide import data."
 msgstr ""
 
-#: admin/class-pixelgrade_assistant-starter_content.php:6485
+#: admin/class-pixelgrade_assistant-starter_content.php:6737
 msgid "Starter content imported."
 msgstr ""
 
-#: admin/class-pixelgrade_assistant-starter_content.php:6731
-#: admin/class-pixelgrade_assistant-starter_content.php:6858
+#: admin/class-pixelgrade_assistant-starter_content.php:7575
+#: admin/class-pixelgrade_assistant-starter_content.php:7702
 msgid "A starter media file could not be fetched."
 msgstr ""
 
-#: admin/class-pixelgrade_assistant-starter_content.php:6763
+#: admin/class-pixelgrade_assistant-starter_content.php:7607
 msgid "A starter media source URL is not allowed."
 msgstr ""
 
-#: admin/class-pixelgrade_assistant-starter_content.php:6863
+#: admin/class-pixelgrade_assistant-starter_content.php:7707
 msgid "A starter media response could not be decoded."
 msgstr ""
 
-#: admin/class-pixelgrade_assistant-starter_content.php:6889
+#: admin/class-pixelgrade_assistant-starter_content.php:7733
 msgid "A starter media file could not be imported."
 msgstr ""
 
-#: admin/class-pixelgrade_assistant-starter_content.php:7016
+#: admin/class-pixelgrade_assistant-starter_content.php:7860
 msgid "No file data."
 msgstr ""
 
-#: admin/class-pixelgrade_assistant-starter_content.php:7025
+#: admin/class-pixelgrade_assistant-starter_content.php:7869
 msgid "File permission error."
 msgstr ""
 
-#: admin/class-pixelgrade_assistant-starter_content.php:7044
+#: admin/class-pixelgrade_assistant-starter_content.php:7888
 msgid "Something went wrong with uploading the media file."
 msgstr ""
 
-#: admin/class-pixelgrade_assistant-starter_content.php:7516
+#: admin/class-pixelgrade_assistant-starter_content.php:8368
 msgid "The layout source did not return bundles."
 msgstr ""
 
-#: admin/class-pixelgrade_assistant-starter_content.php:7754
+#: admin/class-pixelgrade_assistant-starter_content.php:8606
 msgid "The layout media source is not allowed."
 msgstr ""
 
-#: admin/class-pixelgrade_assistant-starter_content.php:7767
+#: admin/class-pixelgrade_assistant-starter_content.php:8619
 msgid "The layout media file could not be fetched."
 msgstr ""
 
-#: admin/class-pixelgrade_assistant-starter_content.php:7772
+#: admin/class-pixelgrade_assistant-starter_content.php:8624
 msgid "The layout media file is empty."
 msgstr ""
 
-#: admin/class-pixelgrade_assistant-starter_content.php:7780
+#: admin/class-pixelgrade_assistant-starter_content.php:8632
 msgid "The layout media file type could not be determined."
 msgstr ""
 
-#: admin/class-pixelgrade_assistant-starter_content.php:7939
+#: admin/class-pixelgrade_assistant-starter_content.php:8791
 msgid "The layout source did not return units."
 msgstr ""
 
-#: admin/class-pixelgrade_assistant-starter_content.php:8072
+#: admin/class-pixelgrade_assistant-starter_content.php:8924
 msgid "The layout source did not return a valid response."
 msgstr ""
 
-#: admin/class-pixelgrade_assistant-starter_content.php:8238
+#: admin/class-pixelgrade_assistant-starter_content.php:9109
 msgid "The layout source could not be reached."
 msgstr ""
 
-#: admin/class-pixelgrade_assistant-starter_content.php:8247
+#: admin/class-pixelgrade_assistant-starter_content.php:9118
 msgid "The layout source returned invalid data."
 msgstr ""
 
-#: admin/class-pixelgrade_assistant-starter_content.php:8254
+#: admin/class-pixelgrade_assistant-starter_content.php:9125
 msgid "The layout source response is missing required data."
 msgstr ""
 
-#: admin/class-pixelgrade_assistant-starter_content.php:8372
+#: admin/class-pixelgrade_assistant-starter_content.php:9243
 msgid "The layout menu could not be imported."
 msgstr ""
 
-#: admin/class-pixelgrade_assistant-starter_content.php:8463
+#: admin/class-pixelgrade_assistant-starter_content.php:9334
 msgid "The layout menu items could not be imported."
 msgstr ""
 
-#: admin/class-pixelgrade_assistant-starter_content.php:8563
+#: admin/class-pixelgrade_assistant-starter_content.php:9434
 msgid "The layout settings could not be imported."
 msgstr ""
 
-#: admin/class-pixelgrade_assistant-starter_content.php:8801
+#: admin/class-pixelgrade_assistant-starter_content.php:9672
 msgid "The layout source site could not be resolved."
 msgstr ""
 
-#: admin/class-pixelgrade_assistant-starter_content.php:8817
+#: admin/class-pixelgrade_assistant-starter_content.php:9688
 msgid "The menu item target could not be resolved."
 msgstr ""
 
-#: admin/class-pixelgrade_assistant-starter_content.php:8822
+#: admin/class-pixelgrade_assistant-starter_content.php:9693
 msgid "The menu item target response is invalid."
 msgstr ""
 
-#: admin/class-pixelgrade_assistant-starter_content.php:9113
+#: admin/class-pixelgrade_assistant-starter_content.php:9984
 msgid "The layout import worker could not be started."
 msgstr ""
 
-#: admin/class-pixelgrade_assistant-starter_content.php:10247
-#: admin/class-pixelgrade_assistant-starter_content.php:10747
+#: admin/class-pixelgrade_assistant-starter_content.php:11118
+#: admin/class-pixelgrade_assistant-starter_content.php:11836
 msgid "Something went wrong with decoding the data received."
 msgstr ""
 
 #. translators: %s: the taxonomy name
-#: admin/class-pixelgrade_assistant-starter_content.php:10697
+#: admin/class-pixelgrade_assistant-starter_content.php:11786
 #, php-format
 msgid "%s does not exists!"
 msgstr ""
 
-#: admin/class-pixelgrade_assistant-starter_content.php:11590
+#: admin/class-pixelgrade_assistant-starter_content.php:12679
 msgid "Renders the page assigned as the static front page, overriding the theme placeholder front page."
 msgstr ""
 
@@ -792,13 +800,13 @@ msgid "TGMPA v%s"
 msgstr ""
 
 #: admin/required-plugins/class-tgm-plugin-activation.php:2304
-#: includes/admin-plugins.php:133
+#: includes/admin-plugins.php:168
 msgid "Required"
 msgstr ""
 
 #: admin/required-plugins/class-tgm-plugin-activation.php:2307
-#: includes/admin-plugins.php:134
-#: includes/setup-readiness.php:803
+#: includes/admin-plugins.php:169
+#: includes/setup-readiness.php:817
 msgid "Recommended"
 msgstr ""
 
@@ -823,8 +831,8 @@ msgid "Installed But Not Activated"
 msgstr ""
 
 #: admin/required-plugins/class-tgm-plugin-activation.php:2352
-#: includes/admin-content-patterns.php:110
-#: includes/admin-plugins.php:140
+#: includes/admin-content-patterns.php:107
+#: includes/admin-plugins.php:175
 msgid "Active"
 msgstr ""
 
@@ -906,16 +914,16 @@ msgid "Plugin"
 msgstr ""
 
 #: admin/required-plugins/class-tgm-plugin-activation.php:2579
-#: includes/admin-content-patterns.php:82
-#: includes/admin-content-patterns.php:112
-#: includes/admin-layout-units.php:93
-#: includes/admin-layout-units.php:116
+#: includes/admin-content-patterns.php:79
+#: includes/admin-content-patterns.php:109
+#: includes/admin-layout-units.php:90
+#: includes/admin-layout-units.php:113
 #: includes/admin-recipes.php:88
 msgid "Source"
 msgstr ""
 
 #: admin/required-plugins/class-tgm-plugin-activation.php:2580
-#: includes/admin-content-patterns.php:83
+#: includes/admin-content-patterns.php:80
 #: includes/admin-docs.php:167
 msgid "Type"
 msgstr ""
@@ -951,20 +959,20 @@ msgid "Upgrade message from the plugin author:"
 msgstr ""
 
 #: admin/required-plugins/class-tgm-plugin-activation.php:2748
-#: includes/admin-plugins.php:137
+#: includes/admin-plugins.php:172
 #: includes/default-plugin-config.php:37
 msgid "Install"
 msgstr ""
 
 #: admin/required-plugins/class-tgm-plugin-activation.php:2754
-#: includes/admin-plugins.php:139
+#: includes/admin-plugins.php:174
 #: includes/default-plugin-config.php:39
 #: includes/default-plugin-config.php:424
 msgid "Update"
 msgstr ""
 
 #: admin/required-plugins/class-tgm-plugin-activation.php:2757
-#: includes/admin-plugins.php:138
+#: includes/admin-plugins.php:173
 #: includes/default-plugin-config.php:38
 msgid "Activate"
 msgstr ""
@@ -1090,7 +1098,7 @@ msgid "Your Pixelgrade account is disconnected."
 msgstr ""
 
 #: includes/account.php:1186
-#: includes/admin-overview.php:130
+#: includes/admin-overview.php:258
 msgid "Account"
 msgstr ""
 
@@ -1098,308 +1106,418 @@ msgstr ""
 msgid "You are not allowed to manage the Pixelgrade account connection."
 msgstr ""
 
-#: includes/account.php:1384
-#: includes/admin-overview.php:864
+#: includes/account.php:1637
+msgid "Pixelgrade Plus Studio"
+msgstr ""
+
+#: includes/account.php:1641
+msgid "Pixelgrade Plus Single"
+msgstr ""
+
+#: includes/account.php:1644
+#: includes/default-plugin-config.php:221
+msgid "Pixelgrade Plus"
+msgstr ""
+
+#: includes/account.php:1892
+#: includes/admin-overview.php:747
 msgid "Available"
 msgstr ""
 
-#: includes/account.php:1386
+#: includes/account.php:1894
 msgid "This account can use the free Pixelgrade support and documentation available for the active theme."
 msgstr ""
 
-#: includes/account.php:1392
+#: includes/account.php:1901
 msgid "Pixelgrade products"
 msgstr ""
 
-#: includes/account.php:1400
-#: includes/admin-overview.php:857
+#: includes/account.php:1907
+#: includes/admin-plugins.php:176
+msgid "Installed"
+msgstr ""
+
+#. translators: %s: Pixelgrade Plus product label.
+#: includes/account.php:1910
+#, php-format
+msgid "Your connected Pixelgrade account includes %s and the companion plugin is installed. Activate it to enable the Plus benefits for this site."
+msgstr ""
+
+#: includes/account.php:1911
+#: includes/account.php:2090
+msgid "Activate Pixelgrade Plus"
+msgstr ""
+
+#: includes/account.php:1914
+msgid "Plus available"
+msgstr ""
+
+#. translators: %s: Pixelgrade Plus product label.
+#: includes/account.php:1917
+#, php-format
+msgid "Your connected Pixelgrade account includes %s. Download the companion plugin from Pixelgrade.com, install it, then activate it for this site."
+msgstr ""
+
+#: includes/account.php:1918
+#: includes/account.php:2081
+#: includes/admin-plugins.php:399
+msgid "Download Pixelgrade Plus"
+msgstr ""
+
+#: includes/account.php:1925
+#: includes/admin-overview.php:740
 msgid "Licensed"
 msgstr ""
 
 #. translators: %s: Pixelgrade Plus product label.
-#: includes/account.php:1402
+#: includes/account.php:1927
 #, php-format
-msgid "%s license is active. The Plus panel shows entitlement and add-on details."
+msgid "%s license is active. Open the Plus panel to review the benefits validated for this site, or refresh them after a new purchase."
 msgstr ""
 
-#: includes/account.php:1405
+#: includes/account.php:1928
+msgid "Review Plus benefits"
+msgstr ""
+
+#: includes/account.php:1931
 msgid "Needs license"
 msgstr ""
 
 #. translators: %s: Pixelgrade Plus product label.
-#: includes/account.php:1407
+#: includes/account.php:1933
 #, php-format
-msgid "%s is installed. Use the Plus panel to activate any eligible license found on this account."
+msgid "%s is installed. Plus checks the connected account automatically; if no license is active yet, open the Plus panel to check again or connect the purchasing account."
+msgstr ""
+
+#: includes/account.php:1934
+msgid "Check Plus license"
+msgstr ""
+
+#: includes/account.php:1999
+msgid "Pixelgrade Plus is set up"
+msgstr ""
+
+#. translators: %s: Pixelgrade Plus product label.
+#: includes/account.php:2001
+#, php-format
+msgid "Your %s license is validated on this site. Everything Plus adds is on."
+msgstr ""
+
+#: includes/account.php:2013
+msgid "Everything free stays free. Plus adds the deeper end of the design system, for sites with more riding on them — one-time purchase, no subscription."
+msgstr ""
+
+#: includes/account.php:2015
+#: includes/admin-overview.php:795
+#: includes/default-plugin-config.php:232
+msgid "Explore Pixelgrade Plus"
+msgstr ""
+
+#: includes/account.php:2022
+msgid "Already purchased Plus? Connect your Pixelgrade account above and this page will guide the setup."
+msgstr ""
+
+#: includes/account.php:2045
+msgid "Connect your Pixelgrade account"
+msgstr ""
+
+#: includes/account.php:2046
+msgid "A free pixelgrade.com account ties your license, your Pixelgrade Credits, and this site together."
+msgstr ""
+
+#: includes/account.php:2049
+msgid "Get the Pixelgrade Plus plugin"
+msgstr ""
+
+#. translators: %s: Pixelgrade Plus product label.
+#: includes/account.php:2052
+#, php-format
+msgid "Your account includes %s. Download the plugin from your Pixelgrade.com account."
+msgstr ""
+
+#: includes/account.php:2053
+msgid "Download the Pixelgrade Plus plugin from your Pixelgrade.com account after purchase."
+msgstr ""
+
+#: includes/account.php:2056
+msgid "Activate the plugin on this site"
+msgstr ""
+
+#: includes/account.php:2057
+msgid "Turn Pixelgrade Plus on from the Plugins screen. Nothing is licensed yet at this point."
+msgstr ""
+
+#: includes/account.php:2060
+msgid "Check your Plus license"
+msgstr ""
+
+#: includes/account.php:2062
+msgid "Plus checks automatically after the account is connected. If the license is not active yet, open the Plus panel to check again."
+msgstr ""
+
+#: includes/account.php:2063
+msgid "Plus checks automatically after the account is connected. If the license is not active yet, open the Plus panel to check again or connect the purchasing account."
+msgstr ""
+
+#: includes/account.php:2076
+#: includes/account.php:2230
+#: includes/account.php:2285
+#: includes/admin-docs.php:164
+msgid "Connect account"
+msgstr ""
+
+#: includes/account.php:2085
+msgid "Then upload the zip under Plugins → Add Plugin → Upload Plugin."
+msgstr ""
+
+#: includes/account.php:2095
+msgid "Open the Plus panel"
+msgstr ""
+
+#: includes/account.php:2115
+#: includes/admin-overview.php:802
+#: includes/admin-starter-sites.php:955
+#: includes/default-plugin-config.php:534
+msgid "Set up Pixelgrade Plus"
+msgstr ""
+
+#. translators: 1: completed step count, 2: total step count.
+#: includes/account.php:2117
+#, php-format
+msgid "%1$d of %2$d steps done"
+msgstr ""
+
+#: includes/account.php:2118
+msgid "The deeper end of the design system unlocks when these steps are done — deeper style control, premium fonts and assets, richer block controls."
 msgstr ""
 
 #. translators: %s: account connection date.
-#: includes/account.php:1469
+#: includes/account.php:2178
 #, php-format
 msgid "Connected %s."
 msgstr ""
 
-#: includes/account.php:1472
+#: includes/account.php:2181
 msgid "Connected account"
 msgstr ""
 
 #. translators: %d: pixelgrade.com user id.
-#: includes/account.php:1475
+#: includes/account.php:2184
 #, php-format
 msgid "Pixelgrade ID %d"
 msgstr ""
 
-#: includes/account.php:1482
+#: includes/account.php:2191
 #: includes/default-plugin-config.php:114
 msgid "Ready"
 msgstr ""
 
-#: includes/account.php:1506
-msgid "Support access is ready"
-msgstr ""
-
-#: includes/account.php:1506
-msgid "Support access needs a connection"
-msgstr ""
-
-#: includes/account.php:1508
-msgid "You can send support requests with your site context and Pixelgrade identity attached."
-msgstr ""
-
-#: includes/account.php:1509
-msgid "Connect a free pixelgrade.com account to send support requests from this dashboard. Documentation stays available without connecting."
-msgstr ""
-
-#: includes/account.php:1516
-#: includes/admin-overview.php:297
+#: includes/account.php:2223
 msgid "Get help"
 msgstr ""
 
-#: includes/account.php:1523
-#: includes/account.php:1590
-#: includes/admin-docs.php:164
-#: includes/admin-overview.php:250
-msgid "Connect account"
-msgstr ""
-
-#: includes/account.php:1523
+#: includes/account.php:2230
 msgid "Browse documentation"
 msgstr ""
 
-#: includes/account.php:1536
-msgid "Dashboard support"
+#: includes/account.php:2240
+msgid "Browse guides for the active Pixelgrade theme anytime — no account needed. They also open right where you work, from the Design Docs button in the editor toolbar and the admin bar."
 msgstr ""
 
-#: includes/account.php:1539
-msgid "Support requests can include the active theme and account identity."
+#: includes/account.php:2243
+msgid "Open Pixelgrade Design Docs"
 msgstr ""
 
-#: includes/account.php:1540
-msgid "Connect once to send support requests without leaving WordPress."
+#: includes/account.php:2246
+msgid "System Status checks your setup"
 msgstr ""
 
-#: includes/account.php:1544
-msgid "Product documentation"
+#: includes/account.php:2247
+msgid "When something looks off, System Status reviews your theme, plugins, and configuration and points at the next safe step."
 msgstr ""
 
-#: includes/account.php:1546
-msgid "Browse product guidance for the active Pixelgrade theme anytime."
+#: includes/account.php:2250
+msgid "View System Status"
 msgstr ""
 
-#: includes/account.php:1551
-msgid "Account identity"
-msgstr ""
-
-#: includes/account.php:1554
-msgid "Your pixelgrade.com account is connected and ready for support requests."
-msgstr ""
-
-#: includes/account.php:1555
-msgid "The connection is optional and can be disconnected from this page."
-msgstr ""
-
-#: includes/account.php:1586
+#: includes/account.php:2281
 msgid "Pixelgrade account"
 msgstr ""
 
-#: includes/account.php:1587
-msgid "Site connected. Everything is ready."
+#: includes/account.php:2282
+msgid "Site connected."
 msgstr ""
 
-#: includes/account.php:1588
-msgid "Your site is securely connected to your pixelgrade.com account. Support requests and account-aware tools can use this identity."
+#: includes/account.php:2283
+msgid "Support requests and license checks from this site use this identity."
 msgstr ""
 
-#: includes/account.php:1589
-msgid "Connect a free pixelgrade.com account to send support requests and get help right from your dashboard. It is free for everyone and always optional."
+#: includes/account.php:2284
+msgid "Your site and every free feature work without an account. Connect your pixelgrade.com account when you need it — to validate a Pixelgrade Plus license, or to use Pixelgrade Credits for assisted help. Always optional."
 msgstr ""
 
-#: includes/account.php:1591
+#: includes/account.php:2286
 msgid "Disconnect account"
 msgstr ""
 
-#: includes/account.php:1592
+#: includes/account.php:2287
 msgid "Account connection is not configured."
 msgstr ""
 
-#: includes/admin-content-patterns.php:28
-#: includes/admin-content-patterns.php:80
+#: includes/admin-content-patterns.php:77
 msgid "Page Patterns"
 msgstr ""
 
-#: includes/admin-content-patterns.php:81
-msgid "Add ready-made content — a single page or post from a starter — instead of importing a whole starter site. For reusable parts like headers, footers, and templates, use the Layouts tab."
+#: includes/admin-content-patterns.php:78
+msgid "Add ready-made content — a single page or post from a starter — instead of importing a whole starter site. For reusable parts like headers, footers, and templates, use the Site Parts section."
 msgstr ""
 
-#: includes/admin-content-patterns.php:84
+#: includes/admin-content-patterns.php:81
 msgid "All sources"
 msgstr ""
 
-#: includes/admin-content-patterns.php:85
+#: includes/admin-content-patterns.php:82
 msgid "All types"
 msgstr ""
 
-#: includes/admin-content-patterns.php:86
+#: includes/admin-content-patterns.php:83
 msgid "Search page patterns"
 msgstr ""
 
-#: includes/admin-content-patterns.php:87
+#: includes/admin-content-patterns.php:84
 msgid "Load page patterns"
 msgstr ""
 
-#: includes/admin-content-patterns.php:88
+#: includes/admin-content-patterns.php:85
 msgid "Refresh"
 msgstr ""
 
-#: includes/admin-content-patterns.php:89
+#: includes/admin-content-patterns.php:86
 msgid "Loading page patterns..."
 msgstr ""
 
-#: includes/admin-content-patterns.php:90
+#: includes/admin-content-patterns.php:87
 msgid "No page patterns are available from these sources."
 msgstr ""
 
-#: includes/admin-content-patterns.php:91
+#: includes/admin-content-patterns.php:88
 msgid "No page patterns match these filters."
 msgstr ""
 
-#: includes/admin-content-patterns.php:92
+#: includes/admin-content-patterns.php:89
 msgid "Page patterns could not be loaded. Please try again."
 msgstr ""
 
-#: includes/admin-content-patterns.php:93
+#: includes/admin-content-patterns.php:90
 msgid "Some page-pattern sources could not be loaded."
 msgstr ""
 
-#: includes/admin-content-patterns.php:94
+#: includes/admin-content-patterns.php:91
 #, php-format
 msgid "Some sources are temporarily unavailable: %s. The other page patterns loaded fine."
 msgstr ""
 
-#: includes/admin-content-patterns.php:95
-#: includes/admin-layout-units.php:98
+#: includes/admin-content-patterns.php:92
+#: includes/admin-layout-units.php:95
 #: includes/admin-recipes.php:73
 msgid "Apply"
 msgstr ""
 
-#: includes/admin-content-patterns.php:96
+#: includes/admin-content-patterns.php:93
 msgid "Replace"
 msgstr ""
 
-#: includes/admin-content-patterns.php:97
+#: includes/admin-content-patterns.php:94
 msgid "Applying page pattern..."
 msgstr ""
 
-#: includes/admin-content-patterns.php:98
+#: includes/admin-content-patterns.php:95
 msgid "Page pattern applied."
 msgstr ""
 
-#: includes/admin-content-patterns.php:99
+#: includes/admin-content-patterns.php:96
 #, php-format
 msgid "Added “%s” to your site."
 msgstr ""
 
-#: includes/admin-content-patterns.php:100
+#: includes/admin-content-patterns.php:97
 msgid "View"
 msgstr ""
 
-#: includes/admin-content-patterns.php:101
+#: includes/admin-content-patterns.php:98
 #: includes/theme-helpers/extras.php:291
-#: includes/theme-helpers/nova-menu/class-nova-menu.php:495
+#: includes/theme-helpers/nova-menu/class-nova-menu.php:497
 msgid "Edit"
 msgstr ""
 
-#: includes/admin-content-patterns.php:102
+#: includes/admin-content-patterns.php:99
 msgid "Page pattern could not be applied. Please try again."
 msgstr ""
 
-#: includes/admin-content-patterns.php:103
-#: includes/admin-layout-units.php:102
+#: includes/admin-content-patterns.php:100
+#: includes/admin-layout-units.php:99
 #: includes/admin-recipes.php:78
 msgid "Remove"
 msgstr ""
 
-#: includes/admin-content-patterns.php:104
+#: includes/admin-content-patterns.php:101
 msgid "Removing page pattern..."
 msgstr ""
 
-#: includes/admin-content-patterns.php:106
+#: includes/admin-content-patterns.php:103
 msgid "Page pattern could not be removed. Please try again."
 msgstr ""
 
-#: includes/admin-content-patterns.php:107
+#: includes/admin-content-patterns.php:104
 msgid "Applied page patterns"
 msgstr ""
 
-#: includes/admin-content-patterns.php:108
+#: includes/admin-content-patterns.php:105
 msgid "No page patterns are applied yet."
 msgstr ""
 
-#: includes/admin-content-patterns.php:109
+#: includes/admin-content-patterns.php:106
 #: includes/admin-recipes.php:77
 msgid "Applied"
 msgstr ""
 
-#: includes/admin-content-patterns.php:111
+#: includes/admin-content-patterns.php:108
 msgid "None applied yet"
 msgstr ""
 
-#: includes/admin-content-patterns.php:113
-#: includes/admin-layout-units.php:117
+#: includes/admin-content-patterns.php:110
+#: includes/admin-layout-units.php:114
 #: includes/admin-recipes.php:89
-#: includes/admin-starter-sites.php:825
-msgid "Premium"
+msgid "Plus"
 msgstr ""
 
-#: includes/admin-content-patterns.php:114
-#: includes/admin-layout-units.php:118
-#: includes/admin-recipes.php:90
-#: includes/admin-starter-sites.php:824
-msgid "Free"
-msgstr ""
-
-#: includes/admin-content-patterns.php:115
+#: includes/admin-content-patterns.php:111
 #: includes/default-plugin-config.php:35
 msgid "Unavailable"
 msgstr ""
 
-#: includes/admin-content-patterns.php:116
+#: includes/admin-content-patterns.php:112
 msgid "media"
 msgstr ""
 
-#: includes/admin-content-patterns.php:117
+#: includes/admin-content-patterns.php:113
 msgid "Expand"
 msgstr ""
 
-#: includes/admin-content-patterns.php:118
+#: includes/admin-content-patterns.php:114
 msgid "Open the full page pattern preview"
 msgstr ""
 
-#: includes/admin-content-patterns.php:119
+#: includes/admin-content-patterns.php:115
 msgid "No preview"
 msgstr ""
 
-#: includes/admin-content-patterns.php:120
+#: includes/admin-content-patterns.php:116
 msgid "Reload page patterns from your starters"
+msgstr ""
+
+#: includes/admin-design-library.php:44
+msgid "Design Library"
 msgstr ""
 
 #: includes/admin-docs.php:147
@@ -1611,535 +1729,423 @@ msgstr ""
 msgid "Help"
 msgstr ""
 
-#: includes/admin-layout-units.php:31
-#: includes/admin-layout-units.php:91
-#: includes/admin-overview.php:162
-#: includes/admin-starter-sites.php:865
-msgid "Layouts"
+#: includes/admin-layout-units.php:88
+msgid "Site Parts"
 msgstr ""
 
-#: includes/admin-layout-units.php:92
+#: includes/admin-layout-units.php:89
 msgid "Apply a single reusable part — a header, footer, or full page template — without importing a whole site. For complete ready-made pages, use Page Patterns; for an entire site, use Starter Sites."
 msgstr ""
 
-#: includes/admin-layout-units.php:94
+#: includes/admin-layout-units.php:91
 msgid "Load layouts"
 msgstr ""
 
-#: includes/admin-layout-units.php:95
+#: includes/admin-layout-units.php:92
 msgid "Loading layouts..."
 msgstr ""
 
-#: includes/admin-layout-units.php:96
+#: includes/admin-layout-units.php:93
 msgid "No layouts are available from this source."
 msgstr ""
 
-#: includes/admin-layout-units.php:97
+#: includes/admin-layout-units.php:94
 msgid "Layouts could not be loaded. Please try again."
 msgstr ""
 
-#: includes/admin-layout-units.php:99
+#: includes/admin-layout-units.php:96
 msgid "Applying layout..."
 msgstr ""
 
-#: includes/admin-layout-units.php:100
+#: includes/admin-layout-units.php:97
 msgid "Layout applied."
 msgstr ""
 
-#: includes/admin-layout-units.php:101
+#: includes/admin-layout-units.php:98
 msgid "Layout could not be applied. Please try again."
 msgstr ""
 
-#: includes/admin-layout-units.php:103
+#: includes/admin-layout-units.php:100
 msgid "Removing layout..."
 msgstr ""
 
-#: includes/admin-layout-units.php:104
+#: includes/admin-layout-units.php:101
 msgid "Layout removed."
 msgstr ""
 
-#: includes/admin-layout-units.php:105
+#: includes/admin-layout-units.php:102
 msgid "Layout could not be removed. Please try again."
 msgstr ""
 
-#: includes/admin-layout-units.php:106
+#: includes/admin-layout-units.php:103
 msgid "Applied layouts"
 msgstr ""
 
-#: includes/admin-layout-units.php:107
+#: includes/admin-layout-units.php:104
 msgid "No layouts are applied yet."
 msgstr ""
 
-#: includes/admin-layout-units.php:108
+#: includes/admin-layout-units.php:105
 msgid "Template parts"
 msgstr ""
 
+#: includes/admin-layout-units.php:106
 #: includes/admin-layout-units.php:109
-#: includes/admin-layout-units.php:112
 #: includes/admin-recipes.php:86
 msgid "Templates"
 msgstr ""
 
-#: includes/admin-layout-units.php:110
+#: includes/admin-layout-units.php:107
 msgid "Headers"
 msgstr ""
 
-#: includes/admin-layout-units.php:111
+#: includes/admin-layout-units.php:108
 msgid "Footers"
 msgstr ""
 
-#: includes/admin-layout-units.php:113
+#: includes/admin-layout-units.php:110
 #: includes/admin-recipes.php:87
-#: includes/admin-starter-sites.php:867
+#: includes/admin-starter-sites.php:983
 msgid "Features"
 msgstr ""
 
-#: includes/admin-layout-units.php:114
+#: includes/admin-layout-units.php:111
 msgid "Feature"
 msgstr ""
 
-#: includes/admin-layout-units.php:115
+#: includes/admin-layout-units.php:112
 msgid "Include sample projects"
 msgstr ""
 
 #: includes/admin-overview.php:44
-#: includes/admin-starter-sites.php:876
+#: includes/admin-starter-sites.php:992
 msgid "Home"
 msgstr ""
 
-#: includes/admin-overview.php:110
-#: includes/setup-readiness.php:329
+#: includes/admin-overview.php:158
+msgid "One thing below needs your attention."
+msgstr ""
+
+#: includes/admin-overview.php:163
+msgid "Here is where your site stands."
+msgstr ""
+
+#. translators: %s: the site title.
+#: includes/admin-overview.php:169
+#, php-format
+msgid "%s is set up and ready to work on."
+msgstr ""
+
+#: includes/admin-overview.php:174
+msgid "Your site is set up and ready to work on."
+msgstr ""
+
+#: includes/admin-overview.php:203
+#: includes/setup-readiness.php:343
 msgid "Active theme"
 msgstr ""
 
 #. translators: %s: theme version number.
-#: includes/admin-overview.php:114
+#: includes/admin-overview.php:207
 #, php-format
 msgid "v%s"
 msgstr ""
 
-#: includes/admin-overview.php:122
+#: includes/admin-overview.php:211
+msgid "Block theme"
+msgstr ""
+
+#: includes/admin-overview.php:211
+msgid "Classic theme"
+msgstr ""
+
+#: includes/admin-overview.php:216
 msgid "Theme"
 msgstr ""
 
-#: includes/admin-overview.php:124
-msgid "Block theme editing is available."
+#: includes/admin-overview.php:224
+#: includes/admin-plugins.php:39
+#: includes/admin-plugins.php:162
+msgid "Site Setup"
 msgstr ""
 
-#: includes/admin-overview.php:124
-msgid "Classic theme editing is available."
+#: includes/admin-overview.php:232
+msgid "Started from"
 msgstr ""
 
-#: includes/admin-overview.php:131
-msgid "Connected"
-msgstr ""
-
-#: includes/admin-overview.php:131
+#: includes/admin-overview.php:259
 #: includes/default-plugin-config.php:17
 msgid "Not connected"
 msgstr ""
 
-#: includes/admin-overview.php:132
-msgid "Connect for support and account services."
-msgstr ""
-
-#: includes/admin-overview.php:146
-#: includes/admin-plugins.php:39
-#: includes/admin-plugins.php:127
-msgid "Setup"
-msgstr ""
-
-#: includes/admin-overview.php:154
-#: includes/admin-overview.php:673
-msgid "Starter"
-msgstr ""
-
-#: includes/admin-overview.php:163
-msgid "applied"
-msgstr ""
-
-#: includes/admin-overview.php:164
-msgid "Applied frames can be replaced or removed."
-msgstr ""
-
-#: includes/admin-overview.php:164
-msgid "No individual layouts applied yet."
-msgstr ""
-
-#: includes/admin-overview.php:170
-#: includes/admin-starter-sites.php:864
-msgid "Content"
-msgstr ""
-
-#: includes/admin-overview.php:202
-msgid "Review setup"
-msgstr ""
-
-#: includes/admin-overview.php:203
-msgid "Finish the required setup first"
-msgstr ""
-
-#: includes/admin-overview.php:204
-msgid "One or more recommended plugins still need attention before the design tools can work as intended."
-msgstr ""
-
-#: includes/admin-overview.php:206
-msgid "This only installs or activates plugins. It does not import content or change your pages."
-msgstr ""
-
-#: includes/admin-overview.php:214
-msgid "Choose a starter site"
-msgstr ""
-
-#: includes/admin-overview.php:215
-msgid "Start from a complete direction"
-msgstr ""
-
-#: includes/admin-overview.php:216
-msgid "Your site has starter options available. Pick one when you want a full content and design baseline."
-msgstr ""
-
-#: includes/admin-overview.php:218
-msgid "Starter content can be reset from Tools; account and license data stay untouched."
-msgstr ""
-
-#: includes/admin-overview.php:226
-msgid "Add a page pattern"
-msgstr ""
-
-#: includes/admin-overview.php:227
-msgid "Build the next page from a pattern"
-msgstr ""
-
-#: includes/admin-overview.php:228
-msgid "A starter is already in place. Add a focused page pattern next instead of importing another full site."
-msgstr ""
-
-#: includes/admin-overview.php:230
-msgid "Page patterns add focused content and can be removed like normal WordPress pages."
-msgstr ""
-
-#: includes/admin-overview.php:238
-msgid "Browse layouts"
-msgstr ""
-
-#: includes/admin-overview.php:239
-msgid "Try one reusable layout"
-msgstr ""
-
-#: includes/admin-overview.php:240
-msgid "Apply a header, footer, or template without importing a whole starter site."
-msgstr ""
-
-#: includes/admin-overview.php:242
-msgid "Layouts are journaled and can be replaced or removed from the Layouts tab."
-msgstr ""
-
-#: includes/admin-overview.php:251
-msgid "Connect for support"
-msgstr ""
-
-#: includes/admin-overview.php:252
-msgid "Connect a pixelgrade.com account so support and account services know this site."
-msgstr ""
-
-#: includes/admin-overview.php:254
-msgid "Assistant stores account identity separately from Plus license state."
-msgstr ""
-
-#: includes/admin-overview.php:262
-#: includes/admin-overview.php:919
-#: includes/admin-starter-sites.php:839
-#: includes/default-plugin-config.php:534
-msgid "Set up Pixelgrade Plus"
-msgstr ""
-
-#: includes/admin-overview.php:263
-msgid "Unlock premium features"
-msgstr ""
-
-#: includes/admin-overview.php:264
-msgid "Pixelgrade Plus is installed but not licensed yet. Activate it when you are ready to use its premium features on top of your free Pixelgrade theme."
-msgstr ""
-
-#: includes/admin-overview.php:266
-msgid "Pixelgrade Plus handles its own licensing — this just takes you there."
-msgstr ""
-
-#: includes/admin-overview.php:274
-msgid "Refine styles"
-msgstr ""
-
-#: includes/admin-overview.php:275
-msgid "Tune the design system"
-msgstr ""
-
-#: includes/admin-overview.php:276
-msgid "Adjust colors, typography, and spacing after the site structure is in place."
-msgstr ""
-
-#: includes/admin-overview.php:278
-msgid "Style changes stay in WordPress design settings and can be adjusted again later."
-msgstr ""
-
-#: includes/admin-overview.php:286
-#: includes/admin-overview.php:912
-#: includes/default-plugin-config.php:232
-msgid "Explore Pixelgrade Plus"
-msgstr ""
-
-#: includes/admin-overview.php:287
-msgid "See what Plus unlocks"
-msgstr ""
-
-#: includes/admin-overview.php:288
-msgid "Pixelgrade Plus adds premium features on top of your free Pixelgrade theme."
-msgstr ""
-
-#: includes/admin-overview.php:290
-msgid "Exploring Plus does not change anything on your site."
-msgstr ""
-
-#: includes/admin-overview.php:298
-msgid "Find the next answer"
-msgstr ""
-
-#: includes/admin-overview.php:299
-msgid "Open documentation and support when you need guidance for this site."
-msgstr ""
-
-#: includes/admin-overview.php:301
-msgid "Support requests include site context so the team can answer faster."
-msgstr ""
-
-#: includes/admin-overview.php:314
-msgid "What is safe to change"
-msgstr ""
-
-#: includes/admin-overview.php:316
-msgid "Starter imports are tracked and can be reset from Tools without disconnecting your account."
-msgstr ""
-
-#: includes/admin-overview.php:317
-msgid "Individual layouts are tracked, so they can be replaced or removed later."
-msgstr ""
-
-#: includes/admin-overview.php:318
-msgid "Color, font, and spacing changes live in your WordPress design settings and can be adjusted again anytime."
-msgstr ""
-
-#: includes/admin-overview.php:390
+#: includes/admin-overview.php:347
 msgid "Open Design System"
 msgstr ""
 
-#: includes/admin-overview.php:397
-#: includes/admin-overview.php:404
+#: includes/admin-overview.php:354
+#: includes/admin-overview.php:361
 #: includes/admin-styles.php:183
 msgid "Open Style Manager"
 msgstr ""
 
-#: includes/admin-overview.php:415
-msgid "Browse Starter Sites"
+#: includes/admin-overview.php:373
+msgid "Browse the Design Library"
 msgstr ""
 
-#: includes/admin-overview.php:426
-#: includes/admin-overview.php:433
+#: includes/admin-overview.php:384
+#: includes/admin-overview.php:391
 msgid "Get Help"
 msgstr ""
 
-#: includes/admin-overview.php:552
+#: includes/admin-overview.php:531
 msgid "No plugin requirements"
 msgstr ""
 
-#: includes/admin-overview.php:556
+#: includes/admin-overview.php:535
 msgid "All ready"
 msgstr ""
 
 #. translators: 1: ready plugin count, 2: total plugin count.
-#: includes/admin-overview.php:561
+#: includes/admin-overview.php:540
 #, php-format
 msgid "%1$d of %2$d ready"
 msgstr ""
 
-#: includes/admin-overview.php:578
+#: includes/admin-overview.php:557
 msgid "No recommended plugins are required for this theme."
 msgstr ""
 
-#: includes/admin-overview.php:582
+#: includes/admin-overview.php:561
 msgid "Recommended plugins are installed and active."
 msgstr ""
 
-#. translators: %d: number of plugins needing setup.
-#: includes/admin-overview.php:587
-#, php-format
-msgid "%d plugin needs setup."
+#: includes/admin-overview.php:565
+msgid "1 plugin needs setup."
 msgstr ""
 
-#. translators: %s: starter site title.
-#: includes/admin-overview.php:677
+#. translators: %d: number of plugins needing setup.
+#: includes/admin-overview.php:570
 #, php-format
-msgid "%s applied"
+msgid "%d plugins need setup."
 msgstr ""
 
 #: includes/admin-overview.php:683
-msgid "Ready to choose"
+msgid "A starter design"
 msgstr ""
 
-#: includes/admin-overview.php:686
-msgid "No starters available"
+#: includes/admin-overview.php:694
+msgid "Ready to choose a design"
 msgstr ""
 
-#: includes/admin-overview.php:700
-msgid "Imported starter content is tracked for reset and cleanup."
+#: includes/admin-overview.php:697
+msgid "No designs available"
 msgstr ""
 
-#: includes/admin-overview.php:704
-msgid "Starter sites can add content, media, layouts, and design settings."
-msgstr ""
-
-#: includes/admin-overview.php:707
-msgid "This theme does not expose starter sites."
-msgstr ""
-
-#: includes/admin-overview.php:761
-msgid "item present"
-msgstr ""
-
-#: includes/admin-overview.php:761
-msgid "items present"
-msgstr ""
-
-#: includes/admin-overview.php:765
-msgid "Starter content present"
-msgstr ""
-
-#: includes/admin-overview.php:768
-msgid "No imported content"
-msgstr ""
-
-#: includes/admin-overview.php:782
-msgid "Add focused page patterns without replacing the whole site."
-msgstr ""
-
-#: includes/admin-overview.php:785
-msgid "Page Patterns can add focused pages after your baseline is ready."
-msgstr ""
-
-#. translators: 1: count, 2: singular item label.
-#. translators: 1: count, 2: plural item label.
-#: includes/admin-overview.php:803
-#: includes/admin-overview.php:811
-#, php-format
-msgid "%1$d %2$s"
-msgstr ""
-
-#: includes/admin-overview.php:836
-msgid "Pixelgrade account is connected."
+#: includes/admin-overview.php:719
+msgid "Connected"
 msgstr ""
 
 #. translators: %s: account display name, login, or email.
-#: includes/admin-overview.php:841
+#: includes/admin-overview.php:724
 #, php-format
-msgid "Connected as %s."
+msgid "Connected as %s"
 msgstr ""
 
-#: includes/admin-overview.php:861
+#: includes/admin-overview.php:744
 msgid "Installed, not licensed"
 msgstr ""
 
-#: includes/admin-overview.php:878
+#: includes/admin-overview.php:761
 msgid "Premium features are unlocked on this site."
 msgstr ""
 
-#: includes/admin-overview.php:882
+#: includes/admin-overview.php:765
 msgid "Activate a license to unlock premium features."
 msgstr ""
 
-#: includes/admin-overview.php:885
+#: includes/admin-overview.php:768
 msgid "Premium features can extend your free Pixelgrade theme."
 msgstr ""
 
-#: includes/admin-overview.php:913
-msgid "Unlock advanced design tools, starter sites, and premium support for your Pixelgrade site."
+#: includes/admin-overview.php:796
+msgid "Premium design tools and support that extend your free theme — there when you want them."
 msgstr ""
 
-#: includes/admin-overview.php:920
+#: includes/admin-overview.php:803
 msgid "Pixelgrade Plus is installed. Activate it to unlock its advanced design tools."
 msgstr ""
 
-#: includes/admin-overview.php:926
-#: includes/admin-starter-sites.php:840
+#: includes/admin-overview.php:809
+#: includes/admin-starter-sites.php:956
 #: includes/default-plugin-config.php:531
 msgid "Manage Pixelgrade Plus"
 msgstr ""
 
-#: includes/admin-overview.php:927
+#: includes/admin-overview.php:810
 #: includes/default-plugin-config.php:532
 msgid "Pixelgrade Plus is active. Manage your advanced design tools and settings."
 msgstr ""
 
-#: includes/admin-overview.php:971
+#: includes/admin-overview.php:853
+msgid "today"
+msgstr ""
+
+#: includes/admin-overview.php:857
+msgid "yesterday"
+msgstr ""
+
+#. translators: %d: number of days (always 2 or more).
+#: includes/admin-overview.php:862
+#, php-format
+msgid "%d days ago"
+msgstr ""
+
+#. translators: %d: number of weeks (always 2 or more).
+#: includes/admin-overview.php:867
+#, php-format
+msgid "%d weeks ago"
+msgstr ""
+
+#. translators: %d: number of months (always 2 or more).
+#: includes/admin-overview.php:872
+#, php-format
+msgid "%d months ago"
+msgstr ""
+
+#: includes/admin-overview.php:876
+msgid "a year ago"
+msgstr ""
+
+#. translators: %d: number of years (always 2 or more).
+#: includes/admin-overview.php:880
+#, php-format
+msgid "%d years ago"
+msgstr ""
+
+#. translators: %s: layout part title (a header, footer, or template).
+#. translators: %s: layout recipe title.
+#: includes/admin-overview.php:903
+#: includes/admin-overview.php:907
+#, php-format
+msgid "%s applied"
+msgstr ""
+
+#. translators: %s: page/content pattern title.
+#: includes/admin-overview.php:905
+#, php-format
+msgid "%s added"
+msgstr ""
+
+#. translators: %s: starter design title.
+#: includes/admin-overview.php:960
+#, php-format
+msgid "%s imported"
+msgstr ""
+
+#: includes/admin-overview.php:1015
+msgid "Last change"
+msgstr ""
+
+#: includes/admin-overview.php:1154
+msgid "Your style"
+msgstr ""
+
+#: includes/admin-overview.php:1155
+msgid "Your palette"
+msgstr ""
+
+#: includes/admin-overview.php:1155
+msgid "Theme defaults"
+msgstr ""
+
+#: includes/admin-overview.php:1202
+msgid "Needs your attention"
+msgstr ""
+
+#: includes/admin-overview.php:1213
+msgid "1 check to review"
+msgstr ""
+
+#. translators: %d: number of readiness checks with warnings (always 2 or more).
+#: includes/admin-overview.php:1215
+#, php-format
+msgid "%d checks to review"
+msgstr ""
+
+#: includes/admin-overview.php:1222
+msgid "No known conflicts"
+msgstr ""
+
+#: includes/admin-overview.php:1277
+msgid "Diagnostics"
+msgstr ""
+
+#: includes/admin-overview.php:1317
 msgid "Connect your account"
 msgstr ""
 
-#: includes/admin-overview.php:972
+#: includes/admin-overview.php:1318
 msgid "Connect a free pixelgrade.com account for support and updates. Optional."
 msgstr ""
 
-#: includes/admin-overview.php:983
-msgid "Pick a starter site"
-msgstr ""
-
-#: includes/admin-overview.php:984
-msgid "Launch from a ready-made starter instead of a blank canvas."
-msgstr ""
-
-#: includes/admin-overview.php:993
+#: includes/admin-overview.php:1325
 msgid "Install recommended plugins"
 msgstr ""
 
-#: includes/admin-overview.php:994
+#: includes/admin-overview.php:1326
 msgid "Add the plugins this theme is designed to use."
 msgstr ""
 
-#: includes/admin-plugins.php:128
+#: includes/admin-overview.php:1337
+msgid "Pick a starter site"
+msgstr ""
+
+#: includes/admin-overview.php:1338
+msgid "Launch from a ready-made starter instead of a blank canvas."
+msgstr ""
+
+#: includes/admin-plugins.php:163
 msgid "Check the recommended plugins and activate anything Pixelgrade Design needs before you start working."
 msgstr ""
 
-#: includes/admin-plugins.php:129
+#: includes/admin-plugins.php:164
 msgid "Setup ready"
 msgstr ""
 
-#: includes/admin-plugins.php:130
+#: includes/admin-plugins.php:165
 msgid "The recommended plugins are active."
 msgstr ""
 
-#: includes/admin-plugins.php:131
+#: includes/admin-plugins.php:166
 msgid "You are all set. There are no recommended plugins for this theme right now."
 msgstr ""
 
-#: includes/admin-plugins.php:141
-msgid "Installed"
-msgstr ""
-
-#: includes/admin-plugins.php:142
+#: includes/admin-plugins.php:177
 msgid "Not installed"
 msgstr ""
 
-#: includes/admin-plugins.php:143
+#: includes/admin-plugins.php:178
 msgid "Update available"
 msgstr ""
 
-#: includes/admin-plugins.php:144
+#: includes/admin-plugins.php:179
 msgid "Working..."
 msgstr ""
 
-#: includes/admin-plugins.php:145
+#: includes/admin-plugins.php:180
 msgid "Action failed. Please try again from Plugins > Installed Plugins."
 msgstr ""
 
-#: includes/admin-plugins.php:146
+#: includes/admin-plugins.php:181
 msgid "Refresh the page to confirm the latest plugin status."
+msgstr ""
+
+#: includes/admin-plugins.php:386
+msgid "Your connected Pixelgrade account includes Pixelgrade Plus. Download the companion plugin from Pixelgrade.com, install it, then activate it here."
+msgstr ""
+
+#: includes/admin-plugins.php:387
+msgid "Pixelgrade Plus adds advanced design tools for Pixelgrade LT sites."
 msgstr ""
 
 #: includes/admin-recipes.php:66
@@ -2202,249 +2208,264 @@ msgstr ""
 msgid "Parts"
 msgstr ""
 
-#: includes/admin-recipes.php:91
+#: includes/admin-recipes.php:90
 msgid "Customized after apply"
 msgstr ""
 
-#: includes/admin-starter-sites.php:36
-#: includes/admin-starter-sites.php:814
-msgid "Starter Sites"
-msgstr ""
-
-#: includes/admin-starter-sites.php:533
-#: includes/admin-starter-sites.php:835
+#: includes/admin-starter-sites.php:649
+#: includes/admin-starter-sites.php:951
 msgid "Add portfolio"
 msgstr ""
 
-#: includes/admin-starter-sites.php:543
-#: includes/admin-starter-sites.php:559
-#: includes/admin-starter-sites.php:600
-#: includes/admin-starter-sites.php:832
+#: includes/admin-starter-sites.php:659
+#: includes/admin-starter-sites.php:675
+#: includes/admin-starter-sites.php:716
+#: includes/admin-starter-sites.php:948
 msgid "Apply full site"
 msgstr ""
 
-#: includes/admin-starter-sites.php:550
-#: includes/admin-starter-sites.php:590
-#: includes/admin-starter-sites.php:833
+#: includes/admin-starter-sites.php:666
+#: includes/admin-starter-sites.php:706
+#: includes/admin-starter-sites.php:949
 msgid "Apply layouts"
 msgstr ""
 
-#: includes/admin-starter-sites.php:815
+#: includes/admin-starter-sites.php:930
+msgid "Starter Sites"
+msgstr ""
+
+#: includes/admin-starter-sites.php:931
 msgid "Pick a free starter design, then choose how much of it to apply. (“LT” is our Anima LT theme line — each starter is built on it.)"
 msgstr ""
 
-#: includes/admin-starter-sites.php:816
+#: includes/admin-starter-sites.php:932
 #: includes/default-plugin-config.php:447
 msgid "{{theme_name}} demo content"
 msgstr ""
 
-#: includes/admin-starter-sites.php:817
+#: includes/admin-starter-sites.php:933
 msgid "No starter sites are currently configured."
 msgstr ""
 
-#: includes/admin-starter-sites.php:818
+#: includes/admin-starter-sites.php:934
 msgid "Starter content was already imported. Import it again?"
 msgstr ""
 
-#: includes/admin-starter-sites.php:819
+#: includes/admin-starter-sites.php:935
 #: includes/default-plugin-config.php:452
 msgid "Getting data about available content..."
 msgstr ""
 
-#: includes/admin-starter-sites.php:820
+#: includes/admin-starter-sites.php:936
 msgid "This starter content is not available right now. Please try again later."
 msgstr ""
 
-#: includes/admin-starter-sites.php:821
+#: includes/admin-starter-sites.php:937
 msgid "Something went wrong."
 msgstr ""
 
-#: includes/admin-starter-sites.php:822
+#: includes/admin-starter-sites.php:938
 msgid "Successfully applied."
 msgstr ""
 
-#: includes/admin-starter-sites.php:826
+#: includes/admin-starter-sites.php:940
+msgid "Free"
+msgstr ""
+
+#: includes/admin-starter-sites.php:941
+msgid "Premium"
+msgstr ""
+
+#: includes/admin-starter-sites.php:942
 msgid "Requires Pixelgrade Plus"
 msgstr ""
 
-#: includes/admin-starter-sites.php:829
+#: includes/admin-starter-sites.php:945
 #: includes/default-plugin-config.php:471
 msgid "Import"
 msgstr ""
 
-#: includes/admin-starter-sites.php:830
+#: includes/admin-starter-sites.php:946
 #: includes/default-plugin-config.php:470
 msgid "Imported"
 msgstr ""
 
-#: includes/admin-starter-sites.php:831
+#: includes/admin-starter-sites.php:947
 #, php-format
 msgid "Use %s"
 msgstr ""
 
-#: includes/admin-starter-sites.php:834
+#: includes/admin-starter-sites.php:950
 msgid "Apply selected parts"
 msgstr ""
 
-#: includes/admin-starter-sites.php:836
+#: includes/admin-starter-sites.php:952
 #: includes/admin-tools.php:99
 msgid "Cancel"
 msgstr ""
 
-#: includes/admin-starter-sites.php:837
+#: includes/admin-starter-sites.php:953
 msgid "Back to Starter Sites"
 msgstr ""
 
-#: includes/admin-starter-sites.php:838
+#: includes/admin-starter-sites.php:954
 msgid "Preview"
 msgstr ""
 
-#: includes/admin-starter-sites.php:841
+#: includes/admin-starter-sites.php:957
 msgid "Applying..."
 msgstr ""
 
-#: includes/admin-starter-sites.php:842
+#: includes/admin-starter-sites.php:958
 msgid "Install required plugins"
 msgstr ""
 
-#: includes/admin-starter-sites.php:845
+#: includes/admin-starter-sites.php:961
 msgid "Preset"
 msgstr ""
 
-#: includes/admin-starter-sites.php:846
+#: includes/admin-starter-sites.php:962
 msgid "What to include"
 msgstr ""
 
-#: includes/admin-starter-sites.php:847
+#: includes/admin-starter-sites.php:963
 msgid "Summary"
 msgstr ""
 
-#: includes/admin-starter-sites.php:848
+#: includes/admin-starter-sites.php:964
 msgid "Selected"
 msgstr ""
 
-#: includes/admin-starter-sites.php:849
+#: includes/admin-starter-sites.php:965
 #, php-format
 msgid "This will add/update: %s."
 msgstr ""
 
-#: includes/admin-starter-sites.php:850
+#: includes/admin-starter-sites.php:966
 msgid "Choose at least one part to continue."
 msgstr ""
 
-#: includes/admin-starter-sites.php:852
+#: includes/admin-starter-sites.php:968
 msgid "Full site"
 msgstr ""
 
-#: includes/admin-starter-sites.php:853
+#: includes/admin-starter-sites.php:969
 msgid "Layouts only"
 msgstr ""
 
-#: includes/admin-starter-sites.php:854
+#: includes/admin-starter-sites.php:970
 msgid "Portfolio only"
 msgstr ""
 
-#: includes/admin-starter-sites.php:855
+#: includes/admin-starter-sites.php:971
 msgid "Choose parts"
 msgstr ""
 
-#: includes/admin-starter-sites.php:858
+#: includes/admin-starter-sites.php:974
 msgid "Everything from the starter: content, layouts, menus, and design."
 msgstr ""
 
-#: includes/admin-starter-sites.php:859
+#: includes/admin-starter-sites.php:975
 msgid "Keep your content and apply the starter structure."
 msgstr ""
 
-#: includes/admin-starter-sites.php:860
+#: includes/admin-starter-sites.php:976
 msgid "Add the portfolio feature and its templates."
 msgstr ""
 
-#: includes/admin-starter-sites.php:861
+#: includes/admin-starter-sites.php:977
 msgid "Select the exact pieces you want."
 msgstr ""
 
-#: includes/admin-starter-sites.php:866
+#: includes/admin-starter-sites.php:980
+msgid "Content"
+msgstr ""
+
+#: includes/admin-starter-sites.php:981
+msgid "Layouts"
+msgstr ""
+
+#: includes/admin-starter-sites.php:982
 msgid "Design"
 msgstr ""
 
-#: includes/admin-starter-sites.php:870
+#: includes/admin-starter-sites.php:986
 msgid "Pages"
 msgstr ""
 
-#: includes/admin-starter-sites.php:871
+#: includes/admin-starter-sites.php:987
 msgid "Posts"
 msgstr ""
 
-#: includes/admin-starter-sites.php:872
+#: includes/admin-starter-sites.php:988
 #: includes/theme-helpers/jetpack-fallbacks/portfolios.php:275
 #: includes/theme-helpers/jetpack-fallbacks/portfolios.php:460
 #: includes/theme-helpers/portfolio-cpt.php:70
 msgid "Projects"
 msgstr ""
 
-#: includes/admin-starter-sites.php:873
+#: includes/admin-starter-sites.php:989
 msgid "Products"
 msgstr ""
 
-#: includes/admin-starter-sites.php:874
+#: includes/admin-starter-sites.php:990
 msgid "Header"
 msgstr ""
 
-#: includes/admin-starter-sites.php:875
+#: includes/admin-starter-sites.php:991
 msgid "Footer"
 msgstr ""
 
-#: includes/admin-starter-sites.php:877
+#: includes/admin-starter-sites.php:993
 msgid "Post list (archive)"
 msgstr ""
 
-#: includes/admin-starter-sites.php:878
+#: includes/admin-starter-sites.php:994
 msgid "Single post"
 msgstr ""
 
-#: includes/admin-starter-sites.php:879
+#: includes/admin-starter-sites.php:995
 msgid "Portfolio archive"
 msgstr ""
 
-#: includes/admin-starter-sites.php:880
+#: includes/admin-starter-sites.php:996
 msgid "Portfolio single"
 msgstr ""
 
-#: includes/admin-starter-sites.php:881
+#: includes/admin-starter-sites.php:997
 msgid "Colors and fonts"
 msgstr ""
 
-#: includes/admin-starter-sites.php:882
+#: includes/admin-starter-sites.php:998
 msgid "Menus"
 msgstr ""
 
-#: includes/admin-starter-sites.php:883
+#: includes/admin-starter-sites.php:999
 msgid "Logo"
 msgstr ""
 
 #. translators: %s: comma-separated list of plugin names.
-#: includes/admin-starter-sites.php:890
+#: includes/admin-starter-sites.php:1006
 msgid "This starter needs a couple of plugins first"
 msgstr ""
 
 #. translators: %s: comma-separated list of plugin names.
-#: includes/admin-starter-sites.php:892
+#: includes/admin-starter-sites.php:1008
 #, php-format
 msgid "To use this starter as intended, install and activate %s. Without them the imported pages would render broken (missing blocks, colors and fonts)."
 msgstr ""
 
-#: includes/admin-starter-sites.php:893
+#: includes/admin-starter-sites.php:1009
 msgctxt "separator between required plugin names"
 msgid ", "
 msgstr ""
 
-#: includes/admin-starter-sites.php:894
+#: includes/admin-starter-sites.php:1010
 msgctxt "last separator between required plugin names"
 msgid " and "
 msgstr ""
 
-#: includes/admin-starter-sites.php:1074
+#: includes/admin-starter-sites.php:1190
 #: includes/default-plugin-config.php:448
 msgid "Import the content from the theme demo."
 msgstr ""
@@ -2745,25 +2766,25 @@ msgid "which is not compatible with the plugin. Please update to the latest vers
 msgstr ""
 
 #. translators: %s: the plugin name.
-#: includes/class-pixelgrade_assistant.php:350
+#: includes/class-pixelgrade_assistant.php:357
 #, php-format
 msgid "Error: plugin \"%s\" requires a newer version of PHP to be running."
 msgstr ""
 
 #. translators: %s: the minimum required PHP version.
-#: includes/class-pixelgrade_assistant.php:353
+#: includes/class-pixelgrade_assistant.php:360
 #, php-format
 msgid "Minimal version of PHP required: %s"
 msgstr ""
 
 #. translators: %s: the server current PHP version.
-#: includes/class-pixelgrade_assistant.php:356
+#: includes/class-pixelgrade_assistant.php:363
 #, php-format
 msgid "Your server's PHP version: %s"
 msgstr ""
 
 #. translators: 1: Pixelgrade Assistant plugin name, 2: Pixelgrade Care plugin name
-#: includes/class-pixelgrade_assistant.php:370
+#: includes/class-pixelgrade_assistant.php:377
 #, php-format
 msgid "%1$s stays inactive while %2$s is active, so the two never overlap. Your current setup keeps working — no action needed."
 msgstr ""
@@ -2999,10 +3020,6 @@ msgstr ""
 
 #: includes/default-plugin-config.php:198
 msgid "Starter content importing.."
-msgstr ""
-
-#: includes/default-plugin-config.php:221
-msgid "Pixelgrade Plus"
 msgstr ""
 
 #: includes/default-plugin-config.php:226
@@ -3296,8 +3313,8 @@ msgid "Currently paused..."
 msgstr ""
 
 #: includes/default-plugin-config.php:484
-#: includes/setup-readiness.php:716
-#: includes/setup-readiness.php:732
+#: includes/setup-readiness.php:730
+#: includes/setup-readiness.php:746
 msgid "Manage plugins"
 msgstr ""
 
@@ -3338,227 +3355,227 @@ msgstr ""
 msgid "<a href=\"%1$s\" target=\"_blank\">%2$s</a> - <strong>recommended version is %3$s;</strong> download it <a href=\"%4$s\" target=\"_blank\">here</a>;"
 msgstr ""
 
-#: includes/setup-readiness.php:199
+#: includes/setup-readiness.php:213
 msgid "No recommended plugins for this theme"
 msgstr ""
 
-#: includes/setup-readiness.php:202
-#: includes/setup-readiness.php:205
+#: includes/setup-readiness.php:216
+#: includes/setup-readiness.php:219
 #, php-format
 msgid "%1$d of %2$d active"
 msgstr ""
 
-#: includes/setup-readiness.php:208
+#: includes/setup-readiness.php:222
 #, php-format
 msgid "All %d active and up to date"
 msgstr ""
 
-#: includes/setup-readiness.php:216
-#: includes/setup-readiness.php:805
+#: includes/setup-readiness.php:230
+#: includes/setup-readiness.php:819
 msgid "Recommended plugins"
 msgstr ""
 
-#: includes/setup-readiness.php:219
+#: includes/setup-readiness.php:233
 msgid "All recommended plugins installed, active, and up to date"
 msgstr ""
 
-#: includes/setup-readiness.php:220
+#: includes/setup-readiness.php:234
 msgid "Pixelgrade Design relies on these plugins for blocks, styles, and starter content. Use the list below to install or activate anything missing."
 msgstr ""
 
-#: includes/setup-readiness.php:275
+#: includes/setup-readiness.php:289
 msgid "Companion plugin versions"
 msgstr ""
 
-#: includes/setup-readiness.php:278
+#: includes/setup-readiness.php:292
 msgid "Within the versions your theme is tested against"
 msgstr ""
 
-#: includes/setup-readiness.php:279
+#: includes/setup-readiness.php:293
 #, php-format
 msgid "%d outside the tested range"
 msgstr ""
 
-#: includes/setup-readiness.php:280
+#: includes/setup-readiness.php:294
 msgid "Within the versions your theme declares support for"
 msgstr ""
 
-#: includes/setup-readiness.php:281
+#: includes/setup-readiness.php:295
 msgid "Your theme is tested against specific companion plugin versions. Running outside that range can cause layout or styling differences."
 msgstr ""
 
-#: includes/setup-readiness.php:324
+#: includes/setup-readiness.php:338
 msgid "Unknown theme"
 msgstr ""
 
-#: includes/setup-readiness.php:332
+#: includes/setup-readiness.php:346
 msgid "An active Pixelgrade theme"
 msgstr ""
 
-#: includes/setup-readiness.php:333
+#: includes/setup-readiness.php:347
 msgid "Pixelgrade Design styles, blocks, and starter content are built for Pixelgrade themes. Activate one to use these tools."
 msgstr ""
 
-#: includes/setup-readiness.php:343
+#: includes/setup-readiness.php:357
 msgid "Plugin coexistence"
 msgstr ""
 
-#: includes/setup-readiness.php:346
+#: includes/setup-readiness.php:360
 msgid "Pixelgrade Care is active"
 msgstr ""
 
-#: includes/setup-readiness.php:347
+#: includes/setup-readiness.php:361
 msgid "No conflicting Pixelgrade plugins"
 msgstr ""
 
-#: includes/setup-readiness.php:348
+#: includes/setup-readiness.php:362
 msgid "Pixelgrade Care deactivated"
 msgstr ""
 
-#: includes/setup-readiness.php:349
+#: includes/setup-readiness.php:363
 msgid "Pixelgrade Care and Pixelgrade Assistant cannot run together. Deactivate Pixelgrade Care so Assistant can power the Pixelgrade Design tools."
 msgstr ""
 
-#: includes/setup-readiness.php:376
+#: includes/setup-readiness.php:390
 msgid "PHP version"
 msgstr ""
 
-#: includes/setup-readiness.php:378
-#: includes/setup-readiness.php:393
-#: includes/setup-readiness.php:408
-#: includes/setup-readiness.php:757
-#: includes/setup-readiness.php:761
-#: includes/setup-readiness.php:765
+#: includes/setup-readiness.php:392
+#: includes/setup-readiness.php:407
+#: includes/setup-readiness.php:422
 #: includes/setup-readiness.php:771
+#: includes/setup-readiness.php:775
+#: includes/setup-readiness.php:779
+#: includes/setup-readiness.php:785
 msgid "Unknown"
 msgstr ""
 
-#: includes/setup-readiness.php:379
-#: includes/setup-readiness.php:394
+#: includes/setup-readiness.php:393
+#: includes/setup-readiness.php:408
 #, php-format
 msgid "%s or newer"
 msgstr ""
 
-#: includes/setup-readiness.php:380
+#: includes/setup-readiness.php:394
 msgid "A modern PHP version keeps the editor, Style Manager, and starter imports fast and stable."
 msgstr ""
 
-#: includes/setup-readiness.php:391
+#: includes/setup-readiness.php:405
 msgid "WordPress version"
 msgstr ""
 
-#: includes/setup-readiness.php:395
+#: includes/setup-readiness.php:409
 msgid "The Site Editor and global styles that Pixelgrade Design uses need a current WordPress version."
 msgstr ""
 
-#: includes/setup-readiness.php:406
-#: includes/setup-readiness.php:768
+#: includes/setup-readiness.php:420
+#: includes/setup-readiness.php:782
 msgid "Memory limit"
 msgstr ""
 
-#: includes/setup-readiness.php:409
+#: includes/setup-readiness.php:423
 #, php-format
 msgid "%s or more"
 msgstr ""
 
-#: includes/setup-readiness.php:410
+#: includes/setup-readiness.php:424
 msgid "Starter-content imports and the block editor can run out of memory on tight limits. More headroom (256 MB+) is ideal for large imports."
 msgstr ""
 
-#: includes/setup-readiness.php:443
+#: includes/setup-readiness.php:457
 msgid "Setup needs attention before you start"
 msgstr ""
 
-#: includes/setup-readiness.php:444
+#: includes/setup-readiness.php:458
 msgid "Resolve the blockers below to use Pixelgrade Design on this site."
 msgstr ""
 
-#: includes/setup-readiness.php:447
+#: includes/setup-readiness.php:461
 msgid "A few things need attention"
 msgstr ""
 
-#: includes/setup-readiness.php:448
+#: includes/setup-readiness.php:462
 msgid "Pixelgrade Design will work, but resolving these gives you the best results."
 msgstr ""
 
-#: includes/setup-readiness.php:451
+#: includes/setup-readiness.php:465
 msgid "Pixelgrade Design is ready on this site"
 msgstr ""
 
-#: includes/setup-readiness.php:452
+#: includes/setup-readiness.php:466
 msgid "Everything checks out. You can start designing."
 msgstr ""
 
-#: includes/setup-readiness.php:712
+#: includes/setup-readiness.php:726
 msgid "Choose a theme"
 msgstr ""
 
-#: includes/setup-readiness.php:720
+#: includes/setup-readiness.php:734
 msgid "How to update PHP"
 msgstr ""
 
-#: includes/setup-readiness.php:724
+#: includes/setup-readiness.php:738
 msgid "Update WordPress"
 msgstr ""
 
-#: includes/setup-readiness.php:728
+#: includes/setup-readiness.php:742
 msgid "How to increase memory"
 msgstr ""
 
-#: includes/setup-readiness.php:756
+#: includes/setup-readiness.php:770
 msgid "PHP"
 msgstr ""
 
-#: includes/setup-readiness.php:760
+#: includes/setup-readiness.php:774
 msgid "WordPress"
 msgstr ""
 
-#: includes/setup-readiness.php:764
+#: includes/setup-readiness.php:778
 msgid "Database"
 msgstr ""
 
-#: includes/setup-readiness.php:777
+#: includes/setup-readiness.php:791
 msgid "Max execution time"
 msgstr ""
 
-#: includes/setup-readiness.php:778
+#: includes/setup-readiness.php:792
 #, php-format
 msgid "%s s"
 msgstr ""
 
-#: includes/setup-readiness.php:784
+#: includes/setup-readiness.php:798
 msgid "Max upload size"
 msgstr ""
 
-#: includes/setup-readiness.php:801
+#: includes/setup-readiness.php:815
 msgid "Needs attention"
 msgstr ""
 
-#: includes/setup-readiness.php:802
+#: includes/setup-readiness.php:816
 msgid "Current"
 msgstr ""
 
-#: includes/setup-readiness.php:804
+#: includes/setup-readiness.php:818
 msgid "Why it matters"
 msgstr ""
 
-#: includes/setup-readiness.php:806
+#: includes/setup-readiness.php:820
 msgid "Site environment"
 msgstr ""
 
-#: includes/setup-readiness.php:807
+#: includes/setup-readiness.php:821
 msgid "Open System Status"
 msgstr ""
 
-#: includes/setup-readiness.php:808
+#: includes/setup-readiness.php:822
 msgid "Detailed tables, data collection, and the copyable report live in System Status."
 msgstr ""
 
-#: includes/setup-readiness.php:809
+#: includes/setup-readiness.php:823
 msgid "Blocker"
 msgstr ""
 
-#: includes/setup-readiness.php:810
+#: includes/setup-readiness.php:824
 msgid "Heads up"
 msgstr ""
 
@@ -3897,6 +3914,7 @@ msgstr ""
 msgid "M j, Y @ G:i"
 msgstr ""
 
+#. translators: Publish box date format, see http://php.net/date
 #: includes/theme-helpers/jetpack-fallbacks/portfolios.php:396
 #, php-format
 msgid "Project item draft updated. <a target=\"_blank\" href=\"%s\">Preview project</a>"
@@ -3932,11 +3950,11 @@ msgstr ""
 msgid "Please define an SVG icon filename."
 msgstr ""
 
-#: includes/theme-helpers/nova-menu/class-nova-menu.php:512
+#: includes/theme-helpers/nova-menu/class-nova-menu.php:514
 msgid "You seem to be short on menu entries. You can start creating them on your dashboard."
 msgstr ""
 
-#: includes/theme-helpers/nova-menu/class-nova-menu.php:644
+#: includes/theme-helpers/nova-menu/class-nova-menu.php:646
 msgid "Labels"
 msgstr ""
 
