@@ -3,7 +3,7 @@
  * Plugin Name:       Pixelgrade Assistant
  * Plugin URI:        https://github.com/pixelgrade/pixelgrade-assistant
  * Description:       We care about giving you the best experience with your free Pixelgrade theme.
- * Version:           2.2.1
+ * Version:           2.2.2
  * Requires at least: 5.9
  * Requires PHP:      7.4
  * Author:            Pixelgrade
@@ -23,6 +23,7 @@ define( 'PIXELGRADE_ASSISTANT__PLUGIN_DIR', plugin_dir_path( __FILE__ ) );
 define( 'PIXELGRADE_ASSISTANT__PLUGIN_FILE', __FILE__ );
 
 // Define our constants or make sure they have a value
+defined( 'PIXELGRADE_ASSISTANT__VERSION' )           || define( 'PIXELGRADE_ASSISTANT__VERSION', '2.2.2' );
 defined( 'PIXELGRADE_ASSISTANT__API_BASE' )          || define( 'PIXELGRADE_ASSISTANT__API_BASE', 'https://pixelgrade.com/' );
 defined( 'PIXELGRADE_ASSISTANT__API_BASE_DOMAIN' )   || define( 'PIXELGRADE_ASSISTANT__API_BASE_DOMAIN', 'pixelgrade.com' );
 defined( 'PIXELGRADE_ASSISTANT__SHOP_BASE' )         || define( 'PIXELGRADE_ASSISTANT__SHOP_BASE', 'https://pixelgrade.com/' );
@@ -49,6 +50,9 @@ require_once plugin_dir_path( __FILE__ ) . 'includes/host-extension-surface.php'
 
 // Host-owned pixelgrade.com account connection + Account hub tab.
 require_once plugin_dir_path( __FILE__ ) . 'includes/account.php';
+
+// Minimal site context shared by functional requests to Pixelgrade services.
+require_once plugin_dir_path( __FILE__ ) . 'includes/service-request-context.php';
 
 // Appearance -> Pixelgrade hub: server-side bootstrap data for the React shell.
 require_once plugin_dir_path( __FILE__ ) . 'includes/admin-hub.php';
@@ -105,7 +109,7 @@ function PixelgradeAssistant() {
 	 */
 	require_once plugin_dir_path( __FILE__ ) . 'includes/class-pixelgrade_assistant.php';
 
-	$instance = PixelgradeAssistant::instance( __FILE__, '2.2.1' );
+	$instance = PixelgradeAssistant::instance( __FILE__, PIXELGRADE_ASSISTANT__VERSION );
 
 	return $instance;
 }

@@ -2,14 +2,14 @@
 # This file is distributed under the GPL-3.0.
 msgid ""
 msgstr ""
-"Project-Id-Version: Pixelgrade Assistant 2.2.1\n"
+"Project-Id-Version: Pixelgrade Assistant 2.2.2\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/pixelgrade-assistant\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2026-07-09T11:52:51+00:00\n"
+"POT-Creation-Date: 2026-07-10T15:07:29+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.12.0\n"
 "X-Domain: pixelgrade_assistant\n"
@@ -58,17 +58,17 @@ msgstr ""
 msgid "Learn more"
 msgstr ""
 
-#: admin/class-pixelgrade_assistant-admin.php:1967
+#: admin/class-pixelgrade_assistant-admin.php:1972
 msgid "New Theme Update is Available!"
 msgstr ""
 
-#: admin/class-pixelgrade_assistant-admin.php:1969
+#: admin/class-pixelgrade_assistant-admin.php:1974
 #, php-format
 msgid "Great news! A new theme update is available for your <strong>%s</strong> theme, version <strong>%s</strong>. To update go to your <a href=\"%s\">Theme Dashboard</a>."
 msgstr ""
 
-#: admin/class-pixelgrade_assistant-admin.php:2163
-#: admin/class-pixelgrade_assistant-admin.php:2170
+#: admin/class-pixelgrade_assistant-admin.php:2168
+#: admin/class-pixelgrade_assistant-admin.php:2175
 #: admin/class-pixelgrade_assistant-notifications.php:436
 #: admin/class-pixelgrade_assistant-notifications.php:444
 #: admin/class-pixelgrade_assistant-setup_wizard.php:215
@@ -353,7 +353,7 @@ msgid "The layout bundle endpoint is not available."
 msgstr ""
 
 #: admin/class-pixelgrade_assistant-starter_content.php:2167
-#: includes/admin-starter-sites.php:1000
+#: includes/admin-starter-sites.php:1001
 #: includes/theme-helpers/jetpack-fallbacks/portfolios.php:277
 #: includes/theme-helpers/jetpack-fallbacks/portfolios.php:453
 #: includes/theme-helpers/portfolio-cpt.php:72
@@ -1276,7 +1276,7 @@ msgstr ""
 
 #: includes/account.php:2115
 #: includes/admin-overview.php:802
-#: includes/admin-starter-sites.php:955
+#: includes/admin-starter-sites.php:956
 #: includes/default-plugin-config.php:534
 msgid "Set up Pixelgrade Plus"
 msgstr ""
@@ -1691,37 +1691,37 @@ msgstr ""
 msgid "The documentation feedback request is invalid."
 msgstr ""
 
-#: includes/admin-docs.php:563
+#: includes/admin-docs.php:566
 msgid "You are not allowed to read the documentation."
 msgstr ""
 
-#: includes/admin-docs.php:577
+#: includes/admin-docs.php:580
 msgid "That article is not available here."
 msgstr ""
 
-#: includes/admin-docs.php:699
+#: includes/admin-docs.php:702
 msgid "You are not allowed to submit a support request."
 msgstr ""
 
-#: includes/admin-docs.php:706
+#: includes/admin-docs.php:709
 msgid "Connect your Pixelgrade account before submitting a support request."
 msgstr ""
 
-#: includes/admin-docs.php:712
+#: includes/admin-docs.php:715
 msgid "Support is available for active Pixelgrade themes."
 msgstr ""
 
-#: includes/admin-docs.php:717
+#: includes/admin-docs.php:720
 msgid "Please add a subject and details before sending your request."
 msgstr ""
 
-#: includes/admin-docs.php:724
+#: includes/admin-docs.php:727
 #, php-format
 msgid "Keep the subject under %d characters and add extra context in Details."
 msgstr ""
 
-#: includes/admin-docs.php:733
-#: includes/admin-docs.php:738
+#: includes/admin-docs.php:736
+#: includes/admin-docs.php:741
 msgid "The Pixelgrade account connection is not configured for support requests."
 msgstr ""
 
@@ -1805,7 +1805,7 @@ msgstr ""
 
 #: includes/admin-layout-units.php:110
 #: includes/admin-recipes.php:87
-#: includes/admin-starter-sites.php:983
+#: includes/admin-starter-sites.php:984
 msgid "Features"
 msgstr ""
 
@@ -1818,7 +1818,7 @@ msgid "Include sample projects"
 msgstr ""
 
 #: includes/admin-overview.php:44
-#: includes/admin-starter-sites.php:992
+#: includes/admin-starter-sites.php:993
 msgid "Home"
 msgstr ""
 
@@ -1976,7 +1976,7 @@ msgid "Pixelgrade Plus is installed. Activate it to unlock its advanced design t
 msgstr ""
 
 #: includes/admin-overview.php:809
-#: includes/admin-starter-sites.php:956
+#: includes/admin-starter-sites.php:957
 #: includes/default-plugin-config.php:531
 msgid "Manage Pixelgrade Plus"
 msgstr ""
@@ -2212,260 +2212,260 @@ msgstr ""
 msgid "Customized after apply"
 msgstr ""
 
-#: includes/admin-starter-sites.php:649
-#: includes/admin-starter-sites.php:951
+#: includes/admin-starter-sites.php:650
+#: includes/admin-starter-sites.php:952
 msgid "Add portfolio"
 msgstr ""
 
-#: includes/admin-starter-sites.php:659
-#: includes/admin-starter-sites.php:675
-#: includes/admin-starter-sites.php:716
-#: includes/admin-starter-sites.php:948
+#: includes/admin-starter-sites.php:660
+#: includes/admin-starter-sites.php:676
+#: includes/admin-starter-sites.php:717
+#: includes/admin-starter-sites.php:949
 msgid "Apply full site"
 msgstr ""
 
-#: includes/admin-starter-sites.php:666
-#: includes/admin-starter-sites.php:706
-#: includes/admin-starter-sites.php:949
+#: includes/admin-starter-sites.php:667
+#: includes/admin-starter-sites.php:707
+#: includes/admin-starter-sites.php:950
 msgid "Apply layouts"
 msgstr ""
 
-#: includes/admin-starter-sites.php:930
+#: includes/admin-starter-sites.php:931
 msgid "Starter Sites"
 msgstr ""
 
-#: includes/admin-starter-sites.php:931
+#: includes/admin-starter-sites.php:932
 msgid "Pick a free starter design, then choose how much of it to apply. (“LT” is our Anima LT theme line — each starter is built on it.)"
 msgstr ""
 
-#: includes/admin-starter-sites.php:932
+#: includes/admin-starter-sites.php:933
 #: includes/default-plugin-config.php:447
 msgid "{{theme_name}} demo content"
 msgstr ""
 
-#: includes/admin-starter-sites.php:933
+#: includes/admin-starter-sites.php:934
 msgid "No starter sites are currently configured."
 msgstr ""
 
-#: includes/admin-starter-sites.php:934
+#: includes/admin-starter-sites.php:935
 msgid "Starter content was already imported. Import it again?"
 msgstr ""
 
-#: includes/admin-starter-sites.php:935
+#: includes/admin-starter-sites.php:936
 #: includes/default-plugin-config.php:452
 msgid "Getting data about available content..."
 msgstr ""
 
-#: includes/admin-starter-sites.php:936
+#: includes/admin-starter-sites.php:937
 msgid "This starter content is not available right now. Please try again later."
 msgstr ""
 
-#: includes/admin-starter-sites.php:937
+#: includes/admin-starter-sites.php:938
 msgid "Something went wrong."
 msgstr ""
 
-#: includes/admin-starter-sites.php:938
+#: includes/admin-starter-sites.php:939
 msgid "Successfully applied."
 msgstr ""
 
-#: includes/admin-starter-sites.php:940
+#: includes/admin-starter-sites.php:941
 msgid "Free"
 msgstr ""
 
-#: includes/admin-starter-sites.php:941
+#: includes/admin-starter-sites.php:942
 msgid "Premium"
 msgstr ""
 
-#: includes/admin-starter-sites.php:942
+#: includes/admin-starter-sites.php:943
 msgid "Requires Pixelgrade Plus"
 msgstr ""
 
-#: includes/admin-starter-sites.php:945
+#: includes/admin-starter-sites.php:946
 #: includes/default-plugin-config.php:471
 msgid "Import"
 msgstr ""
 
-#: includes/admin-starter-sites.php:946
+#: includes/admin-starter-sites.php:947
 #: includes/default-plugin-config.php:470
 msgid "Imported"
 msgstr ""
 
-#: includes/admin-starter-sites.php:947
+#: includes/admin-starter-sites.php:948
 #, php-format
 msgid "Use %s"
 msgstr ""
 
-#: includes/admin-starter-sites.php:950
+#: includes/admin-starter-sites.php:951
 msgid "Apply selected parts"
 msgstr ""
 
-#: includes/admin-starter-sites.php:952
+#: includes/admin-starter-sites.php:953
 #: includes/admin-tools.php:99
 msgid "Cancel"
 msgstr ""
 
-#: includes/admin-starter-sites.php:953
+#: includes/admin-starter-sites.php:954
 msgid "Back to Starter Sites"
 msgstr ""
 
-#: includes/admin-starter-sites.php:954
+#: includes/admin-starter-sites.php:955
 msgid "Preview"
 msgstr ""
 
-#: includes/admin-starter-sites.php:957
+#: includes/admin-starter-sites.php:958
 msgid "Applying..."
 msgstr ""
 
-#: includes/admin-starter-sites.php:958
+#: includes/admin-starter-sites.php:959
 msgid "Install required plugins"
 msgstr ""
 
-#: includes/admin-starter-sites.php:961
+#: includes/admin-starter-sites.php:962
 msgid "Preset"
 msgstr ""
 
-#: includes/admin-starter-sites.php:962
+#: includes/admin-starter-sites.php:963
 msgid "What to include"
 msgstr ""
 
-#: includes/admin-starter-sites.php:963
+#: includes/admin-starter-sites.php:964
 msgid "Summary"
 msgstr ""
 
-#: includes/admin-starter-sites.php:964
+#: includes/admin-starter-sites.php:965
 msgid "Selected"
 msgstr ""
 
-#: includes/admin-starter-sites.php:965
+#: includes/admin-starter-sites.php:966
 #, php-format
 msgid "This will add/update: %s."
 msgstr ""
 
-#: includes/admin-starter-sites.php:966
+#: includes/admin-starter-sites.php:967
 msgid "Choose at least one part to continue."
 msgstr ""
 
-#: includes/admin-starter-sites.php:968
+#: includes/admin-starter-sites.php:969
 msgid "Full site"
 msgstr ""
 
-#: includes/admin-starter-sites.php:969
+#: includes/admin-starter-sites.php:970
 msgid "Layouts only"
 msgstr ""
 
-#: includes/admin-starter-sites.php:970
+#: includes/admin-starter-sites.php:971
 msgid "Portfolio only"
 msgstr ""
 
-#: includes/admin-starter-sites.php:971
+#: includes/admin-starter-sites.php:972
 msgid "Choose parts"
 msgstr ""
 
-#: includes/admin-starter-sites.php:974
+#: includes/admin-starter-sites.php:975
 msgid "Everything from the starter: content, layouts, menus, and design."
 msgstr ""
 
-#: includes/admin-starter-sites.php:975
+#: includes/admin-starter-sites.php:976
 msgid "Keep your content and apply the starter structure."
 msgstr ""
 
-#: includes/admin-starter-sites.php:976
+#: includes/admin-starter-sites.php:977
 msgid "Add the portfolio feature and its templates."
 msgstr ""
 
-#: includes/admin-starter-sites.php:977
+#: includes/admin-starter-sites.php:978
 msgid "Select the exact pieces you want."
 msgstr ""
 
-#: includes/admin-starter-sites.php:980
+#: includes/admin-starter-sites.php:981
 msgid "Content"
 msgstr ""
 
-#: includes/admin-starter-sites.php:981
+#: includes/admin-starter-sites.php:982
 msgid "Layouts"
 msgstr ""
 
-#: includes/admin-starter-sites.php:982
+#: includes/admin-starter-sites.php:983
 msgid "Design"
 msgstr ""
 
-#: includes/admin-starter-sites.php:986
+#: includes/admin-starter-sites.php:987
 msgid "Pages"
 msgstr ""
 
-#: includes/admin-starter-sites.php:987
+#: includes/admin-starter-sites.php:988
 msgid "Posts"
 msgstr ""
 
-#: includes/admin-starter-sites.php:988
+#: includes/admin-starter-sites.php:989
 #: includes/theme-helpers/jetpack-fallbacks/portfolios.php:275
 #: includes/theme-helpers/jetpack-fallbacks/portfolios.php:460
 #: includes/theme-helpers/portfolio-cpt.php:70
 msgid "Projects"
 msgstr ""
 
-#: includes/admin-starter-sites.php:989
+#: includes/admin-starter-sites.php:990
 msgid "Products"
 msgstr ""
 
-#: includes/admin-starter-sites.php:990
+#: includes/admin-starter-sites.php:991
 msgid "Header"
 msgstr ""
 
-#: includes/admin-starter-sites.php:991
+#: includes/admin-starter-sites.php:992
 msgid "Footer"
 msgstr ""
 
-#: includes/admin-starter-sites.php:993
+#: includes/admin-starter-sites.php:994
 msgid "Post list (archive)"
 msgstr ""
 
-#: includes/admin-starter-sites.php:994
+#: includes/admin-starter-sites.php:995
 msgid "Single post"
 msgstr ""
 
-#: includes/admin-starter-sites.php:995
+#: includes/admin-starter-sites.php:996
 msgid "Portfolio archive"
 msgstr ""
 
-#: includes/admin-starter-sites.php:996
+#: includes/admin-starter-sites.php:997
 msgid "Portfolio single"
 msgstr ""
 
-#: includes/admin-starter-sites.php:997
+#: includes/admin-starter-sites.php:998
 msgid "Colors and fonts"
 msgstr ""
 
-#: includes/admin-starter-sites.php:998
+#: includes/admin-starter-sites.php:999
 msgid "Menus"
 msgstr ""
 
-#: includes/admin-starter-sites.php:999
+#: includes/admin-starter-sites.php:1000
 msgid "Logo"
 msgstr ""
 
 #. translators: %s: comma-separated list of plugin names.
-#: includes/admin-starter-sites.php:1006
+#: includes/admin-starter-sites.php:1007
 msgid "This starter needs a couple of plugins first"
 msgstr ""
 
 #. translators: %s: comma-separated list of plugin names.
-#: includes/admin-starter-sites.php:1008
+#: includes/admin-starter-sites.php:1009
 #, php-format
 msgid "To use this starter as intended, install and activate %s. Without them the imported pages would render broken (missing blocks, colors and fonts)."
 msgstr ""
 
-#: includes/admin-starter-sites.php:1009
+#: includes/admin-starter-sites.php:1010
 msgctxt "separator between required plugin names"
 msgid ", "
 msgstr ""
 
-#: includes/admin-starter-sites.php:1010
+#: includes/admin-starter-sites.php:1011
 msgctxt "last separator between required plugin names"
 msgid " and "
 msgstr ""
 
-#: includes/admin-starter-sites.php:1190
+#: includes/admin-starter-sites.php:1191
 #: includes/default-plugin-config.php:448
 msgid "Import the content from the theme demo."
 msgstr ""
@@ -3914,7 +3914,6 @@ msgstr ""
 msgid "M j, Y @ G:i"
 msgstr ""
 
-#. translators: Publish box date format, see http://php.net/date
 #: includes/theme-helpers/jetpack-fallbacks/portfolios.php:396
 #, php-format
 msgid "Project item draft updated. <a target=\"_blank\" href=\"%s\">Preview project</a>"
