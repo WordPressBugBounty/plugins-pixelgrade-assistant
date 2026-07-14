@@ -608,6 +608,36 @@ if ( ! function_exists( 'pixassist_starter_content_has_commerce' ) ) {
 	}
 }
 
+if ( ! function_exists( 'pixassist_starter_settings_have_commerce_key' ) ) {
+	/**
+	 * Whether a settings tree contains a WooCommerce-owned key at any depth.
+	 *
+	 * Starter manifests group WordPress options under containers such as `options`, so checking only
+	 * the first level would let a direct granular request bypass the commerce capability gate.
+	 *
+	 * @param array $data Settings tree.
+	 *
+	 * @return bool
+	 */
+	function pixassist_starter_settings_have_commerce_key( $data ) {
+		if ( ! is_array( $data ) ) {
+			return false;
+		}
+
+		foreach ( $data as $key => $value ) {
+			if ( 0 === strpos( strtolower( (string) $key ), 'woocommerce_' ) ) {
+				return true;
+			}
+
+			if ( is_array( $value ) && pixassist_starter_settings_have_commerce_key( $value ) ) {
+				return true;
+			}
+		}
+
+		return false;
+	}
+}
+
 if ( ! function_exists( 'pixassist_starter_classify_import' ) ) {
 	/**
 	 * Classify an import operation into a segment from the content itself (intrinsic classification).
@@ -637,10 +667,8 @@ if ( ! function_exists( 'pixassist_starter_classify_import' ) ) {
 
 		if ( in_array( $type, array( 'pre_settings', 'post_settings' ), true ) ) {
 			$data = isset( $args['data'] ) && is_array( $args['data'] ) ? $args['data'] : array();
-			foreach ( array_keys( $data ) as $key ) {
-				if ( 0 === strpos( strtolower( (string) $key ), 'woocommerce_' ) ) {
-					return 'commerce';
-				}
+			if ( pixassist_starter_settings_have_commerce_key( $data ) ) {
+				return 'commerce';
 			}
 		}
 
@@ -698,6 +726,85 @@ if ( ! function_exists( 'pixassist_starter_commerce_object_key' ) ) {
 		}
 
 		return $object_type . ':' . $object_id;
+	}
+}
+
+if ( ! function_exists( 'pixassist_starter_navigation_link_is_commerce' ) ) {
+	/**
+	 * Whether a core/navigation-link block points at commerce content.
+	 *
+	 * Block-navigation posts keep link targets in block attributes rather than nav-menu-item meta.
+	 * Convert those attributes to the same pseudo-record shape used by the record classifier so both
+	 * menu systems share the exact commerce rules and typed skipped-object registry.
+	 *
+	 * @param array $attributes Navigation-link block attributes.
+	 * @param array $context    Optional record-classification context.
+	 *
+	 * @return bool
+	 */
+	function pixassist_starter_navigation_link_is_commerce( $attributes, $context = array() ) {
+		if ( ! is_array( $attributes ) ) {
+			return false;
+		}
+
+		$url  = isset( $attributes['url'] ) ? (string) $attributes['url'] : '';
+		$path = '' !== $url ? parse_url( $url, PHP_URL_PATH ) : '';
+		$path = is_string( $path ) ? trim( $path, '/' ) : '';
+		$slug = '' !== $path ? rawurldecode( basename( $path ) ) : '';
+		$type = isset( $attributes['type'] ) ? (string) $attributes['type'] : '';
+		$id   = isset( $attributes['id'] ) ? $attributes['id'] : 0;
+
+		$record = array(
+			'post_type'  => 'nav_menu_item',
+			'post_title' => isset( $attributes['label'] ) ? (string) $attributes['label'] : '',
+			'post_name'  => $slug,
+			'meta'       => array(
+				'_menu_item_object'    => array( $type ),
+				'_menu_item_object_id' => array( $id ),
+			),
+		);
+
+		return 'commerce' === pixassist_starter_classify_post_record( $record, $context );
+	}
+}
+
+if ( ! function_exists( 'pixassist_starter_filter_unauthorized_navigation_blocks' ) ) {
+	/**
+	 * Remove unauthorized commerce links from mixed block-navigation content.
+	 *
+	 * A `wp_navigation` record can mix Home/About links with a Shop link. Skipping the whole record
+	 * would destroy the editorial menu, while importing it unchanged leaves a dead commerce link after
+	 * the target Shop page is correctly excluded. Core serializes navigation-link blocks as self-closing
+	 * block comments, so remove only the individual links classified as commerce. Invalid/unrecognized
+	 * comments are preserved byte-for-byte.
+	 *
+	 * @param string $content Serialized block content.
+	 * @param array  $context Optional record-classification context.
+	 *
+	 * @return string Filtered content.
+	 */
+	function pixassist_starter_filter_unauthorized_navigation_blocks( $content, $context = array() ) {
+		$content = (string) $content;
+		if ( '' === $content
+			|| false === strpos( $content, 'navigation-link' )
+			|| pixassist_starter_segment_is_authorized( 'commerce' ) ) {
+			return $content;
+		}
+
+		$filtered = preg_replace_callback(
+			'/<!--\s+wp:(?:core\/)?navigation-link\s+(\{.*?\})\s+\/-->/s',
+			function ( $matches ) use ( $context ) {
+				$attributes = json_decode( $matches[1], true );
+				if ( ! is_array( $attributes ) ) {
+					return $matches[0];
+				}
+
+				return pixassist_starter_navigation_link_is_commerce( $attributes, $context ) ? '' : $matches[0];
+			},
+			$content
+		);
+
+		return is_string( $filtered ) ? $filtered : $content;
 	}
 }
 
@@ -833,9 +940,14 @@ if ( ! function_exists( 'pixassist_starter_filter_unauthorized_settings' ) ) {
 			return is_array( $data ) ? $data : array();
 		}
 
-		foreach ( array_keys( $data ) as $key ) {
+		foreach ( $data as $key => $value ) {
 			if ( 0 === strpos( strtolower( (string) $key ), 'woocommerce_' ) ) {
 				unset( $data[ $key ] );
+				continue;
+			}
+
+			if ( is_array( $value ) ) {
+				$data[ $key ] = pixassist_starter_filter_unauthorized_settings( $value );
 			}
 		}
 

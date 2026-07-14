@@ -2,9 +2,9 @@
 Contributors: pixelgrade, vlad.olaru, babbardel
 Tags: dashboard, starter-content, demo-content, recommended-plugins, pixelgrade
 Requires at least: 5.9
-Tested up to: 7.0
+Tested up to: 7.0.1
 Requires PHP: 7.4
-Stable tag: 2.2.2
+Stable tag: 2.3.0
 License: GPLv3.0
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 
@@ -94,14 +94,18 @@ Pixelgrade Assistant does not perform advertising, cross-site, or event-level be
 
 == Screenshots ==
 
-1. Main dashboard tab
-2. Useful links tab
-3. System status tab
-4. Contextual docs sidebar
-5. Open support ticket tab
-6. Site setup wizard
+1. The Pixelgrade Design home brings onboarding, site status, and the next best action into one calm dashboard.
+2. Site Setup verifies the recommended plugin stack and environment at a glance.
+3. Browse free starter sites alongside reusable site parts and page patterns in the Design Library.
+4. Preview the live color, typography, and spacing systems, then jump straight into the matching Style Manager controls.
 
 == Changelog ==
+
+= 2.3.0 =
+* New onboarding: an essentials-first Site Setup checklist can install or activate Anima LT, Style Manager, and Nova Blocks from one place.
+* Design previews: Styles now shows live, site-specific color and typography previews that refresh with Style Manager changes.
+* Companion extensions: new contributed sections for Styles and Setup, plus setup-readiness checks that participate in the overall status.
+* Starter imports now repair missing media on re-import, skip unavailable optional taxonomies, and exclude locked WooCommerce content and settings while preserving server-side enforcement.
 
 = 2.2.2 =
 * Service infrastructure: functional Pixelgrade requests now use a documented first-party site registry with explicit URL/stack context and aggregate service reporting.
