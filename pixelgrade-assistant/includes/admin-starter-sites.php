@@ -61,7 +61,7 @@ if ( ! function_exists( 'pixassist_get_starter_sites_data' ) ) {
 			'siteAnalysis' => pixassist_get_starter_site_analysis(),
 			'copy'      => pixassist_get_starter_sites_copy( pixassist_get_starter_sites_config() ),
 			'endpoints' => pixassist_get_starter_sites_endpoints(),
-			'imported'  => pixassist_get_starter_sites_imported_state(),
+			'imported'  => pixassist_get_starter_sites_imported_summary(),
 			'applied'   => pixassist_get_starter_sites_applied_state(),
 			'collectionNews' => pixassist_get_collection_news( $starters ),
 			'plus'      => function_exists( 'pixassist_get_plus_status' ) ? pixassist_get_plus_status() : array(
@@ -229,11 +229,11 @@ if ( ! function_exists( 'pixassist_starter_lineage_title' ) ) {
 	/**
 	 * Present each free starter under its Pixelgrade LT lineage name.
 	 *
-	 * Field Notes / Olive & Ash / Meridian ARE the Hive LT / Rosa LT / Mies LT designs converted onto
-	 * the Anima LT stack with fresh media (Felt/Julia/Pile LT are already named that way), so the hub
-	 * shows the whole set under consistent LT-lineage names. Display title ONLY — the demo slug/id is
-	 * unchanged, so nothing collides with the reserved theme-single slugs. The cloud
-	 * `starterContent.demos` titles remain the source of record until aligned there.
+	 * Olive & Ash / Meridian ARE the Rosa LT / Mies LT designs converted onto the Anima LT stack with
+	 * fresh media (Hive/Felt/Julia/Pile LT are already canonical under LT slugs), so the hub shows the
+	 * whole set under consistent LT-lineage names. Display title ONLY — the remaining legacy demo
+	 * slugs/ids are unchanged, so nothing collides with the reserved theme-single slugs. The cloud
+	 * `starterContent.demos` titles remain the source of record until those entries are aligned there.
 	 *
 	 * @param string $id    Demo id/slug.
 	 * @param string $title Cloud-provided title (used when no lineage mapping exists).
@@ -244,7 +244,6 @@ if ( ! function_exists( 'pixassist_starter_lineage_title' ) ) {
 		$lineage = apply_filters(
 			'pixassist_starter_lineage_titles',
 			array(
-				'anima-blog'       => 'Hive LT',
 				'anima-restaurant' => 'Rosa LT',
 				'anima-portfolio'  => 'Mies LT',
 			)
@@ -405,6 +404,7 @@ if ( ! function_exists( 'pixassist_normalize_admin_hub_starter' ) ) {
 			'role'            => ( isset( $starter['role'] ) && 'library' === $starter['role'] ) ? 'library' : 'starter',
 			'source'          => $source,
 			'order'           => isset( $starter['order'] ) ? (int) $starter['order'] : 10,
+			'featureTags'     => pixassist_get_starter_feature_tags( $starter, $id, $capabilities ),
 			'capabilities'    => $capabilities,
 			'requiredPlugins' => pixassist_get_starter_required_plugins(
 				array(
@@ -426,6 +426,109 @@ if ( ! function_exists( 'pixassist_normalize_admin_hub_starter' ) ) {
 		$normalized['applyPlan'] = pixassist_get_starter_apply_plan( $normalized, pixassist_get_starter_site_analysis() );
 
 		return $normalized;
+	}
+}
+
+if ( ! function_exists( 'pixassist_starter_display_text' ) ) {
+	/**
+	 * Translate display-only payload text WITHOUT HTML-escaping.
+	 *
+	 * Strings destined for `wp_localize_script` payloads are rendered as React TEXT — running them
+	 * through esc_html__() bakes literal `&amp;` into the UI. Plain __() is the correct escaping
+	 * level for that sink; the function_exists guard keeps the standalone pin tests WordPress-free.
+	 *
+	 * @param string $text Text to translate.
+	 *
+	 * @return string
+	 */
+	function pixassist_starter_display_text( $text ) {
+		return function_exists( '__' ) ? __( $text, 'pixelgrade_assistant' ) : $text;
+	}
+}
+
+if ( ! function_exists( 'pixassist_get_starter_feature_tags' ) ) {
+	/**
+	 * Short, differentiating feature tags for a starter ("what is this site for"), WordPress.com-
+	 * themes style, rendered on the gallery cards and the composer header.
+	 *
+	 * Universal capabilities (colors & fonts, menus, pages & posts) are never tagged — every starter
+	 * has them, so they carry no signal. Commerce is also excluded here: the shop chip is derived
+	 * from the commerce segment so availability/gating stays single-sourced.
+	 *
+	 * Source order: descriptor `featureTags` (cloud config or companion-injected, display-only
+	 * strings) → Assistant's curated map for its known free starters → a portfolio-derived fallback.
+	 *
+	 * @param array  $starter      Raw starter descriptor.
+	 * @param string $id           Normalized starter id.
+	 * @param array  $capabilities Computed starter capabilities (for the derived fallback).
+	 *
+	 * @return string[] Up to four sanitized display tags.
+	 */
+	function pixassist_get_starter_feature_tags( $starter, $id, $capabilities = array() ) {
+		$tags = array();
+
+		if ( ! empty( $starter['featureTags'] ) && is_array( $starter['featureTags'] ) ) {
+			$tags = $starter['featureTags'];
+		} else {
+			// NOTE: plain translation (never esc_html__) — these land in a JSON payload rendered as
+			// React text, where an escaped ampersand shows up literally as "&amp;".
+			$curated = array(
+				'anima-restaurant' => array(
+					pixassist_starter_display_text( 'Menu & reservations' ),
+					pixassist_starter_display_text( 'Gallery' ),
+					pixassist_starter_display_text( 'Journal' ),
+				),
+				'anima-portfolio'  => array(
+					pixassist_starter_display_text( 'Portfolio' ),
+					pixassist_starter_display_text( 'Studio profile' ),
+					pixassist_starter_display_text( 'Contact' ),
+				),
+				'felt-lt'          => array(
+					pixassist_starter_display_text( 'Magazine home' ),
+					pixassist_starter_display_text( 'Stories & reviews' ),
+				),
+				'julia-lt'         => array(
+					pixassist_starter_display_text( 'Recipe index' ),
+					pixassist_starter_display_text( 'Food stories' ),
+				),
+				'pile-lt'          => array(
+					pixassist_starter_display_text( 'Portfolio' ),
+					pixassist_starter_display_text( 'Journal' ),
+				),
+				// The Hive LT starter has shipped under both ids (anima-blog pre-cutover, hive-lt
+				// canonical, repositioned as a bold editorial magazine) — tag both so older cached
+				// configs keep their glimpse.
+				'hive-lt'          => array(
+					pixassist_starter_display_text( 'Editorial home' ),
+					pixassist_starter_display_text( 'Visual essays' ),
+				),
+				'anima-blog'       => array(
+					pixassist_starter_display_text( 'Personal journal' ),
+					pixassist_starter_display_text( 'Photo stories' ),
+				),
+			);
+
+			if ( isset( $curated[ $id ] ) ) {
+				$tags = $curated[ $id ];
+			} elseif ( isset( $capabilities['features'] ) && is_array( $capabilities['features'] ) && in_array( 'portfolio', $capabilities['features'], true ) ) {
+				$tags = array( pixassist_starter_display_text( 'Portfolio' ) );
+			}
+		}
+
+		$clean = array();
+		foreach ( (array) $tags as $tag ) {
+			$tag = trim( wp_strip_all_tags( (string) $tag ) );
+			if ( '' === $tag ) {
+				continue;
+			}
+
+			$clean[] = $tag;
+			if ( count( $clean ) >= 4 ) {
+				break;
+			}
+		}
+
+		return $clean;
 	}
 }
 
@@ -1002,13 +1105,16 @@ if ( ! function_exists( 'pixassist_get_starter_sites_copy' ) ) {
 				),
 			),
 			// Dependency-gate copy: shown when a starter needs companion plugins that are not active yet.
+			// The *Single variants keep the copy grammatical when exactly one plugin is missing.
 			'requirements' => array(
+				'heading'       => esc_html__( 'This starter needs a couple of plugins first', 'pixelgrade_assistant' ),
+				'headingSingle' => esc_html__( 'This starter needs one more plugin first', 'pixelgrade_assistant' ),
 				/* translators: %s: comma-separated list of plugin names. */
-				'heading'   => esc_html__( 'This starter needs a couple of plugins first', 'pixelgrade_assistant' ),
-				/* translators: %s: comma-separated list of plugin names. */
-				'message'   => esc_html__( 'To use this starter as intended, install and activate %s. Without them the imported pages would render broken (missing blocks, colors and fonts).', 'pixelgrade_assistant' ),
-				'separator' => esc_html_x( ', ', 'separator between required plugin names', 'pixelgrade_assistant' ),
-				'and'       => esc_html_x( ' and ', 'last separator between required plugin names', 'pixelgrade_assistant' ),
+				'message'       => esc_html__( 'To use this starter as intended, install and activate %s. Without them the imported pages would render broken (missing blocks, colors and fonts).', 'pixelgrade_assistant' ),
+				/* translators: %s: a plugin name. */
+				'messageSingle' => esc_html__( 'To use this starter as intended, install and activate %s. Without it the imported pages would render broken (missing blocks, colors and fonts).', 'pixelgrade_assistant' ),
+				'separator'     => esc_html_x( ', ', 'separator between required plugin names', 'pixelgrade_assistant' ),
+				'and'           => esc_html_x( ' and ', 'last separator between required plugin names', 'pixelgrade_assistant' ),
 			),
 			// Deep link to the Plugins tab so the user can install + activate the missing companions.
 			'pluginsTabUrl' => pixassist_get_starter_sites_plugins_tab_url(),
@@ -1092,6 +1198,38 @@ if ( ! function_exists( 'pixassist_get_starter_sites_imported_state' ) ) {
 	}
 }
 
+if ( ! function_exists( 'pixassist_get_starter_sites_imported_summary' ) ) {
+	/**
+	 * Display-safe summary of the import journal for the browser payload.
+	 *
+	 * The raw `imported_starter_content` journal carries remote→local id maps, media maps, and full
+	 * settings snapshots (tens of KB per starter) that exist for the reset feature — the Starter Sites
+	 * UI only ever needs "was this starter imported, when, and was it a full demo". Localizing the raw
+	 * journal shipped ~64KB of dead weight to every hub page load, twice.
+	 *
+	 * @return array { demoKey: { imported: true, fullDemo: bool, importedAt: int } }
+	 */
+	function pixassist_get_starter_sites_imported_summary() {
+		$summary = array();
+
+		foreach ( pixassist_get_starter_sites_imported_state() as $key => $entry ) {
+			if ( ! is_array( $entry ) || empty( $entry ) ) {
+				continue;
+			}
+
+			$summary[ (string) $key ] = array(
+				'imported'   => true,
+				// A full-demo import always closes with a settings pass; layouts-only and content
+				// cherry-picks don't. Not a perfect signal, but safe: it only feeds display state.
+				'fullDemo'   => isset( $entry['post_settings'] ),
+				'importedAt' => isset( $entry['importedAt'] ) ? (int) $entry['importedAt'] : 0,
+			);
+		}
+
+		return $summary;
+	}
+}
+
 if ( ! function_exists( 'pixassist_get_starter_sites_active_starter' ) ) {
 	/**
 	 * The starter currently applied as the live full site.
@@ -1118,11 +1256,12 @@ if ( ! function_exists( 'pixassist_get_starter_sites_active_starter' ) ) {
 			}
 		}
 
-		// Fallback: the last starter whose journal records full-demo content (not layouts-only).
-		$fallback     = '';
-		$full_markers = array( 'post_types', 'taxonomies', 'media', 'pre_settings', 'post_settings', 'widgets' );
+		// Fallback: the last starter whose journal records a full-demo import. Requiring the closing
+		// settings pass (post_settings) keeps composer cherry-picks (pages-only, layouts-only, media)
+		// from being mistaken for the live full site.
+		$fallback = '';
 		foreach ( pixassist_get_starter_sites_imported_state() as $key => $entry ) {
-			if ( is_array( $entry ) && array_intersect( array_keys( $entry ), $full_markers ) ) {
+			if ( is_array( $entry ) && isset( $entry['post_settings'] ) ) {
 				$fallback = (string) $key;
 			}
 		}
@@ -1138,10 +1277,31 @@ if ( ! function_exists( 'pixassist_get_starter_sites_applied_state' ) ) {
 	 * @return array
 	 */
 	function pixassist_get_starter_sites_applied_state() {
+		// Recipes/layout units are slimmed to the fields the Starter Sites JS actually reads
+		// (`isApplied` / `demoKey`) — their journals can carry heavy look/unit sub-journals.
+		$recipes = array();
+		if ( function_exists( 'pixassist_get_recipes_applied' ) ) {
+			foreach ( (array) pixassist_get_recipes_applied() as $key => $entry ) {
+				$recipes[ (string) $key ] = array(
+					'demoKey'   => is_array( $entry ) && isset( $entry['demoKey'] ) ? (string) $entry['demoKey'] : '',
+					'isApplied' => is_array( $entry ) && ! empty( $entry['isApplied'] ),
+				);
+			}
+		}
+
+		$layout_units = array();
+		if ( function_exists( 'pixassist_get_layout_units_applied' ) ) {
+			foreach ( (array) pixassist_get_layout_units_applied() as $key => $entry ) {
+				$layout_units[ (string) $key ] = array(
+					'demoKey' => is_array( $entry ) && isset( $entry['demoKey'] ) ? (string) $entry['demoKey'] : '',
+				);
+			}
+		}
+
 		return array(
-			'fullDemos'     => pixassist_get_starter_sites_imported_state(),
-			'recipes'       => function_exists( 'pixassist_get_recipes_applied' ) ? pixassist_get_recipes_applied() : array(),
-			'layoutUnits'   => function_exists( 'pixassist_get_layout_units_applied' ) ? pixassist_get_layout_units_applied() : array(),
+			'fullDemos'     => pixassist_get_starter_sites_imported_summary(),
+			'recipes'       => $recipes,
+			'layoutUnits'   => $layout_units,
 			'activeStarter' => pixassist_get_starter_sites_active_starter(),
 		);
 	}
