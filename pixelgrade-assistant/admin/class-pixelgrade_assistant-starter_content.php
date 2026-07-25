@@ -51,6 +51,13 @@ class PixelgradeAssistant_StarterContent {
 	private $media_url_map_cache = array();
 
 	/**
+	 * Request-local cache for exact source-media URL replacements, keyed by demo.
+	 *
+	 * @var array
+	 */
+	private $media_source_replacement_cache = array();
+
+	/**
 	 * Request-local state for the site-mode preview menu injector — the source base whose demo menus the
 	 * preview renders for nav locations, and the lazily-built slug => items[] map.
 	 *
@@ -148,6 +155,7 @@ class PixelgradeAssistant_StarterContent {
 				$this,
 				'filter_post_option_page_for_posts'
 			), 10, 2 );
+			add_filter( 'pixassist_sce_import_post_option_site_logo', array( $this, 'filter_post_theme_mod_custom_logo' ), 10, 2 );
 			add_filter( 'pixassist_sce_import_post_theme_mod_nav_menu_locations', array(
 				$this,
 				'filter_post_theme_mod_nav_menu_locations'
@@ -7350,7 +7358,10 @@ HTML;
 				absint( $params['remote_id'] ),
 				sanitize_text_field( $params['title'] ),
 				sanitize_text_field( $params['ext'] ),
-				$params['file_data']
+				$params['file_data'],
+				true,
+				false,
+				isset( $params['source_urls'] ) ? $params['source_urls'] : array()
 			) );
 		}
 
@@ -7364,7 +7375,7 @@ HTML;
 		 * @return int|WP_Error Number of imported media records.
 		 */
 		private function import_starter_media( $demo_key, $base_url, $media, $use_source_urls = false ) {
-			if ( empty( $media['placeholders'] ) || ! is_array( $media ) ) {
+			if ( ! is_array( $media ) ) {
 				return 0;
 			}
 
@@ -7394,8 +7405,9 @@ HTML;
 		/**
 		 * Build the flat fetch list of source media to import, skipping anything already imported.
 		 *
-		 * The 'placeholders' GROUP is the rotation pool (not imported as-is) and the 'source_urls' entry is a
-		 * metadata map, so both are skipped. A source id already imported for this demo whose local attachment
+		 * The `placeholders` and `ignored` groups are both imported so the exporter can distinguish the
+		 * rotation pool from source assets that must be preserved. The `source_urls` entry is only a metadata
+		 * map, so it is skipped. A source id already imported for this demo whose local attachment
 		 * still exists is skipped too: re-importing a starter must REUSE attachments, not duplicate them. The
 		 * journal records only the latest remote->local mapping, so a duplicate import would leave the original
 		 * orphaned in the media library (the 110 -> 220 doubling). If the mapped attachment is gone (deleted by
@@ -7417,7 +7429,7 @@ HTML;
 			$items = array();
 			foreach ( $media as $group => $ids ) {
 				$group = sanitize_key( $group );
-				if ( 'placeholders' === $group || 'source_urls' === $group || empty( $ids ) || ! is_array( $ids ) ) {
+				if ( ! in_array( $group, array( 'placeholders', 'ignored' ), true ) || empty( $ids ) || ! is_array( $ids ) ) {
 					continue;
 				}
 				foreach ( $ids as $remote_id ) {
@@ -7638,6 +7650,7 @@ HTML;
 				return $attachment_id;
 			}
 
+			$this->record_imported_media_source_urls( $demo_key, $remote_id, array( 'full' => $source_url ), true );
 			$this->record_imported_media_attachment( $demo_key, $group, $remote_id, $attachment_id, $defer_save );
 
 			$attachment_data = wp_get_attachment_metadata( $attachment_id );
@@ -7724,7 +7737,8 @@ HTML;
 				sanitize_text_field( $media['ext'] ),
 				$media['data'],
 				false,
-				$defer_save
+				$defer_save,
+				! empty( $media['urls'] ) ? $media['urls'] : array()
 			);
 
 			if ( empty( $result['code'] ) || 'success' !== $result['code'] ) {
@@ -7826,10 +7840,22 @@ HTML;
 		 *
 		 * @return array Response payload.
 		 */
-		private function import_media_file( $demo_key, $group, $remote_id, $title, $ext, $file_data, $generate_metadata = true, $defer_save = false ) {
+		private function import_media_file( $demo_key, $group, $remote_id, $title, $ext, $file_data, $generate_metadata = true, $defer_save = false, $source_urls = array() ) {
 			$demo_key  = sanitize_text_field( $demo_key );
 			$group     = sanitize_text_field( $group );
 			$remote_id = absint( $remote_id );
+			$existing_attachment_id = $remote_id ? $this->get_imported_media_id( $demo_key, $remote_id ) : 0;
+
+			// The media payload carries the canonical source URLs even when an older starter manifest does not.
+			// Keep them beside the import journal so post content can be remapped independently of brittle block
+			// IDs/classes. For a fresh upload the attachment journal save below flushes this write too; a reused
+			// attachment must save it here because the function returns before inserting anything.
+			$this->record_imported_media_source_urls(
+				$demo_key,
+				$remote_id,
+				$source_urls,
+				! $existing_attachment_id || $defer_save
+			);
 
 			// Reuse an already-imported attachment for this (demo, source id) instead of inserting a duplicate.
 			// Importing media must be idempotent: replaying a starter import (or just its media step) must not
@@ -7837,12 +7863,12 @@ HTML;
 			// mapping. This is the server-side backstop shared by every import path, notably the modern hub's
 			// client-driven per-media upload loop, which calls straight in here via /upload_media and never goes
 			// through import_starter()'s collector.
-			if ( $remote_id && $this->starter_media_already_imported( $demo_key, $remote_id ) ) {
+			if ( $existing_attachment_id && 'attachment' === get_post_type( $existing_attachment_id ) ) {
 				return array(
 					'code'    => 'success',
 					'message' => '',
 					'data'    => array(
-						'attachmentID' => $this->get_imported_media_id( $demo_key, $remote_id ),
+						'attachmentID' => $existing_attachment_id,
 						'reused'       => true,
 					),
 				);
@@ -7961,6 +7987,71 @@ HTML;
 			PixelgradeAssistant_Admin::set_option( 'imported_starter_content', $starter_content );
 			// During a full-site media batch the caller flushes once at the end; saving the entire
 			// (growing) journal option per media item is O(n^2). Single uploads still save immediately.
+			if ( ! $defer_save ) {
+				PixelgradeAssistant_Admin::save_options();
+			}
+		}
+
+		/**
+		 * Record canonical source URLs for an imported media ID.
+		 *
+		 * The exporter normally rewrites content using block attachment IDs. That cannot cover an image nested
+		 * in a Paragraph/HTML block, or markup whose `wp-image-*` class points at a deleted source attachment.
+		 * The media endpoint still returns the real source URLs, so persist those as a deterministic fallback.
+		 *
+		 * @param string       $demo_key   Starter/demo key.
+		 * @param int          $remote_id  Source media ID.
+		 * @param string|array $source_urls Source URL or size => URL map.
+		 * @param bool         $defer_save Whether another journal write will save the option.
+		 *
+		 * @return void
+		 */
+		private function record_imported_media_source_urls( $demo_key, $remote_id, $source_urls, $defer_save = false ) {
+			$demo_key  = sanitize_text_field( $demo_key );
+			$remote_id = absint( $remote_id );
+			if ( empty( $demo_key ) || empty( $remote_id ) ) {
+				return;
+			}
+
+			if ( is_string( $source_urls ) ) {
+				$source_urls = array( 'full' => $source_urls );
+			}
+			if ( empty( $source_urls ) || ! is_array( $source_urls ) ) {
+				return;
+			}
+
+			$normalized = array();
+			foreach ( $source_urls as $size => $source_url ) {
+				$size       = sanitize_key( is_string( $size ) ? $size : 'full' );
+				$source_url = esc_url_raw( is_array( $source_url ) && isset( $source_url['url'] ) ? $source_url['url'] : $source_url );
+				if ( empty( $size ) || empty( $source_url ) || ! $this->is_allowed_demo_url( $source_url ) ) {
+					continue;
+				}
+				$normalized[ $size ] = $source_url;
+			}
+			if ( empty( $normalized ) ) {
+				return;
+			}
+
+			$starter_content = PixelgradeAssistant_Admin::get_option( 'imported_starter_content' );
+			if ( ! is_array( $starter_content ) ) {
+				$starter_content = array();
+			}
+			if ( empty( $starter_content[ $demo_key ] ) || ! is_array( $starter_content[ $demo_key ] ) ) {
+				$starter_content[ $demo_key ] = array();
+			}
+			if ( empty( $starter_content[ $demo_key ]['media_source_urls'] ) || ! is_array( $starter_content[ $demo_key ]['media_source_urls'] ) ) {
+				$starter_content[ $demo_key ]['media_source_urls'] = array();
+			}
+
+			$existing = isset( $starter_content[ $demo_key ]['media_source_urls'][ $remote_id ] )
+				&& is_array( $starter_content[ $demo_key ]['media_source_urls'][ $remote_id ] )
+				? $starter_content[ $demo_key ]['media_source_urls'][ $remote_id ]
+				: array();
+			$starter_content[ $demo_key ]['media_source_urls'][ $remote_id ] = array_merge( $existing, $normalized );
+
+			PixelgradeAssistant_Admin::set_option( 'imported_starter_content', $starter_content );
+			unset( $this->media_source_replacement_cache[ $demo_key ] );
 			if ( ! $defer_save ) {
 				PixelgradeAssistant_Admin::save_options();
 			}
@@ -10713,6 +10804,9 @@ HTML;
 					if ( isset( $starter_content[ $demo_key ][ $group ][ $type ] ) && is_array( $starter_content[ $demo_key ][ $group ][ $type ] ) ) {
 						unset( $starter_content[ $demo_key ][ $group ][ $type ][ $source_id ] );
 					}
+					if ( 'post_types' === $group && 'page' === $type && isset( $starter_content[ $demo_key ]['effective_page_templates'] ) ) {
+						unset( $starter_content[ $demo_key ]['effective_page_templates'][ $source_id ] );
+					}
 				}
 			}
 		}
@@ -10780,6 +10874,9 @@ HTML;
 				foreach ( $map as $source_id => $local_id ) {
 					if ( isset( $starter_content[ $demo_key ][ $group ][ $type ] ) && is_array( $starter_content[ $demo_key ][ $group ][ $type ] ) ) {
 						unset( $starter_content[ $demo_key ][ $group ][ $type ][ $source_id ] );
+					}
+					if ( 'post_types' === $group && 'page' === $type && isset( $starter_content[ $demo_key ]['effective_page_templates'] ) ) {
+						unset( $starter_content[ $demo_key ]['effective_page_templates'][ $source_id ] );
 					}
 				}
 			}
@@ -11097,7 +11194,9 @@ HTML;
 	 * @return bool|array|WP_REST_Response False on failure, the imported post IDs otherwise.
 	 */
 	private function import_post_type( $demo_key, $base_url, $args = array() ) {
-		$imported_ids = array();
+		$imported_ids             = array();
+		$reused_existing_ids      = array();
+		$effective_page_templates = array();
 
 		if ( empty( $args['ids'] ) ) {
 			return false;
@@ -11198,6 +11297,14 @@ HTML;
 					$response_data['data']['posts'][ $i ]['post_content'] = $post['post_content'];
 				}
 
+				// Exporter block rewriting intentionally follows attachment IDs, but real starter content may contain
+				// inline images inside Paragraph/HTML blocks (and occasionally stale wp-image classes). Exact source
+				// URLs captured during the media phase provide a deterministic final mapping to local attachments.
+				if ( isset( $post['post_content'] ) ) {
+					$post['post_content'] = $this->remap_imported_media_urls_in_content( $post['post_content'], $demo_key );
+					$response_data['data']['posts'][ $i ]['post_content'] = $post['post_content'];
+				}
+
 				$post_args = array(
 					'import_id'             => $post['ID'],
 					'post_title'            => wp_strip_all_tags( $post['post_title'] ),
@@ -11241,6 +11348,7 @@ HTML;
 						// collect_starter_media_items()) but the post keeps URLs/ids of the deleted ones and
 						// its cleared `_thumbnail_id` stays cleared. Repair importer-owned posts from the
 						// fresh source record so a re-import actually restores their images.
+						$reused_existing_ids[ $post['ID'] ] = $imported_ids[ $post['ID'] ];
 						$this->maybe_repair_imported_post_media( $imported_ids[ $post['ID'] ], $post, $demo_key );
 						continue;
 					}
@@ -11321,6 +11429,19 @@ HTML;
 				// Allow others to have a say in it.
 				$post_args = apply_filters( 'pixassist_sce_insert_post_args', $post_args, $post, $demo_key );
 
+				if ( 'page' === $post['post_type'] ) {
+					$effective_page_templates[ $post['ID'] ] = '';
+					if ( ! empty( $post_args['meta_input']['_wp_page_template'] ) ) {
+						$effective_page_template = $post_args['meta_input']['_wp_page_template'];
+						if ( is_array( $effective_page_template ) ) {
+							$effective_page_template = reset( $effective_page_template );
+						}
+						if ( is_string( $effective_page_template ) ) {
+							$effective_page_templates[ $post['ID'] ] = $effective_page_template;
+						}
+					}
+				}
+
 				// Since wp_insert_post() at post.php@L3884 does a wp_unslash() on the whole post data, we need to do a wp_slash() to prevent things from breaking.
 				$post_args = wp_slash_strings_only( $post_args );
 
@@ -11356,6 +11477,24 @@ HTML;
 
 			if ( ! isset( $imported_ids[ $post['ID'] ] ) ) {
 				continue;
+			}
+
+			$source_page_template = array_key_exists( $post['ID'], $effective_page_templates )
+				? $effective_page_templates[ $post['ID'] ]
+				: '';
+			if ( ! array_key_exists( $post['ID'], $effective_page_templates )
+				&& isset( $starter_content[ $demo_key ]['effective_page_templates'] )
+				&& is_array( $starter_content[ $demo_key ]['effective_page_templates'] )
+				&& array_key_exists( $post['ID'], $starter_content[ $demo_key ]['effective_page_templates'] ) ) {
+				$source_page_template = $starter_content[ $demo_key ]['effective_page_templates'][ $post['ID'] ];
+			} elseif ( ! array_key_exists( $post['ID'], $effective_page_templates )
+				&& 'page' === $post['post_type']
+				&& ! empty( $post['meta']['_wp_page_template'] ) ) {
+				$source_page_template = $post['meta']['_wp_page_template'];
+				if ( is_array( $source_page_template ) ) {
+					$source_page_template = reset( $source_page_template );
+				}
+				$source_page_template = is_string( $source_page_template ) ? $source_page_template : '';
 			}
 
 			$update_args = array(
@@ -11411,11 +11550,39 @@ HTML;
 				wp_update_post( $update_args );
 			}
 
+			// wp_update_post() merges the WP_Post object's magic `page_template`
+			// property into the update. When a block template is scheduled later in
+			// the starter manifest, Core does not know it yet and resets the imported
+			// `_wp_page_template` meta to `default`. Restore the effective imported
+			// value, and repair importer-owned pages affected by earlier imports.
+			if ( '' !== $source_page_template ) {
+				$current_page_template = get_post_meta( $update_args['ID'], '_wp_page_template', true );
+				$should_restore_template = in_array( $current_page_template, array( '', 'default' ), true )
+					&& (
+						! isset( $reused_existing_ids[ $post['ID'] ] )
+						|| get_post_meta( $update_args['ID'], 'imported_with_pixassist', true )
+					);
+
+				if ( $should_restore_template && $source_page_template !== $current_page_template ) {
+					update_post_meta( $update_args['ID'], '_wp_page_template', $source_page_template );
+				}
+			}
+
 			do_action( 'pixassist_sce_after_insert_post', $post, $imported_ids, $demo_key );
 		}
 
 		// Remember the imported post IDs
 		$starter_content[ $demo_key ]['post_types'][ $args['post_type'] ] = $imported_ids;
+		if ( ! empty( $effective_page_templates ) ) {
+			if ( empty( $starter_content[ $demo_key ]['effective_page_templates'] )
+				|| ! is_array( $starter_content[ $demo_key ]['effective_page_templates'] ) ) {
+				$starter_content[ $demo_key ]['effective_page_templates'] = array();
+			}
+			$starter_content[ $demo_key ]['effective_page_templates'] = array_replace(
+				$starter_content[ $demo_key ]['effective_page_templates'],
+				$effective_page_templates
+			);
+		}
 		// Save the data in the DB
 		PixelgradeAssistant_Admin::set_option( 'imported_starter_content', $starter_content );
 		PixelgradeAssistant_Admin::save_options();
@@ -12510,6 +12677,7 @@ HTML;
 	public function end_import() {
 		$this->replace_demo_urls_in_content();
 		$this->backfill_pending_thumbnails();
+		$this->sanitize_style_manager_options_after_import();
 		$this->regenerate_style_manager_after_import();
 	}
 
@@ -13055,6 +13223,146 @@ HTML;
 	}
 
 	/**
+	 * Collect persisted Style Manager option definitions from its final schema.
+	 *
+	 * @param array $config Style Manager Customizer configuration.
+	 *
+	 * @return array Option definitions keyed by setting ID.
+	 */
+	private function collect_style_manager_option_definitions( $config ) {
+		$definitions = array();
+
+		foreach ( (array) $config as $item ) {
+			if ( ! is_array( $item ) ) {
+				continue;
+			}
+
+			if (
+				isset( $item['setting_type'], $item['setting_id'] )
+				&& 'option' === $item['setting_type']
+				&& is_string( $item['setting_id'] )
+				&& ( ! isset( $item['type'] ) || ! in_array( $item['type'], array( 'html', 'button' ), true ) )
+				&& 0 === strpos( $item['setting_id'], 'sm_' )
+			) {
+				$definitions[ $item['setting_id'] ] = $item;
+			}
+
+			$definitions = array_merge( $definitions, $this->collect_style_manager_option_definitions( $item ) );
+		}
+
+		return $definitions;
+	}
+
+	/**
+	 * Get the final Style Manager schema used to validate destination state.
+	 *
+	 * @return array Option definitions keyed by setting ID.
+	 */
+	private function get_style_manager_option_definitions() {
+		$config = null;
+
+		if ( function_exists( '\\Pixelgrade\\StyleManager\\get_customizer_config' ) ) {
+			try {
+				$config = \Pixelgrade\StyleManager\get_customizer_config();
+			} catch ( \Throwable $exception ) {
+				$config = null;
+			}
+		}
+
+		/**
+		 * Filters the Style Manager schema used to repair destination options after import.
+		 *
+		 * @param array|null $config Final Style Manager Customizer configuration.
+		 */
+		$config = apply_filters( 'pixassist_sce_style_manager_schema', $config );
+
+		if ( ! is_array( $config ) ) {
+			return array();
+		}
+
+		return $this->collect_style_manager_option_definitions( $config );
+	}
+
+	/**
+	 * Whether a persisted Style Manager value violates its typed schema contract.
+	 *
+	 * @param mixed $value      Persisted option value.
+	 * @param array $definition Style Manager option definition.
+	 *
+	 * @return bool
+	 */
+	private function is_invalid_style_manager_option_value( $value, $definition ) {
+		$type = isset( $definition['type'] ) ? (string) $definition['type'] : '';
+
+		if ( 'range' === $type ) {
+			if ( '' === $value || ! is_numeric( $value ) ) {
+				return true;
+			}
+
+			$input_attrs = isset( $definition['input_attrs'] ) && is_array( $definition['input_attrs'] )
+				? $definition['input_attrs']
+				: array();
+			$number = (float) $value;
+
+			if ( isset( $input_attrs['min'] ) && is_numeric( $input_attrs['min'] ) && $number < (float) $input_attrs['min'] ) {
+				return true;
+			}
+
+			if ( isset( $input_attrs['max'] ) && is_numeric( $input_attrs['max'] ) && $number > (float) $input_attrs['max'] ) {
+				return true;
+			}
+		}
+
+		$choice_types = array(
+			'radio',
+			'radio_html',
+			'radio_image',
+			'select',
+			'select2',
+			'select_color',
+			'sm_radio',
+			'sm_switch',
+			'preset',
+		);
+		if (
+			in_array( $type, $choice_types, true )
+			&& isset( $definition['choices'] )
+			&& is_array( $definition['choices'] )
+			&& ( ! is_scalar( $value ) || ! array_key_exists( $value, $definition['choices'] ) )
+		) {
+			return true;
+		}
+
+		return false;
+	}
+
+	/**
+	 * Remove invalid destination artifacts so Style Manager can use schema defaults.
+	 *
+	 * Valid empty toggles and checkboxes are intentional false values and remain stored.
+	 * If the schema API is unavailable, no values are guessed at or removed.
+	 *
+	 * @return array Removed option IDs.
+	 */
+	private function sanitize_style_manager_options_after_import() {
+		$removed = array();
+
+		foreach ( $this->get_style_manager_option_definitions() as $option_id => $definition ) {
+			$value = get_option( $option_id, null );
+
+			if ( null === $value || ! $this->is_invalid_style_manager_option_value( $value, $definition ) ) {
+				continue;
+			}
+
+			if ( delete_option( $option_id ) ) {
+				$removed[] = $option_id;
+			}
+		}
+
+		return $removed;
+	}
+
+	/**
 	 * Force Style Manager to rebuild its generated CSS after an import.
 	 *
 	 * The importer writes the `sm_*` design options directly (via `update_option`), which
@@ -13434,6 +13742,125 @@ HTML;
 
 	private function get_ignored_images( $demo_key ) {
 		return $this->get_media_url_map( $demo_key, 'ignored' );
+	}
+
+	/**
+	 * Replace exact source-media URLs in post content with their imported local attachment URLs.
+	 *
+	 * The source exporter handles dedicated media blocks. This fallback covers mixed markup such as an
+	 * `<img>` inside a Paragraph/HTML block, where the URL is authoritative even when `wp-image-*` is stale.
+	 * Only URLs recorded from the authenticated media import are considered; unrelated remote content is
+	 * never changed. When an img's src matches, its attachment class is corrected in the same tag.
+	 *
+	 * @param string $content  Source post content.
+	 * @param string $demo_key Starter/demo key.
+	 *
+	 * @return string
+	 */
+	private function remap_imported_media_urls_in_content( $content, $demo_key ) {
+		$content = (string) $content;
+		if ( '' === $content ) {
+			return $content;
+		}
+
+		$replacements = $this->get_imported_media_source_replacements( $demo_key );
+		if ( empty( $replacements ) ) {
+			return $content;
+		}
+
+		// Correct the attachment class only when the src in that same tag has an exact, trusted mapping.
+		$content = preg_replace_callback(
+			'/<img\b[^>]*>/i',
+			function ( $match ) use ( $replacements ) {
+				$tag = $match[0];
+				if ( ! preg_match( '/\bsrc\s*=\s*(["\'])(.*?)\1/i', $tag, $src_match ) ) {
+					return $tag;
+				}
+
+				$source_url = html_entity_decode( $src_match[2], ENT_QUOTES, 'UTF-8' );
+				if ( empty( $replacements[ $source_url ] ) ) {
+					return $tag;
+				}
+
+				$replacement = $replacements[ $source_url ];
+				$tag         = str_replace( $src_match[2], $replacement['url'], $tag );
+				$tag         = preg_replace( '/\bwp-image-\d+\b/', 'wp-image-' . absint( $replacement['id'] ), $tag );
+
+				return $tag;
+			},
+			$content
+		);
+
+		// Also cover srcset entries, media links, block JSON, and other exact URL-bearing attributes.
+		$search  = array_keys( $replacements );
+		$replace = array_map(
+			function ( $replacement ) {
+				return $replacement['url'];
+			},
+			array_values( $replacements )
+		);
+
+		return str_replace( $search, $replace, $content );
+	}
+
+	/**
+	 * Build source URL => local URL/attachment replacements from the starter import journal.
+	 *
+	 * @param string $demo_key Starter/demo key.
+	 *
+	 * @return array
+	 */
+	private function get_imported_media_source_replacements( $demo_key ) {
+		$demo_key = sanitize_key( $demo_key );
+		if ( isset( $this->media_source_replacement_cache[ $demo_key ] ) ) {
+			return $this->media_source_replacement_cache[ $demo_key ];
+		}
+
+		$starter_content = PixelgradeAssistant_Admin::get_option( 'imported_starter_content' );
+		$source_sets     = ! empty( $starter_content[ $demo_key ]['media_source_urls'] )
+			&& is_array( $starter_content[ $demo_key ]['media_source_urls'] )
+			? $starter_content[ $demo_key ]['media_source_urls']
+			: array();
+		$replacements = array();
+
+		foreach ( $source_sets as $remote_id => $source_urls ) {
+			$local_id = $this->get_imported_media_id( $demo_key, $remote_id );
+			if ( empty( $local_id ) ) {
+				continue;
+			}
+
+			$local_urls = $this->get_image_thumbnails_urls( $local_id );
+			if ( empty( $local_urls['full'] ) ) {
+				continue;
+			}
+
+			if ( is_string( $source_urls ) ) {
+				$source_urls = array( 'full' => $source_urls );
+			}
+			if ( ! is_array( $source_urls ) ) {
+				continue;
+			}
+
+			// Prefer the full-size pairing when a tiny image exposes the same URL for every registered size.
+			if ( isset( $source_urls['full'] ) ) {
+				$source_urls = array( 'full' => $source_urls['full'] ) + $source_urls;
+			}
+			foreach ( $source_urls as $size => $source_url ) {
+				$source_url = esc_url_raw( is_array( $source_url ) && isset( $source_url['url'] ) ? $source_url['url'] : $source_url );
+				if ( empty( $source_url ) || isset( $replacements[ $source_url ] ) ) {
+					continue;
+				}
+				$local_url = ! empty( $local_urls[ $size ] ) ? $local_urls[ $size ] : $local_urls['full'];
+				$replacements[ $source_url ] = array(
+					'id'  => absint( $local_id ),
+					'url' => $local_url,
+				);
+			}
+		}
+
+		$this->media_source_replacement_cache[ $demo_key ] = $replacements;
+
+		return $replacements;
 	}
 
 	/**

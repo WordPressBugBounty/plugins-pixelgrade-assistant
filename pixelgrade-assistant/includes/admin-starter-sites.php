@@ -1048,7 +1048,8 @@ if ( ! function_exists( 'pixassist_get_starter_sites_copy' ) ) {
 			'actions'     => array(
 				'import'             => isset( $l10n['import'] ) ? (string) $l10n['import'] : esc_html__( 'Import', 'pixelgrade_assistant' ),
 				'imported'           => isset( $l10n['imported'] ) ? (string) $l10n['imported'] : esc_html__( 'Imported', 'pixelgrade_assistant' ),
-				'useStarter'         => esc_html__( 'Use %s', 'pixelgrade_assistant' ),
+				// "Set up", not "Use": the button opens the composer (nothing is imported yet).
+				'useStarter'         => esc_html__( 'Set up %s', 'pixelgrade_assistant' ),
 				'applyFullSite'      => esc_html__( 'Apply full site', 'pixelgrade_assistant' ),
 				'applyLayouts'       => esc_html__( 'Apply layouts', 'pixelgrade_assistant' ),
 				'applySelectedParts' => esc_html__( 'Apply selected parts', 'pixelgrade_assistant' ),
