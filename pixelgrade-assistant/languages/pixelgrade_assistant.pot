@@ -2,14 +2,14 @@
 # This file is distributed under the GPL-3.0.
 msgid ""
 msgstr ""
-"Project-Id-Version: Pixelgrade Assistant 2.3.2\n"
+"Project-Id-Version: Pixelgrade Assistant 2.3.3\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/pixelgrade-assistant\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2026-07-25T12:19:13+00:00\n"
+"POT-Creation-Date: 2026-08-13T11:42:12+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.12.0\n"
 "X-Domain: pixelgrade_assistant\n"
@@ -1216,7 +1216,7 @@ msgid "Everything free stays free. Plus adds the deeper end of the design system
 msgstr ""
 
 #: includes/account.php:2015
-#: includes/admin-overview.php:811
+#: includes/admin-overview.php:814
 #: includes/default-plugin-config.php:232
 msgid "Explore Pixelgrade Plus"
 msgstr ""
@@ -1283,7 +1283,7 @@ msgid "Open the Plus panel"
 msgstr ""
 
 #: includes/account.php:2115
-#: includes/admin-overview.php:818
+#: includes/admin-overview.php:821
 #: includes/admin-starter-sites.php:1060
 #: includes/default-plugin-config.php:534
 msgid "Set up Pixelgrade Plus"
@@ -1979,185 +1979,185 @@ msgstr ""
 msgid "Premium features can extend your free Pixelgrade theme."
 msgstr ""
 
-#: includes/admin-overview.php:812
+#: includes/admin-overview.php:815
 msgid "Premium design tools and support that extend your free theme — there when you want them."
 msgstr ""
 
-#: includes/admin-overview.php:819
+#: includes/admin-overview.php:822
 msgid "Pixelgrade Plus is installed. Activate it to unlock its advanced design tools."
 msgstr ""
 
-#: includes/admin-overview.php:825
+#: includes/admin-overview.php:828
 #: includes/admin-starter-sites.php:1061
 #: includes/default-plugin-config.php:531
 msgid "Manage Pixelgrade Plus"
 msgstr ""
 
-#: includes/admin-overview.php:826
+#: includes/admin-overview.php:829
 #: includes/default-plugin-config.php:532
 msgid "Pixelgrade Plus is active. Manage your advanced design tools and settings."
 msgstr ""
 
-#: includes/admin-overview.php:869
+#: includes/admin-overview.php:872
 msgid "today"
 msgstr ""
 
-#: includes/admin-overview.php:873
+#: includes/admin-overview.php:876
 msgid "yesterday"
 msgstr ""
 
 #. translators: %d: number of days (always 2 or more).
-#: includes/admin-overview.php:878
+#: includes/admin-overview.php:881
 #, php-format
 msgid "%d days ago"
 msgstr ""
 
 #. translators: %d: number of weeks (always 2 or more).
-#: includes/admin-overview.php:883
+#: includes/admin-overview.php:886
 #, php-format
 msgid "%d weeks ago"
 msgstr ""
 
 #. translators: %d: number of months (always 2 or more).
-#: includes/admin-overview.php:888
+#: includes/admin-overview.php:891
 #, php-format
 msgid "%d months ago"
 msgstr ""
 
-#: includes/admin-overview.php:892
+#: includes/admin-overview.php:895
 msgid "a year ago"
 msgstr ""
 
 #. translators: %d: number of years (always 2 or more).
-#: includes/admin-overview.php:896
+#: includes/admin-overview.php:899
 #, php-format
 msgid "%d years ago"
 msgstr ""
 
 #. translators: %s: layout part title (a header, footer, or template).
 #. translators: %s: layout recipe title.
-#: includes/admin-overview.php:919
-#: includes/admin-overview.php:923
+#: includes/admin-overview.php:922
+#: includes/admin-overview.php:926
 #, php-format
 msgid "%s applied"
 msgstr ""
 
 #. translators: %s: page/content pattern title.
-#: includes/admin-overview.php:921
+#: includes/admin-overview.php:924
 #, php-format
 msgid "%s added"
 msgstr ""
 
 #. translators: %s: starter design title.
-#: includes/admin-overview.php:976
+#: includes/admin-overview.php:979
 #, php-format
 msgid "%s imported"
 msgstr ""
 
-#: includes/admin-overview.php:1031
+#: includes/admin-overview.php:1034
 msgid "Last change"
 msgstr ""
 
-#: includes/admin-overview.php:1170
+#: includes/admin-overview.php:1173
 msgid "Your style"
 msgstr ""
 
-#: includes/admin-overview.php:1171
+#: includes/admin-overview.php:1174
 msgid "Your palette"
 msgstr ""
 
-#: includes/admin-overview.php:1171
+#: includes/admin-overview.php:1174
 msgid "Theme defaults"
 msgstr ""
 
-#: includes/admin-overview.php:1218
+#: includes/admin-overview.php:1221
 msgid "Needs your attention"
 msgstr ""
 
-#: includes/admin-overview.php:1229
+#: includes/admin-overview.php:1232
 msgid "1 check to review"
 msgstr ""
 
 #. translators: %d: number of readiness checks with warnings (always 2 or more).
-#: includes/admin-overview.php:1231
+#: includes/admin-overview.php:1234
 #, php-format
 msgid "%d checks to review"
 msgstr ""
 
-#: includes/admin-overview.php:1238
+#: includes/admin-overview.php:1241
 msgid "No known conflicts"
 msgstr ""
 
-#: includes/admin-overview.php:1293
+#: includes/admin-overview.php:1296
 msgid "Diagnostics"
 msgstr ""
 
-#: includes/admin-overview.php:1332
+#: includes/admin-overview.php:1335
 msgid "Install and activate Anima LT"
 msgstr ""
 
-#: includes/admin-overview.php:1333
+#: includes/admin-overview.php:1336
 msgid "Start with the free Pixelgrade theme built for these design tools."
 msgstr ""
 
-#: includes/admin-overview.php:1340
+#: includes/admin-overview.php:1343
 msgid "Install recommended plugins"
 msgstr ""
 
-#: includes/admin-overview.php:1341
+#: includes/admin-overview.php:1344
 msgid "Add the plugins this theme is designed to use."
 msgstr ""
 
-#: includes/admin-overview.php:1355
-#: includes/admin-overview.php:1365
+#: includes/admin-overview.php:1358
+#: includes/admin-overview.php:1368
 msgid "Choose a starter site"
 msgstr ""
 
-#: includes/admin-overview.php:1356
+#: includes/admin-overview.php:1359
 msgid "Launch from a ready-made starter instead of a blank canvas."
 msgstr ""
 
-#: includes/admin-overview.php:1366
+#: includes/admin-overview.php:1369
 msgid "Unlocks after Anima LT is installed."
 msgstr ""
 
 #. translators: 1: number of completed setup steps, 2: total setup steps.
-#: includes/admin-overview.php:1438
+#: includes/admin-overview.php:1441
 #, php-format
 msgid "Finish setup — %1$d of %2$d done"
 msgstr ""
 
-#: includes/admin-overview.php:1443
+#: includes/admin-overview.php:1446
 msgid "Choose a starter site to see your design tools in action."
 msgstr ""
 
-#: includes/admin-overview.php:1444
+#: includes/admin-overview.php:1447
 msgid "Install the essentials to unlock your design tools."
 msgstr ""
 
-#: includes/admin-overview.php:1445
+#: includes/admin-overview.php:1448
 msgid "Resume"
 msgstr ""
 
-#: includes/admin-overview.php:1487
+#: includes/admin-overview.php:1490
 msgid "Browse all designs"
 msgstr ""
 
-#: includes/admin-overview.php:1488
+#: includes/admin-overview.php:1491
 msgid "Start with this design"
 msgstr ""
 
 #. translators: %s: starter design name.
-#: includes/admin-overview.php:1490
+#: includes/admin-overview.php:1493
 #, php-format
 msgid "Import everything from %s? This adds its content, layouts, menus, and design to this site."
 msgstr ""
 
-#: includes/admin-overview.php:1491
+#: includes/admin-overview.php:1494
 msgid "Import full site"
 msgstr ""
 
-#: includes/admin-overview.php:1492
+#: includes/admin-overview.php:1495
 #: includes/admin-starter-sites.php:1057
 #: includes/admin-tools.php:99
 msgid "Cancel"
