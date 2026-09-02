@@ -494,7 +494,7 @@ class Pixassist_Nova_Menu {
 							if ( false !== $atts['display_labels'] ) {
 								echo $this->the_menu_item_labels( $post_id, $featured_labels );
 							} ?>
-							<?php edit_post_link( esc_html__( 'Edit', 'pixelgrade_assistant' ), '<span class="edit-link">', '</span>' ); ?>
+							<?php edit_post_link( esc_html__( 'Edit', 'pixelgrade-assistant' ), '<span class="edit-link">', '</span>' ); ?>
 						</div><!-- .entry-meta -->
 
 					</li><!-- close .menu_item-entry -->
@@ -511,7 +511,7 @@ class Pixassist_Nova_Menu {
 			</div><!-- close .jetpack-menu_item -->
 			<?php
 		} else { ?>
-			<p class="jetpack-nova-menu-shortcode no-items"><?php esc_html_e( 'You seem to be short on menu entries. You can start creating them on your dashboard.', 'pixelgrade_assistant' ); ?></p>
+			<p class="jetpack-nova-menu-shortcode no-items"><?php esc_html_e( 'You seem to be short on menu entries. You can start creating them on your dashboard.', 'pixelgrade-assistant' ); ?></p>
 			<?php
 		}
 		$html = ob_get_clean();
@@ -643,7 +643,7 @@ class Pixassist_Nova_Menu {
 			return '';
 		}
 
-		$html = '<div class="menu-item-labels"><span class="label-text screen-reader-text">' . esc_html__( 'Labels', 'pixelgrade_assistant' ) . ':</span>';
+		$html = '<div class="menu-item-labels"><span class="label-text screen-reader-text">' . esc_html__( 'Labels', 'pixelgrade-assistant' ) . ':</span>';
 		$labels = array();
 		// Loop through all the labels
 		foreach ( $menu_item_labels as $menu_item_label ) {
@@ -733,7 +733,7 @@ class Pixassist_Nova_Menu {
 	 * @since 1.0.0
 	 */
 	public function __clone() {
-		_doing_it_wrong( __FUNCTION__, esc_html__( 'You should not do that!', 'pixelgrade_assistant' ), esc_html( $this->_version ) );
+		_doing_it_wrong( __FUNCTION__, esc_html__( 'You should not do that!', 'pixelgrade-assistant' ), esc_html( $this->_version ) );
 	} // End __clone ()
 
 	/**
@@ -742,6 +742,6 @@ class Pixassist_Nova_Menu {
 	 * @since 1.0.0
 	 */
 	public function __wakeup() {
-		_doing_it_wrong( __FUNCTION__, esc_html__( 'You should not do that!', 'pixelgrade_assistant' ),  esc_html( $this->_version ) );
+		_doing_it_wrong( __FUNCTION__, esc_html__( 'You should not do that!', 'pixelgrade-assistant' ),  esc_html( $this->_version ) );
 	} // End __wakeup ()
 }

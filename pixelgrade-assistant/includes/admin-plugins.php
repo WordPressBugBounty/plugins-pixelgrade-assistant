@@ -37,7 +37,7 @@ if ( ! function_exists( 'pixassist_register_plugins_tab' ) ) {
 
 		$tabs[] = array(
 			'id'         => 'plugins',
-			'label'      => esc_html__( 'Site Setup', 'pixelgrade_assistant' ),
+			'label'      => esc_html__( 'Site Setup', 'pixelgrade-assistant' ),
 			'capability' => 'edit_theme_options',
 			'component'  => 'plugins',
 			'gate'       => '',
@@ -162,26 +162,26 @@ if ( ! function_exists( 'pixassist_get_plugins_copy' ) ) {
 			? $config['pluginManager']['l10n']
 			: array();
 		return array(
-			'title'            => esc_html__( 'Site Setup', 'pixelgrade_assistant' ),
-			'content'          => esc_html__( 'Check the recommended plugins and activate anything Pixelgrade Design needs before you start working.', 'pixelgrade_assistant' ),
-			'validatedTitle'   => pixassist_plugins_replace_tokens( isset( $recommended['validatedTitle'] ) ? (string) $recommended['validatedTitle'] : esc_html__( 'Setup ready', 'pixelgrade_assistant' ) ),
-			'validatedContent' => pixassist_plugins_replace_tokens( isset( $recommended['validatedContent'] ) ? (string) $recommended['validatedContent'] : esc_html__( 'The recommended plugins are active.', 'pixelgrade_assistant' ) ),
-			'empty'            => isset( $manager_l10n['noPlugins'] ) ? (string) $manager_l10n['noPlugins'] : esc_html__( 'You are all set. There are no recommended plugins for this theme right now.', 'pixelgrade_assistant' ),
+			'title'            => esc_html__( 'Site Setup', 'pixelgrade-assistant' ),
+			'content'          => esc_html__( 'Check the recommended plugins and activate anything Pixelgrade Design needs before you start working.', 'pixelgrade-assistant' ),
+			'validatedTitle'   => pixassist_plugins_replace_tokens( isset( $recommended['validatedTitle'] ) ? (string) $recommended['validatedTitle'] : esc_html__( 'Setup ready', 'pixelgrade-assistant' ) ),
+			'validatedContent' => pixassist_plugins_replace_tokens( isset( $recommended['validatedContent'] ) ? (string) $recommended['validatedContent'] : esc_html__( 'The recommended plugins are active.', 'pixelgrade-assistant' ) ),
+			'empty'            => isset( $manager_l10n['noPlugins'] ) ? (string) $manager_l10n['noPlugins'] : esc_html__( 'You are all set. There are no recommended plugins for this theme right now.', 'pixelgrade-assistant' ),
 			'groups'           => array(
-				'required'    => esc_html__( 'Required', 'pixelgrade_assistant' ),
-				'recommended' => esc_html__( 'Recommended', 'pixelgrade_assistant' ),
+				'required'    => esc_html__( 'Required', 'pixelgrade-assistant' ),
+				'recommended' => esc_html__( 'Recommended', 'pixelgrade-assistant' ),
 			),
 			'actions'          => array(
-				'install'      => isset( $config['l10n']['pluginInstallLabel'] ) ? (string) $config['l10n']['pluginInstallLabel'] : esc_html__( 'Install', 'pixelgrade_assistant' ),
-				'activate'     => isset( $config['l10n']['pluginActivateLabel'] ) ? (string) $config['l10n']['pluginActivateLabel'] : esc_html__( 'Activate', 'pixelgrade_assistant' ),
-				'update'       => isset( $config['l10n']['pluginUpdateLabel'] ) ? (string) $config['l10n']['pluginUpdateLabel'] : esc_html__( 'Update', 'pixelgrade_assistant' ),
-				'active'       => esc_html__( 'Active', 'pixelgrade_assistant' ),
-				'inactive'     => esc_html__( 'Installed', 'pixelgrade_assistant' ),
-				'missing'      => esc_html__( 'Not installed', 'pixelgrade_assistant' ),
-				'outdated'     => esc_html__( 'Update available', 'pixelgrade_assistant' ),
-				'working'      => esc_html__( 'Working...', 'pixelgrade_assistant' ),
-				'failed'       => esc_html__( 'Action failed. Please try again from Plugins > Installed Plugins.', 'pixelgrade_assistant' ),
-				'refresh'      => esc_html__( 'Refresh the page to confirm the latest plugin status.', 'pixelgrade_assistant' ),
+				'install'      => isset( $config['l10n']['pluginInstallLabel'] ) ? (string) $config['l10n']['pluginInstallLabel'] : esc_html__( 'Install', 'pixelgrade-assistant' ),
+				'activate'     => isset( $config['l10n']['pluginActivateLabel'] ) ? (string) $config['l10n']['pluginActivateLabel'] : esc_html__( 'Activate', 'pixelgrade-assistant' ),
+				'update'       => isset( $config['l10n']['pluginUpdateLabel'] ) ? (string) $config['l10n']['pluginUpdateLabel'] : esc_html__( 'Update', 'pixelgrade-assistant' ),
+				'active'       => esc_html__( 'Active', 'pixelgrade-assistant' ),
+				'inactive'     => esc_html__( 'Installed', 'pixelgrade-assistant' ),
+				'missing'      => esc_html__( 'Not installed', 'pixelgrade-assistant' ),
+				'outdated'     => esc_html__( 'Update available', 'pixelgrade-assistant' ),
+				'working'      => esc_html__( 'Working...', 'pixelgrade-assistant' ),
+				'failed'       => esc_html__( 'Action failed. Please try again from Plugins > Installed Plugins.', 'pixelgrade-assistant' ),
+				'refresh'      => esc_html__( 'Refresh the page to confirm the latest plugin status.', 'pixelgrade-assistant' ),
 			),
 		);
 	}
@@ -386,8 +386,8 @@ if ( ! function_exists( 'pixassist_get_plus_setup_plugin_payload' ) ) {
 			'selected'      => false,
 			'order'         => 30,
 			'description'   => $has_plus_license
-				? esc_html__( 'Your connected Pixelgrade account includes Pixelgrade Plus. Download the companion plugin from Pixelgrade.com, install it, then activate it here.', 'pixelgrade_assistant' )
-				: esc_html__( 'Pixelgrade Plus adds advanced design tools for Pixelgrade LT sites.', 'pixelgrade_assistant' ),
+				? esc_html__( 'Your connected Pixelgrade account includes Pixelgrade Plus. Download the companion plugin from Pixelgrade.com, install it, then activate it here.', 'pixelgrade-assistant' )
+				: esc_html__( 'Pixelgrade Plus adds advanced design tools for Pixelgrade LT sites.', 'pixelgrade-assistant' ),
 			'author'        => 'Pixelgrade',
 			'is_installed'  => $installed || $plus_active,
 			'is_active'     => $plus_active,
@@ -399,7 +399,7 @@ if ( ! function_exists( 'pixassist_get_plus_setup_plugin_payload' ) ) {
 		if ( ! $payload['is_installed'] ) {
 			$payload['action_type']           = 'external';
 			$payload['external_action_url']   = function_exists( 'esc_url_raw' ) ? esc_url_raw( $setup_url ) : $setup_url;
-			$payload['external_action_label'] = esc_html__( 'Download Pixelgrade Plus', 'pixelgrade_assistant' );
+			$payload['external_action_label'] = esc_html__( 'Download Pixelgrade Plus', 'pixelgrade-assistant' );
 			$payload['install_url']           = '';
 		} elseif ( ! $payload['is_active'] ) {
 			$payload['activate_url'] = pixassist_get_plus_plugin_activate_url( $payload['file_path'] );

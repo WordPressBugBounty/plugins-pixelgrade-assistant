@@ -41,7 +41,7 @@ if ( ! function_exists( 'pixassist_register_design_library_tab' ) ) {
 
 		$tabs[] = array(
 			'id'         => 'design-library',
-			'label'      => esc_html__( 'Design Library', 'pixelgrade_assistant' ),
+			'label'      => esc_html__( 'Design Library', 'pixelgrade-assistant' ),
 			'capability' => 'edit_theme_options',
 			'component'  => 'designLibrary',
 			'gate'       => '',

@@ -184,81 +184,81 @@ class PixelgradeAssistant_Notifications {
 				$screenshot = $theme->get_screenshot();
 				if ( $screenshot ) { ?>
 					<img class="pixassist-notice__screenshot" src="<?php echo esc_url( $screenshot ); ?>"
-					     width="1200" height="900" alt="<?php esc_html_e( 'Theme screenshot', 'pixelgrade_assistant' ); ?>">
+					     width="1200" height="900" alt="<?php esc_html_e( 'Theme screenshot', 'pixelgrade-assistant' ); ?>">
 				<?php } ?>
 				<div class="pixassist-notice__body">
 					<div class="step initial-step">
 						<h2><?php
 							/* translators: 1: User name, 2: Theme name */
-							echo wp_kses( sprintf( __( 'Hi %1$s. Do you enjoy crafting your site with %2$s?', 'pixelgrade_assistant' ), $current_user_name,  $theme->get( 'Name' ) ), wp_kses_allowed_html( 'post' ) ); ?></h2>
+							echo wp_kses( sprintf( __( 'Hi %1$s. Do you enjoy crafting your site with %2$s?', 'pixelgrade-assistant' ), $current_user_name,  $theme->get( 'Name' ) ), wp_kses_allowed_html( 'post' ) ); ?></h2>
 						<p><?php
 							/* translators: %s: Theme name  */
-							echo wp_kses( sprintf( __( 'You have put %s to good use and we, at Pixelgrade, would love to know <strong>what you think of it.</strong> Any feedback is very much appreciated.', 'pixelgrade_assistant' ), $theme->get( 'Name' ) ), wp_kses_allowed_html( 'post' ) ); ?></p>
+							echo wp_kses( sprintf( __( 'You have put %s to good use and we, at Pixelgrade, would love to know <strong>what you think of it.</strong> Any feedback is very much appreciated.', 'pixelgrade-assistant' ), $theme->get( 'Name' ) ), wp_kses_allowed_html( 'post' ) ); ?></p>
 
 						<a class="pixassist-notice-button js-pixassist-enjoyed-handle button button-primary" href="#">
 							<span class="pixassist-notice-button__text"><?php
 								/* translators: %s: Theme name  */
-								echo wp_kses( sprintf( __( 'Yes, %s is a really good fit for me', 'pixelgrade_assistant' ), $theme->get( 'Name' ) ), wp_kses_allowed_html( 'post' ) ); ?></span>
+								echo wp_kses( sprintf( __( 'Yes, %s is a really good fit for me', 'pixelgrade-assistant' ), $theme->get( 'Name' ) ), wp_kses_allowed_html( 'post' ) ); ?></span>
 						</a>
 						<a class="pixassist-notice-button js-pixassist-notenjoyed-handle button" href="#">
-							<span class="pixassist-notice-button__text"><?php esc_html_e( 'Not really', 'pixelgrade_assistant' ); ?></span>
+							<span class="pixassist-notice-button__text"><?php esc_html_e( 'Not really', 'pixelgrade-assistant' ); ?></span>
 						</a>
 					</div>
 					<div class="step yes-step">
 						<h2><?php
 							/* translators: %s: Theme name */
-							echo wp_kses( sprintf( __( 'That\'s awesome! 🤩<br>Could you do us a BIG favor and award %s a 5-star rating on WordPress.org?', 'pixelgrade_assistant' ), $theme->get( 'Name' ) ), wp_kses_allowed_html( 'post' ) ); ?></h2>
+							echo wp_kses( sprintf( __( 'That\'s awesome! 🤩<br>Could you do us a BIG favor and award %s a 5-star rating on WordPress.org?', 'pixelgrade-assistant' ), $theme->get( 'Name' ) ), wp_kses_allowed_html( 'post' ) ); ?></h2>
 						<p><?php
 							/* translators: %s: Theme name  */
-							echo wp_kses( sprintf( __( 'This will help us <strong>spread the word</strong> and boost our <strong>motivation to keep improving %s. 🚀</strong>', 'pixelgrade_assistant' ), $theme->get( 'Name' ) ), wp_kses_allowed_html( 'post' ) ); ?></p>
+							echo wp_kses( sprintf( __( 'This will help us <strong>spread the word</strong> and boost our <strong>motivation to keep improving %s. 🚀</strong>', 'pixelgrade-assistant' ), $theme->get( 'Name' ) ), wp_kses_allowed_html( 'post' ) ); ?></p>
 
 						<a class="pixassist-notice-button js-pixassist-awardrating-handle button button-primary dashicons-before dashicons-external" href="<?php echo esc_url( $review_link ); ?>" target="_blank">
-							<span class="pixassist-notice-button__text"><?php esc_html_e( 'OK, you people deserve it', 'pixelgrade_assistant' ); ?></span>
+							<span class="pixassist-notice-button__text"><?php esc_html_e( 'OK, you people deserve it', 'pixelgrade-assistant' ); ?></span>
 						</a>
 						<a class="pixassist-notice-button js-pixassist-maybelater-handle button" href="#">
-							<span class="pixassist-notice-button__text"><?php esc_html_e( 'Maybe later / Already have', 'pixelgrade_assistant' ); ?></span>
+							<span class="pixassist-notice-button__text"><?php esc_html_e( 'Maybe later / Already have', 'pixelgrade-assistant' ); ?></span>
 						</a>
 					</div>
 					<div class="step no-step">
-						<h2><?php esc_html_e( 'Now you got us curious 🤔 Could you describe the areas that let you down?', 'pixelgrade_assistant' ); ?></h2>
+						<h2><?php esc_html_e( 'Now you got us curious 🤔 Could you describe the areas that let you down?', 'pixelgrade-assistant' ); ?></h2>
 						<p class="feedback-message-wrapper">
-							<textarea class="feedback-message js-pixassist-feedbackmsg-handle" placeholder="<?php esc_html_e( 'Tell us about your experience with setting up the theme, customizating styles, creating posts and pages, playing with your pet, and anything in between.', 'pixelgrade_assistant' ); ?>"></textarea>
+							<textarea class="feedback-message js-pixassist-feedbackmsg-handle" placeholder="<?php esc_html_e( 'Tell us about your experience with setting up the theme, customizating styles, creating posts and pages, playing with your pet, and anything in between.', 'pixelgrade-assistant' ); ?>"></textarea>
 						</p>
 						<button type="submit" class="pixassist-notice-button js-pixassist-submitfeedback-handle button button-primary">
-							<span class="screen-reader-text"><?php esc_html_e( 'Submit feedback message.', 'pixelgrade_assistant' ); ?></span><?php esc_html_e( 'Send my feedback', 'pixelgrade_assistant' ); ?>
+							<span class="screen-reader-text"><?php esc_html_e( 'Submit feedback message.', 'pixelgrade-assistant' ); ?></span><?php esc_html_e( 'Send my feedback', 'pixelgrade-assistant' ); ?>
 						</button>
 						<a class="pixassist-notice-button js-pixassist-notnow-handle button" href="#">
-							<span class="pixassist-notice-button__text"><?php esc_html_e( 'Not now', 'pixelgrade_assistant' ); ?></span>
+							<span class="pixassist-notice-button__text"><?php esc_html_e( 'Not now', 'pixelgrade-assistant' ); ?></span>
 						</a>
 					</div>
 					<div class="step rating-thankyou-step">
-						<h2><?php esc_html_e( 'Thank you so much! 🤗', 'pixelgrade_assistant' ); ?></h2>
-						<p><?php echo wp_kses_post( __( 'We at Pixelgrade believe in the power of <strong>"give before you get"</strong> and it\'s nice when this is matched by reality. <strong>You just made it so. 💪</strong>', 'pixelgrade_assistant' ) ); ?></p>
+						<h2><?php esc_html_e( 'Thank you so much! 🤗', 'pixelgrade-assistant' ); ?></h2>
+						<p><?php echo wp_kses_post( __( 'We at Pixelgrade believe in the power of <strong>"give before you get"</strong> and it\'s nice when this is matched by reality. <strong>You just made it so. 💪</strong>', 'pixelgrade-assistant' ) ); ?></p>
 
-						<p><?php echo wp_kses_post( __( 'We will now quietly get out of your way and let you get back to your thing.', 'pixelgrade_assistant' ) ); ?></p>
+						<p><?php echo wp_kses_post( __( 'We will now quietly get out of your way and let you get back to your thing.', 'pixelgrade-assistant' ) ); ?></p>
 
 						<button type="submit" class="pixassist-notice-button button dismiss">
-							<span class="screen-reader-text"><?php esc_html_e( 'Dismiss this notice.', 'pixelgrade_assistant' ); ?></span><?php esc_html_e( 'You\'re welcome. Bye, bye for now', 'pixelgrade_assistant' ); ?>
+							<span class="screen-reader-text"><?php esc_html_e( 'Dismiss this notice.', 'pixelgrade-assistant' ); ?></span><?php esc_html_e( 'You\'re welcome. Bye, bye for now', 'pixelgrade-assistant' ); ?>
 						</button>
 					</div>
 					<div class="step feedback-thankyou-step">
-						<h2><?php esc_html_e( 'Your feedback is valuable. Thank you 🤗', 'pixelgrade_assistant' ); ?></h2>
-						<p><?php echo wp_kses_post( __( 'We know things can always be better. At Pixelgrade, we are firm believers in the power of <strong>combining experimentation with continuous improvements.</strong>', 'pixelgrade_assistant' ) ); ?></p>
-						<p><?php echo wp_kses_post( __( 'Your unique perspective helps us understand <strong>the ways our products are actually used.</strong>', 'pixelgrade_assistant' ) ); ?></p>
+						<h2><?php esc_html_e( 'Your feedback is valuable. Thank you 🤗', 'pixelgrade-assistant' ); ?></h2>
+						<p><?php echo wp_kses_post( __( 'We know things can always be better. At Pixelgrade, we are firm believers in the power of <strong>combining experimentation with continuous improvements.</strong>', 'pixelgrade-assistant' ) ); ?></p>
+						<p><?php echo wp_kses_post( __( 'Your unique perspective helps us understand <strong>the ways our products are actually used.</strong>', 'pixelgrade-assistant' ) ); ?></p>
 
-						<p><?php echo wp_kses_post( __( 'We will now quietly get out of your way and let you get back to your thing.', 'pixelgrade_assistant' ) ); ?></p>
+						<p><?php echo wp_kses_post( __( 'We will now quietly get out of your way and let you get back to your thing.', 'pixelgrade-assistant' ) ); ?></p>
 
 						<button type="submit" class="pixassist-notice-button button dismiss">
-							<span class="screen-reader-text"><?php esc_html_e( 'Dismiss this notice.', 'pixelgrade_assistant' ); ?></span><?php esc_html_e( 'Awesome. Bye, bye for now', 'pixelgrade_assistant' ); ?>
+							<span class="screen-reader-text"><?php esc_html_e( 'Dismiss this notice.', 'pixelgrade-assistant' ); ?></span><?php esc_html_e( 'Awesome. Bye, bye for now', 'pixelgrade-assistant' ); ?>
 						</button>
 					</div>
 					<div class="step maybelater-thankyou-step">
-						<h2><?php esc_html_e( 'No worries. There\'s no pressure 😌', 'pixelgrade_assistant' ); ?></h2>
-						<p><?php echo wp_kses_post( __( 'We don\'t enjoy pushy notifications and we think neither do you.', 'pixelgrade_assistant' ) ); ?></p>
-						<p><?php echo wp_kses_post( __( 'We will now quietly get out of your way and let you get back to your thing.', 'pixelgrade_assistant' ) ); ?></p>
+						<h2><?php esc_html_e( 'No worries. There\'s no pressure 😌', 'pixelgrade-assistant' ); ?></h2>
+						<p><?php echo wp_kses_post( __( 'We don\'t enjoy pushy notifications and we think neither do you.', 'pixelgrade-assistant' ) ); ?></p>
+						<p><?php echo wp_kses_post( __( 'We will now quietly get out of your way and let you get back to your thing.', 'pixelgrade-assistant' ) ); ?></p>
 
 						<button type="submit" class="pixassist-notice-button button dismiss">
-							<span class="screen-reader-text"><?php esc_html_e( 'Dismiss this notice.', 'pixelgrade_assistant' ); ?></span><?php esc_html_e( 'OK. Bye, bye for now', 'pixelgrade_assistant' ); ?>
+							<span class="screen-reader-text"><?php esc_html_e( 'Dismiss this notice.', 'pixelgrade-assistant' ); ?></span><?php esc_html_e( 'OK. Bye, bye for now', 'pixelgrade-assistant' ); ?>
 						</button>
 					</div>
 				</div>
@@ -287,7 +287,7 @@ class PixelgradeAssistant_Notifications {
 		wp_localize_script( 'pixassist_notices_js', 'pixassistNotices', array(
 			'ajaxurl' => esc_url_raw( admin_url( 'admin-ajax.php' ) ),
 			'installurl' => home_url( '/' ),
-			'feedbackTicketSubject' => sprintf( esc_html__( 'User Feedback for %s (via Pixelgrade Assistant)', 'pixelgrade_assistant' ), $theme->get('Name') ),
+			'feedbackTicketSubject' => sprintf( esc_html__( 'User Feedback for %s (via Pixelgrade Assistant)', 'pixelgrade-assistant' ), $theme->get('Name') ),
 		) );
 	}
 
@@ -433,7 +433,7 @@ class PixelgradeAssistant_Notifications {
 	 */
 	public function __clone() {
 
-		_doing_it_wrong( __FUNCTION__, esc_html__( 'You should not do that!', 'pixelgrade_assistant' ), esc_html( $this->parent->get_version() ) );
+		_doing_it_wrong( __FUNCTION__, esc_html__( 'You should not do that!', 'pixelgrade-assistant' ), esc_html( $this->parent->get_version() ) );
 	}
 
 	/**
@@ -441,6 +441,6 @@ class PixelgradeAssistant_Notifications {
 	 */
 	public function __wakeup() {
 
-		_doing_it_wrong( __FUNCTION__, esc_html__( 'You should not do that!', 'pixelgrade_assistant' ), esc_html( $this->parent->get_version() ) );
+		_doing_it_wrong( __FUNCTION__, esc_html__( 'You should not do that!', 'pixelgrade-assistant' ), esc_html( $this->parent->get_version() ) );
 	}
 }

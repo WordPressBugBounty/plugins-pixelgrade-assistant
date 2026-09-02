@@ -22,7 +22,7 @@ if ( ! function_exists( 'pixelgrade_get_template_part' ) ) {
 
 		if ( ! file_exists( $located ) ) {
 			/* translators: %s: the template part located path */
-			_doing_it_wrong( __FUNCTION__, sprintf( esc_html__( '%s does not exist.', 'pixelgrade_assistant' ), '<code>' . esc_html( $located ) . '</code>' ), null );
+			_doing_it_wrong( __FUNCTION__, sprintf( esc_html__( '%s does not exist.', 'pixelgrade-assistant' ), '<code>' . esc_html( $located ) . '</code>' ), null );
 
 			return;
 		}
@@ -211,7 +211,7 @@ if ( ! function_exists( 'pixassist_subpages_admin_bar_edit_links_backend' ) ) {
 
 			$wp_admin_bar->add_node( array(
 				'id'    => 'edit_parent',
-				'title' => esc_html__( 'Edit Parent', 'pixelgrade_assistant' ),
+				'title' => esc_html__( 'Edit Parent', 'pixelgrade-assistant' ),
 				'href'  => get_edit_post_link( $post->post_parent ),
 				'meta'  => array( 'class' => 'edit_parent_button' )
 			) );
@@ -241,7 +241,7 @@ if ( ! function_exists( 'pixassist_subpages_admin_bar_edit_links_backend' ) ) {
 
 				$wp_admin_bar->add_node( array(
 					'id'    => 'edit_prev_child',
-					'title' => esc_html__( 'Edit Prev Child', 'pixelgrade_assistant' ),
+					'title' => esc_html__( 'Edit Prev Child', 'pixelgrade-assistant' ),
 					'href'  => get_edit_post_link( $prev_post->ID ),
 					'meta'  => array( 'class' => 'edit_prev_child_button' )
 				) );
@@ -253,7 +253,7 @@ if ( ! function_exists( 'pixassist_subpages_admin_bar_edit_links_backend' ) ) {
 
 				$wp_admin_bar->add_node( array(
 					'id'    => 'edit_next_child',
-					'title' => esc_html__( 'Edit Next Child', 'pixelgrade_assistant' ),
+					'title' => esc_html__( 'Edit Next Child', 'pixelgrade-assistant' ),
 					'href'  => get_edit_post_link( $next_post->ID ),
 					'meta'  => array( 'class' => 'edit_next_child_button' )
 				) );
@@ -277,7 +277,7 @@ if ( ! function_exists( 'pixassist_subpages_admin_bar_edit_links_backend' ) ) {
 
 				$args = array(
 					'id'    => 'edit_children',
-					'title' => esc_html__( 'Edit Children', 'pixelgrade_assistant' ),
+					'title' => esc_html__( 'Edit Children', 'pixelgrade-assistant' ),
 					'href'  => '#',
 					'meta'  => array( 'class' => 'edit_children_button' )
 				);
@@ -288,7 +288,7 @@ if ( ! function_exists( 'pixassist_subpages_admin_bar_edit_links_backend' ) ) {
 					$kid_args = array(
 						'parent' => 'edit_children',
 						'id'     => 'edit_child_' . $kid->post_name,
-						'title'  => esc_html__( 'Edit', 'pixelgrade_assistant' ) . ': ' . $kid->post_title,
+						'title'  => esc_html__( 'Edit', 'pixelgrade-assistant' ) . ': ' . $kid->post_title,
 						'href'   => get_edit_post_link( $kid->ID ),
 						'meta'   => array( 'class' => 'edit_child_button' )
 					);

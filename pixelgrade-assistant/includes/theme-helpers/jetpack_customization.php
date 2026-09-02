@@ -173,7 +173,7 @@ if ( ! class_exists( 'Pixassist_JetpackCustomization' ) ) {
 		 */
 		public function __clone() {
 
-			_doing_it_wrong( __FUNCTION__, esc_html__( 'You should not do that!', 'pixelgrade_assistant' ), '' );
+			_doing_it_wrong( __FUNCTION__, esc_html__( 'You should not do that!', 'pixelgrade-assistant' ), '' );
 		}
 
 		/**
@@ -181,7 +181,7 @@ if ( ! class_exists( 'Pixassist_JetpackCustomization' ) ) {
 		 */
 		public function __wakeup() {
 
-			_doing_it_wrong( __FUNCTION__, esc_html__( 'You should not do that!', 'pixelgrade_assistant' ), '' );
+			_doing_it_wrong( __FUNCTION__, esc_html__( 'You should not do that!', 'pixelgrade-assistant' ), '' );
 		}
 	}
 }

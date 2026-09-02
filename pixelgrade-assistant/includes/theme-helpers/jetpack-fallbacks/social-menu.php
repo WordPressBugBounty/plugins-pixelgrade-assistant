@@ -32,7 +32,7 @@ if ( ! function_exists( 'pixassist_jetpack_social_menu_init' ) ) {
 		 *
 		 * @param string $social_menu_description Social Menu description
 		 */
-		$social_menu_description = apply_filters( 'pixassist_jetpack_social_menu_description', __( 'Social Menu', 'pixelgrade_assistant' ) );
+		$social_menu_description = apply_filters( 'pixassist_jetpack_social_menu_description', __( 'Social Menu', 'pixelgrade-assistant' ) );
 
 		// Register a new menu location
 		register_nav_menus(
@@ -88,7 +88,7 @@ if ( ! function_exists( 'jetpack_social_menu' ) ) {
 				$link_after .= pixassist_jetpack_social_menu_get_svg( array( 'icon' => 'chain' ) );
 			} ?>
             <nav class="jetpack-social-navigation jetpack-social-navigation-<?php echo esc_attr( $menu_type ); ?>"
-                 role="navigation" aria-label="<?php esc_html_e( 'Social Links Menu', 'pixelgrade_assistant' ); ?>">
+                 role="navigation" aria-label="<?php esc_html_e( 'Social Links Menu', 'pixelgrade-assistant' ); ?>">
 				<?php
 				wp_nav_menu(
 					array(
@@ -139,12 +139,12 @@ if ( ! function_exists( 'pixassist_jetpack_social_menu_get_svg' ) ) {
 	function pixassist_jetpack_social_menu_get_svg( $args = array() ) {
 		// Make sure $args are an array.
 		if ( empty( $args ) ) {
-			return esc_html__( 'Please define default parameters in the form of an array.', 'pixelgrade_assistant' );
+			return esc_html__( 'Please define default parameters in the form of an array.', 'pixelgrade-assistant' );
 		}
 
 		// Define an icon.
 		if ( false === array_key_exists( 'icon', $args ) ) {
-			return esc_html__( 'Please define an SVG icon filename.', 'pixelgrade_assistant' );
+			return esc_html__( 'Please define an SVG icon filename.', 'pixelgrade-assistant' );
 		}
 
 		// Set defaults.

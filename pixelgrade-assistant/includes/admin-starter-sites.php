@@ -18,6 +18,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 // Capability-segment model + server-side import enforcement (commerce/WooCommerce gating).
 require_once __DIR__ . '/starter-segments.php';
 
+// What each Design Library source contributes (parts and/or content records).
+require_once __DIR__ . '/starter-sources.php';
+
 if ( ! function_exists( 'pixassist_register_starter_sites_tab' ) ) {
 	/**
 	 * Preserve the legacy registration callback without exposing Starter Sites in navigation.
@@ -328,6 +331,11 @@ if ( ! function_exists( 'pixassist_normalize_admin_hub_starter' ) ) {
 	 * - gate (string): '' for free, plus|plus_licensed for premium upsells.
 	 * - image, previewUrl, badge, source (string): optional display metadata.
 	 * - order (int): sort weight.
+	 * - role (string): 'starter' (default) or 'library'. Presentation only — a library gets no
+	 *   card in the Starter Sites section.
+	 * - serves (string[]|string): which Design Library sections may list this source's material —
+	 *   any of `parts`, `content` (a comma-separated string is accepted). Defaults to both for a
+	 *   starter and to `parts` for a library.
 	 * - requiredPlugins (array[]): companion plugins that must be installed AND active before this
 	 *   starter can be imported (e.g. Nova Blocks + Style Manager for the free Anima starters). Each
 	 *   entry: slug, name, isInstalled, isActive. Data-driven (see
@@ -385,6 +393,10 @@ if ( ! function_exists( 'pixassist_normalize_admin_hub_starter' ) ) {
 			)
 		);
 
+		// sanitize_key() here, matching pixassist_starter_serves(): the reader is the tolerant entry
+		// point for un-normalized descriptors, and the two must never disagree about the same value.
+		$role = ( ! empty( $starter['role'] ) && 'library' === sanitize_key( $starter['role'] ) ) ? 'library' : 'starter';
+
 		$normalized = array(
 			'id'              => $id,
 			'title'           => pixassist_starter_lineage_title( $id, ! empty( $starter['title'] ) ? (string) $starter['title'] : pixassist_get_starter_sites_default_title() ),
@@ -397,11 +409,14 @@ if ( ! function_exists( 'pixassist_normalize_admin_hub_starter' ) ) {
 			'image'           => isset( $starter['image'] ) ? pixassist_starter_sites_esc_url_raw( $starter['image'] ) : '',
 			'previewUrl'      => isset( $starter['previewUrl'] ) ? pixassist_starter_sites_esc_url_raw( $starter['previewUrl'] ) : '',
 			'badge'           => isset( $starter['badge'] ) ? (string) $starter['badge'] : '',
-			// Surface role: 'starter' (default — a full starter site, shown in Starter Sites AND as a
-			// Layouts source) vs 'library' (a Layouts-only parts/template library, e.g. the Frame
-			// Library — hidden from the Starter Sites tab, still listed as a Layouts source). Access is
-			// unchanged; this is presentation only.
-			'role'            => ( isset( $starter['role'] ) && 'library' === $starter['role'] ) ? 'library' : 'starter',
+			// Surface role: 'starter' (default — a full starter site, shown in the Starter Sites
+			// section) vs 'library' (a curated catalog, hidden from that section). Presentation only;
+			// access is unchanged.
+			'role'            => $role,
+			// What the source contributes to the Design Library. `role` answers "does this get a
+			// card?"; `serves` answers "which sections may list its material?". Separating them lets
+			// a catalog offer content records without pretending to be a site.
+			'serves'          => pixassist_get_starter_serves( $starter, $role ),
 			'source'          => $source,
 			'order'           => isset( $starter['order'] ) ? (int) $starter['order'] : 10,
 			'featureTags'     => pixassist_get_starter_feature_tags( $starter, $id, $capabilities ),
@@ -442,7 +457,7 @@ if ( ! function_exists( 'pixassist_starter_display_text' ) ) {
 	 * @return string
 	 */
 	function pixassist_starter_display_text( $text ) {
-		return function_exists( '__' ) ? __( $text, 'pixelgrade_assistant' ) : $text;
+		return function_exists( '__' ) ? __( $text, 'pixelgrade-assistant' ) : $text;
 	}
 }
 
@@ -750,7 +765,7 @@ if ( ! function_exists( 'pixassist_get_starter_apply_plan' ) ) {
 		if ( $has_content && in_array( 'portfolio', $features, true ) && ! in_array( 'portfolio', $enabled, true ) ) {
 			$primary = array(
 				'type'                 => 'feature',
-				'label'                => esc_html__( 'Add portfolio', 'pixelgrade_assistant' ),
+				'label'                => esc_html__( 'Add portfolio', 'pixelgrade-assistant' ),
 				'endpoint'             => 'importUnit',
 				'unitType'             => 'feature',
 				'unit'                 => 'portfolio',
@@ -760,14 +775,14 @@ if ( ! function_exists( 'pixassist_get_starter_apply_plan' ) ) {
 		} elseif ( $is_empty && ! empty( $capabilities['fullDemo'] ) ) {
 			$primary = array(
 				'type'          => 'full_demo',
-				'label'         => esc_html__( 'Apply full site', 'pixelgrade_assistant' ),
+				'label'         => esc_html__( 'Apply full site', 'pixelgrade-assistant' ),
 				'endpoint'      => 'importStarter',
 				'affectedAreas' => pixassist_get_full_demo_affected_areas(),
 			);
 		} elseif ( ! empty( $capabilities['recipe'] ) ) {
 			$primary = array(
 				'type'                 => 'layout_only',
-				'label'                => esc_html__( 'Apply layouts', 'pixelgrade_assistant' ),
+				'label'                => esc_html__( 'Apply layouts', 'pixelgrade-assistant' ),
 				'endpoint'             => 'applyRecipe',
 				'includeLookDefault'   => false,
 				'includeSampleDefault' => false,
@@ -776,7 +791,7 @@ if ( ! function_exists( 'pixassist_get_starter_apply_plan' ) ) {
 		} else {
 			$primary = array(
 				'type'          => 'full_demo',
-				'label'         => esc_html__( 'Apply full site', 'pixelgrade_assistant' ),
+				'label'         => esc_html__( 'Apply full site', 'pixelgrade-assistant' ),
 				'endpoint'      => 'importStarter',
 				'affectedAreas' => pixassist_get_full_demo_affected_areas(),
 			);
@@ -807,7 +822,7 @@ if ( ! function_exists( 'pixassist_get_starter_secondary_actions' ) ) {
 		if ( ! empty( $capabilities['recipe'] ) && ( empty( $primary['type'] ) || 'layout_only' !== $primary['type'] ) ) {
 			$actions[] = array(
 				'type'                 => 'layout_only',
-				'label'                => esc_html__( 'Apply layouts', 'pixelgrade_assistant' ),
+				'label'                => esc_html__( 'Apply layouts', 'pixelgrade-assistant' ),
 				'endpoint'             => 'applyRecipe',
 				'includeLookDefault'   => false,
 				'includeSampleDefault' => false,
@@ -817,7 +832,7 @@ if ( ! function_exists( 'pixassist_get_starter_secondary_actions' ) ) {
 		if ( ! empty( $capabilities['fullDemo'] ) && ( empty( $primary['type'] ) || 'full_demo' !== $primary['type'] ) ) {
 			$actions[] = array(
 				'type'     => 'full_demo',
-				'label'    => esc_html__( 'Apply full site', 'pixelgrade_assistant' ),
+				'label'    => esc_html__( 'Apply full site', 'pixelgrade-assistant' ),
 				'endpoint' => 'importStarter',
 			);
 		}
@@ -1031,91 +1046,91 @@ if ( ! function_exists( 'pixassist_get_starter_sites_copy' ) ) {
 			: array();
 
 		return array(
-			'title'       => esc_html__( 'Starter Sites', 'pixelgrade_assistant' ),
-			'description' => esc_html__( 'Pick a free starter design, then choose how much of it to apply. (“LT” is our Anima LT theme line — each starter is built on it.)', 'pixelgrade_assistant' ),
-			'importTitle' => pixassist_starter_sites_replace_tokens( isset( $l10n['importTitle'] ) ? (string) $l10n['importTitle'] : esc_html__( '{{theme_name}} demo content', 'pixelgrade_assistant' ) ),
-			'empty'       => isset( $l10n['noSources'] ) ? (string) $l10n['noSources'] : esc_html__( 'No starter sites are currently configured.', 'pixelgrade_assistant' ),
-			'confirm'     => isset( $l10n['alreadyImportedConfirm'] ) ? (string) $l10n['alreadyImportedConfirm'] : esc_html__( 'Starter content was already imported. Import it again?', 'pixelgrade_assistant' ),
-			'importing'   => isset( $l10n['importingData'] ) ? (string) $l10n['importingData'] : esc_html__( 'Getting data about available content...', 'pixelgrade_assistant' ),
-			'error'       => isset( $l10n['errorMessage'] ) ? (string) $l10n['errorMessage'] : esc_html__( 'This starter content is not available right now. Please try again later.', 'pixelgrade_assistant' ),
-			'failed'      => isset( $l10n['somethingWrong'] ) ? (string) $l10n['somethingWrong'] : esc_html__( 'Something went wrong.', 'pixelgrade_assistant' ),
-			'success'     => esc_html__( 'Successfully applied.', 'pixelgrade_assistant' ),
+			'title'       => esc_html__( 'Starter Sites', 'pixelgrade-assistant' ),
+			'description' => esc_html__( 'Pick a free starter design, then choose how much of it to apply. (“LT” is our Anima LT theme line — each starter is built on it.)', 'pixelgrade-assistant' ),
+			'importTitle' => pixassist_starter_sites_replace_tokens( isset( $l10n['importTitle'] ) ? (string) $l10n['importTitle'] : esc_html__( '{{theme_name}} demo content', 'pixelgrade-assistant' ) ),
+			'empty'       => isset( $l10n['noSources'] ) ? (string) $l10n['noSources'] : esc_html__( 'No starter sites are currently configured.', 'pixelgrade-assistant' ),
+			'confirm'     => isset( $l10n['alreadyImportedConfirm'] ) ? (string) $l10n['alreadyImportedConfirm'] : esc_html__( 'Starter content was already imported. Import it again?', 'pixelgrade-assistant' ),
+			'importing'   => isset( $l10n['importingData'] ) ? (string) $l10n['importingData'] : esc_html__( 'Getting data about available content...', 'pixelgrade-assistant' ),
+			'error'       => isset( $l10n['errorMessage'] ) ? (string) $l10n['errorMessage'] : esc_html__( 'This starter content is not available right now. Please try again later.', 'pixelgrade-assistant' ),
+			'failed'      => isset( $l10n['somethingWrong'] ) ? (string) $l10n['somethingWrong'] : esc_html__( 'Something went wrong.', 'pixelgrade-assistant' ),
+			'success'     => esc_html__( 'Successfully applied.', 'pixelgrade-assistant' ),
 			'labels'      => array(
-				'free'    => esc_html__( 'Free', 'pixelgrade_assistant' ),
-				'premium' => esc_html__( 'Premium', 'pixelgrade_assistant' ),
-				'locked'  => esc_html__( 'Requires Pixelgrade Plus', 'pixelgrade_assistant' ),
+				'free'    => esc_html__( 'Free', 'pixelgrade-assistant' ),
+				'premium' => esc_html__( 'Premium', 'pixelgrade-assistant' ),
+				'locked'  => esc_html__( 'Requires Pixelgrade Plus', 'pixelgrade-assistant' ),
 			),
 			'actions'     => array(
-				'import'             => isset( $l10n['import'] ) ? (string) $l10n['import'] : esc_html__( 'Import', 'pixelgrade_assistant' ),
-				'imported'           => isset( $l10n['imported'] ) ? (string) $l10n['imported'] : esc_html__( 'Imported', 'pixelgrade_assistant' ),
+				'import'             => isset( $l10n['import'] ) ? (string) $l10n['import'] : esc_html__( 'Import', 'pixelgrade-assistant' ),
+				'imported'           => isset( $l10n['imported'] ) ? (string) $l10n['imported'] : esc_html__( 'Imported', 'pixelgrade-assistant' ),
 				// "Set up", not "Use": the button opens the composer (nothing is imported yet).
-				'useStarter'         => esc_html__( 'Set up %s', 'pixelgrade_assistant' ),
-				'applyFullSite'      => esc_html__( 'Apply full site', 'pixelgrade_assistant' ),
-				'applyLayouts'       => esc_html__( 'Apply layouts', 'pixelgrade_assistant' ),
-				'applySelectedParts' => esc_html__( 'Apply selected parts', 'pixelgrade_assistant' ),
-				'addPortfolio'       => esc_html__( 'Add portfolio', 'pixelgrade_assistant' ),
-				'cancel'             => esc_html__( 'Cancel', 'pixelgrade_assistant' ),
-				'backToStarterSites' => esc_html__( 'Back to Starter Sites', 'pixelgrade_assistant' ),
-				'preview'            => esc_html__( 'Preview', 'pixelgrade_assistant' ),
-				'setupPlus'          => esc_html__( 'Set up Pixelgrade Plus', 'pixelgrade_assistant' ),
-				'managePlus'         => esc_html__( 'Manage Pixelgrade Plus', 'pixelgrade_assistant' ),
-				'working'            => esc_html__( 'Applying...', 'pixelgrade_assistant' ),
-				'managePlugins'      => esc_html__( 'Install required plugins', 'pixelgrade_assistant' ),
+				'useStarter'         => esc_html__( 'Set up %s', 'pixelgrade-assistant' ),
+				'applyFullSite'      => esc_html__( 'Apply full site', 'pixelgrade-assistant' ),
+				'applyLayouts'       => esc_html__( 'Apply layouts', 'pixelgrade-assistant' ),
+				'applySelectedParts' => esc_html__( 'Apply selected parts', 'pixelgrade-assistant' ),
+				'addPortfolio'       => esc_html__( 'Add portfolio', 'pixelgrade-assistant' ),
+				'cancel'             => esc_html__( 'Cancel', 'pixelgrade-assistant' ),
+				'backToStarterSites' => esc_html__( 'Back to Starter Sites', 'pixelgrade-assistant' ),
+				'preview'            => esc_html__( 'Preview', 'pixelgrade-assistant' ),
+				'setupPlus'          => esc_html__( 'Set up Pixelgrade Plus', 'pixelgrade-assistant' ),
+				'managePlus'         => esc_html__( 'Manage Pixelgrade Plus', 'pixelgrade-assistant' ),
+				'working'            => esc_html__( 'Applying...', 'pixelgrade-assistant' ),
+				'managePlugins'      => esc_html__( 'Install required plugins', 'pixelgrade-assistant' ),
 			),
 			'composer'    => array(
-				'preset'        => esc_html__( 'Preset', 'pixelgrade_assistant' ),
-				'include'       => esc_html__( 'What to include', 'pixelgrade_assistant' ),
-				'summary'       => esc_html__( 'Summary', 'pixelgrade_assistant' ),
-				'selected'      => esc_html__( 'Selected', 'pixelgrade_assistant' ),
-				'summaryPrefix' => esc_html__( 'This will add/update: %s.', 'pixelgrade_assistant' ),
-				'emptySummary'  => esc_html__( 'Choose at least one part to continue.', 'pixelgrade_assistant' ),
+				'preset'        => esc_html__( 'Preset', 'pixelgrade-assistant' ),
+				'include'       => esc_html__( 'What to include', 'pixelgrade-assistant' ),
+				'summary'       => esc_html__( 'Summary', 'pixelgrade-assistant' ),
+				'selected'      => esc_html__( 'Selected', 'pixelgrade-assistant' ),
+				'summaryPrefix' => esc_html__( 'This will add/update: %s.', 'pixelgrade-assistant' ),
+				'emptySummary'  => esc_html__( 'Choose at least one part to continue.', 'pixelgrade-assistant' ),
 				'presets'       => array(
-					'fullSite'      => esc_html__( 'Full site', 'pixelgrade_assistant' ),
-					'layoutsOnly'   => esc_html__( 'Layouts only', 'pixelgrade_assistant' ),
-					'portfolioOnly' => esc_html__( 'Portfolio only', 'pixelgrade_assistant' ),
-					'chooseParts'   => esc_html__( 'Choose parts', 'pixelgrade_assistant' ),
+					'fullSite'      => esc_html__( 'Full site', 'pixelgrade-assistant' ),
+					'layoutsOnly'   => esc_html__( 'Layouts only', 'pixelgrade-assistant' ),
+					'portfolioOnly' => esc_html__( 'Portfolio only', 'pixelgrade-assistant' ),
+					'chooseParts'   => esc_html__( 'Choose parts', 'pixelgrade-assistant' ),
 				),
 				'presetDescriptions' => array(
-					'fullSite'      => esc_html__( 'Everything from the starter: content, layouts, menus, and design.', 'pixelgrade_assistant' ),
-					'layoutsOnly'   => esc_html__( 'Keep your content and apply the starter structure.', 'pixelgrade_assistant' ),
-					'portfolioOnly' => esc_html__( 'Add the portfolio feature and its templates.', 'pixelgrade_assistant' ),
-					'chooseParts'   => esc_html__( 'Select the exact pieces you want.', 'pixelgrade_assistant' ),
+					'fullSite'      => esc_html__( 'Everything from the starter: content, layouts, menus, and design.', 'pixelgrade-assistant' ),
+					'layoutsOnly'   => esc_html__( 'Keep your content and apply the starter structure.', 'pixelgrade-assistant' ),
+					'portfolioOnly' => esc_html__( 'Add the portfolio feature and its templates.', 'pixelgrade-assistant' ),
+					'chooseParts'   => esc_html__( 'Select the exact pieces you want.', 'pixelgrade-assistant' ),
 				),
 				'groups'        => array(
-					'content'  => esc_html__( 'Content', 'pixelgrade_assistant' ),
-					'layouts'  => esc_html__( 'Layouts', 'pixelgrade_assistant' ),
-					'design'   => esc_html__( 'Design', 'pixelgrade_assistant' ),
-					'features' => esc_html__( 'Features', 'pixelgrade_assistant' ),
+					'content'  => esc_html__( 'Content', 'pixelgrade-assistant' ),
+					'layouts'  => esc_html__( 'Layouts', 'pixelgrade-assistant' ),
+					'design'   => esc_html__( 'Design', 'pixelgrade-assistant' ),
+					'features' => esc_html__( 'Features', 'pixelgrade-assistant' ),
 				),
 				'parts'         => array(
-					'pages'            => esc_html__( 'Pages', 'pixelgrade_assistant' ),
-					'posts'            => esc_html__( 'Posts', 'pixelgrade_assistant' ),
-					'projects'         => esc_html__( 'Projects', 'pixelgrade_assistant' ),
-					'products'         => esc_html__( 'Products', 'pixelgrade_assistant' ),
-					'header'           => esc_html__( 'Header', 'pixelgrade_assistant' ),
-					'footer'           => esc_html__( 'Footer', 'pixelgrade_assistant' ),
-					'home'             => esc_html__( 'Home', 'pixelgrade_assistant' ),
-					'archive'          => esc_html__( 'Post list (archive)', 'pixelgrade_assistant' ),
-					'single'           => esc_html__( 'Single post', 'pixelgrade_assistant' ),
-					'portfolioArchive' => esc_html__( 'Portfolio archive', 'pixelgrade_assistant' ),
-					'portfolioSingle'  => esc_html__( 'Portfolio single', 'pixelgrade_assistant' ),
-					'colorsFonts'      => esc_html__( 'Colors and fonts', 'pixelgrade_assistant' ),
-					'menus'            => esc_html__( 'Menus', 'pixelgrade_assistant' ),
-					'logo'             => esc_html__( 'Logo', 'pixelgrade_assistant' ),
-					'portfolio'        => esc_html__( 'Portfolio', 'pixelgrade_assistant' ),
+					'pages'            => esc_html__( 'Pages', 'pixelgrade-assistant' ),
+					'posts'            => esc_html__( 'Posts', 'pixelgrade-assistant' ),
+					'projects'         => esc_html__( 'Projects', 'pixelgrade-assistant' ),
+					'products'         => esc_html__( 'Products', 'pixelgrade-assistant' ),
+					'header'           => esc_html__( 'Header', 'pixelgrade-assistant' ),
+					'footer'           => esc_html__( 'Footer', 'pixelgrade-assistant' ),
+					'home'             => esc_html__( 'Home', 'pixelgrade-assistant' ),
+					'archive'          => esc_html__( 'Post list (archive)', 'pixelgrade-assistant' ),
+					'single'           => esc_html__( 'Single post', 'pixelgrade-assistant' ),
+					'portfolioArchive' => esc_html__( 'Portfolio archive', 'pixelgrade-assistant' ),
+					'portfolioSingle'  => esc_html__( 'Portfolio single', 'pixelgrade-assistant' ),
+					'colorsFonts'      => esc_html__( 'Colors and fonts', 'pixelgrade-assistant' ),
+					'menus'            => esc_html__( 'Menus', 'pixelgrade-assistant' ),
+					'logo'             => esc_html__( 'Logo', 'pixelgrade-assistant' ),
+					'portfolio'        => esc_html__( 'Portfolio', 'pixelgrade-assistant' ),
 				),
 			),
 			// Dependency-gate copy: shown when a starter needs companion plugins that are not active yet.
 			// The *Single variants keep the copy grammatical when exactly one plugin is missing.
 			'requirements' => array(
-				'heading'       => esc_html__( 'This starter needs a couple of plugins first', 'pixelgrade_assistant' ),
-				'headingSingle' => esc_html__( 'This starter needs one more plugin first', 'pixelgrade_assistant' ),
+				'heading'       => esc_html__( 'This starter needs a couple of plugins first', 'pixelgrade-assistant' ),
+				'headingSingle' => esc_html__( 'This starter needs one more plugin first', 'pixelgrade-assistant' ),
 				/* translators: %s: comma-separated list of plugin names. */
-				'message'       => esc_html__( 'To use this starter as intended, install and activate %s. Without them the imported pages would render broken (missing blocks, colors and fonts).', 'pixelgrade_assistant' ),
+				'message'       => esc_html__( 'To use this starter as intended, install and activate %s. Without them the imported pages would render broken (missing blocks, colors and fonts).', 'pixelgrade-assistant' ),
 				/* translators: %s: a plugin name. */
-				'messageSingle' => esc_html__( 'To use this starter as intended, install and activate %s. Without it the imported pages would render broken (missing blocks, colors and fonts).', 'pixelgrade_assistant' ),
-				'separator'     => esc_html_x( ', ', 'separator between required plugin names', 'pixelgrade_assistant' ),
-				'and'           => esc_html_x( ' and ', 'last separator between required plugin names', 'pixelgrade_assistant' ),
+				'messageSingle' => esc_html__( 'To use this starter as intended, install and activate %s. Without it the imported pages would render broken (missing blocks, colors and fonts).', 'pixelgrade-assistant' ),
+				'separator'     => esc_html_x( ', ', 'separator between required plugin names', 'pixelgrade-assistant' ),
+				'and'           => esc_html_x( ' and ', 'last separator between required plugin names', 'pixelgrade-assistant' ),
 			),
 			// Deep link to the Plugins tab so the user can install + activate the missing companions.
 			'pluginsTabUrl' => pixassist_get_starter_sites_plugins_tab_url(),
@@ -1349,7 +1364,7 @@ if ( ! function_exists( 'pixassist_get_starter_sites_default_description' ) ) {
 			return pixassist_starter_sites_replace_tokens( (string) $config['starterContent']['l10n']['importContentDescription'] );
 		}
 
-		return esc_html__( 'Import the content from the theme demo.', 'pixelgrade_assistant' );
+		return esc_html__( 'Import the content from the theme demo.', 'pixelgrade-assistant' );
 	}
 }
 

@@ -1000,16 +1000,16 @@ if ( ! function_exists( 'pixassist_account_initiate_connection' ) ) {
 		if ( ( function_exists( 'pixassist_is_care_active' ) && pixassist_is_care_active() )
 			|| ! pixassist_account_can_manage()
 			|| ! pixassist_account_verify_nonce( isset( $request['_wpnonce'] ) ? $request['_wpnonce'] : '' ) ) {
-			return pixassist_account_result( 'denied', esc_html__( 'You are not allowed to connect a Pixelgrade account.', 'pixelgrade_assistant' ) );
+			return pixassist_account_result( 'denied', esc_html__( 'You are not allowed to connect a Pixelgrade account.', 'pixelgrade-assistant' ) );
 		}
 
 		if ( ! pixassist_account_oauth_is_configured() ) {
-			return pixassist_account_result( 'not_configured', esc_html__( 'The Pixelgrade account connection is not configured for this build.', 'pixelgrade_assistant' ) );
+			return pixassist_account_result( 'not_configured', esc_html__( 'The Pixelgrade account connection is not configured for this build.', 'pixelgrade-assistant' ) );
 		}
 
 		$request_token = pixassist_account_oauth_request_token( pixassist_account_callback_url() );
 		if ( empty( $request_token['oauth_token'] ) ) {
-			return pixassist_account_result( 'connect_failed', esc_html__( 'We could not reach the Pixelgrade account service. Please try again.', 'pixelgrade_assistant' ) );
+			return pixassist_account_result( 'connect_failed', esc_html__( 'We could not reach the Pixelgrade account service. Please try again.', 'pixelgrade-assistant' ) );
 		}
 
 		pixassist_account_save_request_token_secret( $request_token['oauth_token'], isset( $request_token['oauth_token_secret'] ) ? (string) $request_token['oauth_token_secret'] : '' );
@@ -1034,7 +1034,7 @@ if ( ! function_exists( 'pixassist_account_handle_callback' ) ) {
 		if ( ( function_exists( 'pixassist_is_care_active' ) && pixassist_is_care_active() )
 			|| ! pixassist_account_can_manage()
 			|| ! pixassist_account_verify_nonce( isset( $request['pixassist_state'] ) ? $request['pixassist_state'] : '' ) ) {
-			return pixassist_account_result( 'denied', esc_html__( 'You are not allowed to connect a Pixelgrade account.', 'pixelgrade_assistant' ) );
+			return pixassist_account_result( 'denied', esc_html__( 'You are not allowed to connect a Pixelgrade account.', 'pixelgrade-assistant' ) );
 		}
 
 		$oauth_token = pixassist_account_sanitize_string( isset( $request['oauth_token'] ) ? $request['oauth_token'] : '' );
@@ -1043,7 +1043,7 @@ if ( ! function_exists( 'pixassist_account_handle_callback' ) ) {
 
 		if ( null === $secret ) {
 			pixassist_account_log_oauth_failure( 'request-token secret missing at callback (expired or lost between legs)', '' !== $oauth_token ? 'oauth_token present' : 'oauth_token missing' );
-			return pixassist_account_result( 'connect_failed', esc_html__( 'We could not connect your Pixelgrade account. Please try again.', 'pixelgrade_assistant' ) );
+			return pixassist_account_result( 'connect_failed', esc_html__( 'We could not connect your Pixelgrade account. Please try again.', 'pixelgrade-assistant' ) );
 		}
 
 		$access = pixassist_account_oauth_access_token( $oauth_token, $secret, $verifier );
@@ -1051,7 +1051,7 @@ if ( ! function_exists( 'pixassist_account_handle_callback' ) ) {
 
 		if ( empty( $access ) || 0 >= (int) ( isset( $access['pixelgrade_user_id'] ) ? $access['pixelgrade_user_id'] : 0 ) ) {
 			pixassist_account_log_oauth_failure( 'access leg returned no usable identity', empty( $access ) ? 'empty access response' : 'no pixelgrade_user_id in response' );
-			return pixassist_account_result( 'connect_failed', esc_html__( 'We could not connect your Pixelgrade account. Please try again.', 'pixelgrade_assistant' ) );
+			return pixassist_account_result( 'connect_failed', esc_html__( 'We could not connect your Pixelgrade account. Please try again.', 'pixelgrade-assistant' ) );
 		}
 
 		pixassist_save_account_connection(
@@ -1065,7 +1065,7 @@ if ( ! function_exists( 'pixassist_account_handle_callback' ) ) {
 			)
 		);
 
-		return pixassist_account_result( 'connected', esc_html__( 'Your Pixelgrade account is connected.', 'pixelgrade_assistant' ) );
+		return pixassist_account_result( 'connected', esc_html__( 'Your Pixelgrade account is connected.', 'pixelgrade-assistant' ) );
 	}
 }
 
@@ -1081,12 +1081,12 @@ if ( ! function_exists( 'pixassist_account_disconnect' ) ) {
 		if ( ( function_exists( 'pixassist_is_care_active' ) && pixassist_is_care_active() )
 			|| ! pixassist_account_can_manage()
 			|| ! pixassist_account_verify_nonce( isset( $request['_wpnonce'] ) ? $request['_wpnonce'] : '' ) ) {
-			return pixassist_account_result( 'denied', esc_html__( 'You are not allowed to disconnect this Pixelgrade account.', 'pixelgrade_assistant' ) );
+			return pixassist_account_result( 'denied', esc_html__( 'You are not allowed to disconnect this Pixelgrade account.', 'pixelgrade-assistant' ) );
 		}
 
 		pixassist_delete_account_connection();
 
-		return pixassist_account_result( 'disconnected', esc_html__( 'Your Pixelgrade account is disconnected.', 'pixelgrade_assistant' ) );
+		return pixassist_account_result( 'disconnected', esc_html__( 'Your Pixelgrade account is disconnected.', 'pixelgrade-assistant' ) );
 	}
 }
 
@@ -1183,7 +1183,7 @@ if ( ! function_exists( 'pixassist_register_account_tab' ) ) {
 
 		$tabs[] = array(
 			'id'         => 'account',
-			'label'      => esc_html__( 'Account', 'pixelgrade_assistant' ),
+			'label'      => esc_html__( 'Account', 'pixelgrade-assistant' ),
 			'capability' => pixassist_account_capability(),
 			'component'  => 'account',
 			'gate'       => '',
@@ -1228,27 +1228,27 @@ if ( ! function_exists( 'pixassist_get_account_notice' ) ) {
 			'connected'      => array(
 				'status'  => 'connected',
 				'type'    => 'success',
-				'message' => esc_html__( 'Your Pixelgrade account is connected.', 'pixelgrade_assistant' ),
+				'message' => esc_html__( 'Your Pixelgrade account is connected.', 'pixelgrade-assistant' ),
 			),
 			'disconnected'   => array(
 				'status'  => 'disconnected',
 				'type'    => 'success',
-				'message' => esc_html__( 'Your Pixelgrade account is disconnected.', 'pixelgrade_assistant' ),
+				'message' => esc_html__( 'Your Pixelgrade account is disconnected.', 'pixelgrade-assistant' ),
 			),
 			'connect_failed' => array(
 				'status'  => 'connect_failed',
 				'type'    => 'error',
-				'message' => esc_html__( 'We could not connect your Pixelgrade account. Please try again.', 'pixelgrade_assistant' ),
+				'message' => esc_html__( 'We could not connect your Pixelgrade account. Please try again.', 'pixelgrade-assistant' ),
 			),
 			'not_configured' => array(
 				'status'  => 'not_configured',
 				'type'    => 'warning',
-				'message' => esc_html__( 'The Pixelgrade account connection is not configured for this build.', 'pixelgrade_assistant' ),
+				'message' => esc_html__( 'The Pixelgrade account connection is not configured for this build.', 'pixelgrade-assistant' ),
 			),
 			'denied'         => array(
 				'status'  => 'denied',
 				'type'    => 'error',
-				'message' => esc_html__( 'You are not allowed to manage the Pixelgrade account connection.', 'pixelgrade_assistant' ),
+				'message' => esc_html__( 'You are not allowed to manage the Pixelgrade account connection.', 'pixelgrade-assistant' ),
 			),
 		);
 
@@ -1634,14 +1634,14 @@ if ( ! function_exists( 'pixassist_account_plus_tier_label' ) ) {
 		}
 
 		if ( 'studio' === $tier || 'pixelgrade-plus-studio' === $sku ) {
-			return esc_html__( 'Pixelgrade Plus Studio', 'pixelgrade_assistant' );
+			return esc_html__( 'Pixelgrade Plus Studio', 'pixelgrade-assistant' );
 		}
 
 		if ( 'single' === $tier || 'pixelgrade-plus-single' === $sku ) {
-			return esc_html__( 'Pixelgrade Plus Single', 'pixelgrade_assistant' );
+			return esc_html__( 'Pixelgrade Plus Single', 'pixelgrade-assistant' );
 		}
 
-		return esc_html__( 'Pixelgrade Plus', 'pixelgrade_assistant' );
+		return esc_html__( 'Pixelgrade Plus', 'pixelgrade-assistant' );
 	}
 }
 
@@ -1889,49 +1889,49 @@ if ( ! function_exists( 'pixassist_get_account_products_summary' ) ) {
 
 		$summary = array(
 			'state'       => 'available',
-			'statusLabel' => esc_html__( 'Available', 'pixelgrade_assistant' ),
+			'statusLabel' => esc_html__( 'Available', 'pixelgrade-assistant' ),
 			'label'       => implode( ' + ', array_filter( $labels ) ),
-			'description' => esc_html__( 'This account can use the free Pixelgrade support and documentation available for the active theme.', 'pixelgrade_assistant' ),
+			'description' => esc_html__( 'This account can use the free Pixelgrade support and documentation available for the active theme.', 'pixelgrade-assistant' ),
 			'plusLabel'   => ( $plus_active || $plus_owned ) ? $plus_label : '',
 			'url'         => '',
 			'actionLabel' => '',
 		);
 
 		if ( '' === $summary['label'] ) {
-			$summary['label'] = esc_html__( 'Pixelgrade products', 'pixelgrade_assistant' );
+			$summary['label'] = esc_html__( 'Pixelgrade products', 'pixelgrade-assistant' );
 		}
 
 		if ( ! $plus_active && $plus_owned ) {
 			if ( $plus_installed ) {
 				$summary['state']       = 'plus_plugin_inactive';
-				$summary['statusLabel'] = esc_html__( 'Installed', 'pixelgrade_assistant' );
+				$summary['statusLabel'] = esc_html__( 'Installed', 'pixelgrade-assistant' );
 				$summary['url']         = pixassist_get_plus_plugin_activate_url( 'pixelgrade-plus/pixelgrade-plus.php' );
 				/* translators: %s: Pixelgrade Plus product label. */
-				$summary['description'] = sprintf( esc_html__( 'Your connected Pixelgrade account includes %s and the companion plugin is installed. Activate it to enable the Plus benefits for this site.', 'pixelgrade_assistant' ), $plus_label );
-				$summary['actionLabel'] = esc_html__( 'Activate Pixelgrade Plus', 'pixelgrade_assistant' );
+				$summary['description'] = sprintf( esc_html__( 'Your connected Pixelgrade account includes %s and the companion plugin is installed. Activate it to enable the Plus benefits for this site.', 'pixelgrade-assistant' ), $plus_label );
+				$summary['actionLabel'] = esc_html__( 'Activate Pixelgrade Plus', 'pixelgrade-assistant' );
 			} else {
 				$summary['state']       = 'plus_plugin_missing';
-				$summary['statusLabel'] = esc_html__( 'Plus available', 'pixelgrade_assistant' );
+				$summary['statusLabel'] = esc_html__( 'Plus available', 'pixelgrade-assistant' );
 				$summary['url']         = $plus_setup_url;
 				/* translators: %s: Pixelgrade Plus product label. */
-				$summary['description'] = sprintf( esc_html__( 'Your connected Pixelgrade account includes %s. Download the companion plugin from Pixelgrade.com, install it, then activate it for this site.', 'pixelgrade_assistant' ), $plus_label );
-				$summary['actionLabel'] = esc_html__( 'Download Pixelgrade Plus', 'pixelgrade_assistant' );
+				$summary['description'] = sprintf( esc_html__( 'Your connected Pixelgrade account includes %s. Download the companion plugin from Pixelgrade.com, install it, then activate it for this site.', 'pixelgrade-assistant' ), $plus_label );
+				$summary['actionLabel'] = esc_html__( 'Download Pixelgrade Plus', 'pixelgrade-assistant' );
 			}
 		} elseif ( $plus_active ) {
 			$summary['url'] = $plus_url;
 
 			if ( ! empty( $plus_status['is_plus_licensed'] ) ) {
 				$summary['state']       = 'licensed';
-				$summary['statusLabel'] = esc_html__( 'Licensed', 'pixelgrade_assistant' );
+				$summary['statusLabel'] = esc_html__( 'Licensed', 'pixelgrade-assistant' );
 				/* translators: %s: Pixelgrade Plus product label. */
-				$summary['description'] = sprintf( esc_html__( '%s license is active. Open the Plus panel to review the benefits validated for this site, or refresh them after a new purchase.', 'pixelgrade_assistant' ), $plus_label );
-				$summary['actionLabel'] = esc_html__( 'Review Plus benefits', 'pixelgrade_assistant' );
+				$summary['description'] = sprintf( esc_html__( '%s license is active. Open the Plus panel to review the benefits validated for this site, or refresh them after a new purchase.', 'pixelgrade-assistant' ), $plus_label );
+				$summary['actionLabel'] = esc_html__( 'Review Plus benefits', 'pixelgrade-assistant' );
 			} else {
 				$summary['state']       = 'needs_license';
-				$summary['statusLabel'] = esc_html__( 'Needs license', 'pixelgrade_assistant' );
+				$summary['statusLabel'] = esc_html__( 'Needs license', 'pixelgrade-assistant' );
 				/* translators: %s: Pixelgrade Plus product label. */
-				$summary['description'] = sprintf( esc_html__( '%s is installed. Plus checks the connected account automatically; if no license is active yet, open the Plus panel to check again or connect the purchasing account.', 'pixelgrade_assistant' ), $plus_label );
-				$summary['actionLabel'] = esc_html__( 'Check Plus license', 'pixelgrade_assistant' );
+				$summary['description'] = sprintf( esc_html__( '%s is installed. Plus checks the connected account automatically; if no license is active yet, open the Plus panel to check again or connect the purchasing account.', 'pixelgrade-assistant' ), $plus_label );
+				$summary['actionLabel'] = esc_html__( 'Check Plus license', 'pixelgrade-assistant' );
 			}
 		}
 
@@ -1996,9 +1996,9 @@ if ( ! function_exists( 'pixassist_get_account_plus_journey' ) ) {
 		if ( $active && $licensed ) {
 			return array(
 				'state'       => 'complete',
-				'title'       => esc_html__( 'Pixelgrade Plus is set up', 'pixelgrade_assistant' ),
+				'title'       => esc_html__( 'Pixelgrade Plus is set up', 'pixelgrade-assistant' ),
 				/* translators: %s: Pixelgrade Plus product label. */
-				'description' => sprintf( esc_html__( 'Your %s license is validated on this site. Everything Plus adds is on.', 'pixelgrade_assistant' ), $plus_label ),
+				'description' => sprintf( esc_html__( 'Your %s license is validated on this site. Everything Plus adds is on.', 'pixelgrade-assistant' ), $plus_label ),
 				// No action on purpose: the Plus panel sits directly below this row, and it no
 				// longer lists "benefits" — a scroll link would promise something that isn't there.
 				'action'      => null,
@@ -2010,16 +2010,16 @@ if ( ! function_exists( 'pixassist_get_account_plus_journey' ) ) {
 			$invite = array(
 				'state'       => 'invite',
 				'title'       => 'Pixelgrade Plus',
-				'description' => esc_html__( 'Everything free stays free. Plus adds the deeper end of the design system, for sites with more riding on them — one-time purchase, no subscription.', 'pixelgrade_assistant' ),
+				'description' => esc_html__( 'Everything free stays free. Plus adds the deeper end of the design system, for sites with more riding on them — one-time purchase, no subscription.', 'pixelgrade-assistant' ),
 				'action'      => array(
-					'label' => esc_html__( 'Explore Pixelgrade Plus', 'pixelgrade_assistant' ),
+					'label' => esc_html__( 'Explore Pixelgrade Plus', 'pixelgrade-assistant' ),
 					'url'   => $setup_url,
 				),
 				'steps'       => array(),
 			);
 
 			if ( ! $connected ) {
-				$invite['hint'] = esc_html__( 'Already purchased Plus? Connect your Pixelgrade account above and this page will guide the setup.', 'pixelgrade_assistant' );
+				$invite['hint'] = esc_html__( 'Already purchased Plus? Connect your Pixelgrade account above and this page will guide the setup.', 'pixelgrade-assistant' );
 			}
 
 			return $invite;
@@ -2042,25 +2042,25 @@ if ( ! function_exists( 'pixassist_get_account_plus_journey' ) ) {
 
 		$steps = array(
 			'connect'          => array(
-				'label'       => esc_html__( 'Connect your Pixelgrade account', 'pixelgrade_assistant' ),
-				'description' => esc_html__( 'A free pixelgrade.com account ties your license, your Pixelgrade Credits, and this site together.', 'pixelgrade_assistant' ),
+				'label'       => esc_html__( 'Connect your Pixelgrade account', 'pixelgrade-assistant' ),
+				'description' => esc_html__( 'A free pixelgrade.com account ties your license, your Pixelgrade Credits, and this site together.', 'pixelgrade-assistant' ),
 			),
 			'get_plugin'       => array(
-				'label'       => esc_html__( 'Get the Pixelgrade Plus plugin', 'pixelgrade_assistant' ),
+				'label'       => esc_html__( 'Get the Pixelgrade Plus plugin', 'pixelgrade-assistant' ),
 				'description' => $owned
 					/* translators: %s: Pixelgrade Plus product label. */
-					? sprintf( esc_html__( 'Your account includes %s. Download the plugin from your Pixelgrade.com account.', 'pixelgrade_assistant' ), $plus_label )
-					: esc_html__( 'Download the Pixelgrade Plus plugin from your Pixelgrade.com account after purchase.', 'pixelgrade_assistant' ),
+					? sprintf( esc_html__( 'Your account includes %s. Download the plugin from your Pixelgrade.com account.', 'pixelgrade-assistant' ), $plus_label )
+					: esc_html__( 'Download the Pixelgrade Plus plugin from your Pixelgrade.com account after purchase.', 'pixelgrade-assistant' ),
 			),
 			'activate_plugin'  => array(
-				'label'       => esc_html__( 'Activate the plugin on this site', 'pixelgrade_assistant' ),
-				'description' => esc_html__( 'Turn Pixelgrade Plus on from the Plugins screen. Nothing is licensed yet at this point.', 'pixelgrade_assistant' ),
+				'label'       => esc_html__( 'Activate the plugin on this site', 'pixelgrade-assistant' ),
+				'description' => esc_html__( 'Turn Pixelgrade Plus on from the Plugins screen. Nothing is licensed yet at this point.', 'pixelgrade-assistant' ),
 			),
 			'validate_license' => array(
-				'label'       => esc_html__( 'Check your Plus license', 'pixelgrade_assistant' ),
+				'label'       => esc_html__( 'Check your Plus license', 'pixelgrade-assistant' ),
 				'description' => $owned || ! $connected
-					? esc_html__( 'Plus checks automatically after the account is connected. If the license is not active yet, open the Plus panel to check again.', 'pixelgrade_assistant' )
-					: esc_html__( 'Plus checks automatically after the account is connected. If the license is not active yet, open the Plus panel to check again or connect the purchasing account.', 'pixelgrade_assistant' ),
+					? esc_html__( 'Plus checks automatically after the account is connected. If the license is not active yet, open the Plus panel to check again.', 'pixelgrade-assistant' )
+					: esc_html__( 'Plus checks automatically after the account is connected. If the license is not active yet, open the Plus panel to check again or connect the purchasing account.', 'pixelgrade-assistant' ),
 			),
 		);
 
@@ -2073,26 +2073,26 @@ if ( ! function_exists( 'pixassist_get_account_plus_journey' ) ) {
 			if ( 'current' === $state ) {
 				if ( 'connect' === $step_id && $can_oauth ) {
 					$action = array(
-						'label' => esc_html__( 'Connect account', 'pixelgrade_assistant' ),
+						'label' => esc_html__( 'Connect account', 'pixelgrade-assistant' ),
 						'url'   => pixassist_get_account_connect_url(),
 					);
 				} elseif ( 'get_plugin' === $step_id ) {
 					$action = array(
-						'label' => esc_html__( 'Download Pixelgrade Plus', 'pixelgrade_assistant' ),
+						'label' => esc_html__( 'Download Pixelgrade Plus', 'pixelgrade-assistant' ),
 						'url'   => $setup_url,
 					);
 					$hint   = array(
-						'label' => esc_html__( 'Then upload the zip under Plugins → Add Plugin → Upload Plugin.', 'pixelgrade_assistant' ),
+						'label' => esc_html__( 'Then upload the zip under Plugins → Add Plugin → Upload Plugin.', 'pixelgrade-assistant' ),
 						'url'   => function_exists( 'esc_url_raw' ) ? esc_url_raw( admin_url( 'plugin-install.php?tab=upload' ) ) : admin_url( 'plugin-install.php?tab=upload' ),
 					);
 				} elseif ( 'activate_plugin' === $step_id ) {
 					$action = array(
-						'label' => esc_html__( 'Activate Pixelgrade Plus', 'pixelgrade_assistant' ),
+						'label' => esc_html__( 'Activate Pixelgrade Plus', 'pixelgrade-assistant' ),
 						'url'   => pixassist_get_plus_plugin_activate_url( 'pixelgrade-plus/pixelgrade-plus.php' ),
 					);
 				} elseif ( 'validate_license' === $step_id ) {
 					$action = array(
-						'label' => esc_html__( 'Open the Plus panel', 'pixelgrade_assistant' ),
+						'label' => esc_html__( 'Open the Plus panel', 'pixelgrade-assistant' ),
 						'url'   => $panel_url,
 					);
 				}
@@ -2112,10 +2112,10 @@ if ( ! function_exists( 'pixassist_get_account_plus_journey' ) ) {
 
 		return array(
 			'state'         => 'in_progress',
-			'title'         => esc_html__( 'Set up Pixelgrade Plus', 'pixelgrade_assistant' ),
+			'title'         => esc_html__( 'Set up Pixelgrade Plus', 'pixelgrade-assistant' ),
 			/* translators: 1: completed step count, 2: total step count. */
-			'progressLabel' => sprintf( esc_html__( '%1$d of %2$d steps done', 'pixelgrade_assistant' ), $done_count, count( $flags ) ),
-			'description'   => esc_html__( 'The deeper end of the design system unlocks when these steps are done — deeper style control, premium fonts and assets, richer block controls.', 'pixelgrade_assistant' ),
+			'progressLabel' => sprintf( esc_html__( '%1$d of %2$d steps done', 'pixelgrade-assistant' ), $done_count, count( $flags ) ),
+			'description'   => esc_html__( 'The deeper end of the design system unlocks when these steps are done — deeper style control, premium fonts and assets, richer block controls.', 'pixelgrade-assistant' ),
 			'steps'         => $built,
 		);
 	}
@@ -2175,20 +2175,20 @@ if ( ! function_exists( 'pixassist_get_account_details_summary' ) ) {
 		$description = '';
 		if ( '' !== $connected_on ) {
 			/* translators: %s: account connection date. */
-			$description = sprintf( esc_html__( 'Connected %s.', 'pixelgrade_assistant' ), $connected_on );
+			$description = sprintf( esc_html__( 'Connected %s.', 'pixelgrade-assistant' ), $connected_on );
 		}
 
-		$label = esc_html__( 'Connected account', 'pixelgrade_assistant' );
+		$label = esc_html__( 'Connected account', 'pixelgrade-assistant' );
 		if ( 0 < $pixelgrade_id ) {
 			/* translators: %d: pixelgrade.com user id. */
-			$label = sprintf( esc_html__( 'Pixelgrade ID %d', 'pixelgrade_assistant' ), $pixelgrade_id );
+			$label = sprintf( esc_html__( 'Pixelgrade ID %d', 'pixelgrade-assistant' ), $pixelgrade_id );
 		}
 
 		return array(
 			'label'       => $label,
 			'description' => $description,
 			'state'       => 'available',
-			'statusLabel' => esc_html__( 'Ready', 'pixelgrade_assistant' ),
+			'statusLabel' => esc_html__( 'Ready', 'pixelgrade-assistant' ),
 		);
 	}
 }
@@ -2220,14 +2220,14 @@ if ( ! function_exists( 'pixassist_get_account_value_data' ) ) {
 			? array(
 				'id'      => 'get_help',
 				'type'    => 'link',
-				'label'   => esc_html__( 'Get help', 'pixelgrade_assistant' ),
+				'label'   => esc_html__( 'Get help', 'pixelgrade-assistant' ),
 				'url'     => $help_url,
 				'variant' => 'primary',
 			)
 			: array(
 				'id'      => $can_oauth ? 'connect_account' : 'browse_docs',
 				'type'    => 'link',
-				'label'   => $can_oauth ? esc_html__( 'Connect account', 'pixelgrade_assistant' ) : esc_html__( 'Browse documentation', 'pixelgrade_assistant' ),
+				'label'   => $can_oauth ? esc_html__( 'Connect account', 'pixelgrade-assistant' ) : esc_html__( 'Browse documentation', 'pixelgrade-assistant' ),
 				'url'     => $can_oauth ? pixassist_get_account_connect_url() : $docs_url,
 				'variant' => 'primary',
 			);
@@ -2237,17 +2237,17 @@ if ( ! function_exists( 'pixassist_get_account_value_data' ) ) {
 			'products'       => $products,
 			'accountDetails' => pixassist_get_account_details_summary( $account ),
 			'docs'           => array(
-				'label'       => esc_html__( 'Browse guides for the active Pixelgrade theme anytime — no account needed. They also open right where you work, from the Design Docs button in the editor toolbar and the admin bar.', 'pixelgrade_assistant' ),
+				'label'       => esc_html__( 'Browse guides for the active Pixelgrade theme anytime — no account needed. They also open right where you work, from the Design Docs button in the editor toolbar and the admin bar.', 'pixelgrade-assistant' ),
 				'state'       => 'available',
 				'url'         => $docs_url,
-				'actionLabel' => esc_html__( 'Open Pixelgrade Design Docs', 'pixelgrade_assistant' ),
+				'actionLabel' => esc_html__( 'Open Pixelgrade Design Docs', 'pixelgrade-assistant' ),
 			),
 			'diagnostics'    => array(
-				'label'       => esc_html__( 'System Status checks your setup', 'pixelgrade_assistant' ),
-				'description' => esc_html__( 'When something looks off, System Status reviews your theme, plugins, and configuration and points at the next safe step.', 'pixelgrade_assistant' ),
+				'label'       => esc_html__( 'System Status checks your setup', 'pixelgrade-assistant' ),
+				'description' => esc_html__( 'When something looks off, System Status reviews your theme, plugins, and configuration and points at the next safe step.', 'pixelgrade-assistant' ),
 				'state'       => 'available',
 				'url'         => function_exists( 'esc_url_raw' ) ? esc_url_raw( pixassist_get_hub_url( 'system-status' ) ) : pixassist_get_hub_url( 'system-status' ),
-				'actionLabel' => esc_html__( 'View System Status', 'pixelgrade_assistant' ),
+				'actionLabel' => esc_html__( 'View System Status', 'pixelgrade-assistant' ),
 			),
 			'nextAction'  => $next_action,
 		);
@@ -2278,13 +2278,13 @@ if ( ! function_exists( 'pixassist_get_account_data' ) ) {
 				'isConfigured' => pixassist_account_oauth_is_configured(),
 			),
 			'copy'         => array(
-				'title'                  => esc_html__( 'Pixelgrade account', 'pixelgrade_assistant' ),
-				'connectedStatusLabel'   => esc_html__( 'Site connected.', 'pixelgrade_assistant' ),
-				'connectedDescription'   => esc_html__( 'Support requests and license checks from this site use this identity.', 'pixelgrade_assistant' ),
-				'disconnectedDescription' => esc_html__( 'Your site and every free feature work without an account. Connect your pixelgrade.com account when you need it — to validate a Pixelgrade Plus license, or to use Pixelgrade Credits for assisted help. Always optional.', 'pixelgrade_assistant' ),
-				'connectLabel'           => esc_html__( 'Connect account', 'pixelgrade_assistant' ),
-				'disconnectLabel'        => esc_html__( 'Disconnect account', 'pixelgrade_assistant' ),
-				'notConfiguredLabel'     => esc_html__( 'Account connection is not configured.', 'pixelgrade_assistant' ),
+				'title'                  => esc_html__( 'Pixelgrade account', 'pixelgrade-assistant' ),
+				'connectedStatusLabel'   => esc_html__( 'Site connected.', 'pixelgrade-assistant' ),
+				'connectedDescription'   => esc_html__( 'Support requests and license checks from this site use this identity.', 'pixelgrade-assistant' ),
+				'disconnectedDescription' => esc_html__( 'Your site and every free feature work without an account. Connect your pixelgrade.com account when you need it — to validate a Pixelgrade Plus license, or to use Pixelgrade Credits for assisted help. Always optional.', 'pixelgrade-assistant' ),
+				'connectLabel'           => esc_html__( 'Connect account', 'pixelgrade-assistant' ),
+				'disconnectLabel'        => esc_html__( 'Disconnect account', 'pixelgrade-assistant' ),
+				'notConfiguredLabel'     => esc_html__( 'Account connection is not configured.', 'pixelgrade-assistant' ),
 			),
 		);
 	}

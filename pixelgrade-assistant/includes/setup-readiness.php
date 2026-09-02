@@ -210,16 +210,16 @@ if ( ! function_exists( 'pixassist_build_setup_plugins_check' ) ) {
 
 		if ( 0 === $total ) {
 			$status = 'ok';
-			$value  = esc_html__( 'No recommended plugins for this theme', 'pixelgrade_assistant' );
+			$value  = esc_html__( 'No recommended plugins for this theme', 'pixelgrade-assistant' );
 		} elseif ( ! empty( $required_missing ) ) {
 			$status = 'blocked';
-			$value  = sprintf( esc_html__( '%1$d of %2$d active', 'pixelgrade_assistant' ), $active_count, $total );
+			$value  = sprintf( esc_html__( '%1$d of %2$d active', 'pixelgrade-assistant' ), $active_count, $total );
 		} elseif ( ! empty( $optional_missing ) || ! empty( $outdated ) ) {
 			$status = 'warning';
-			$value  = sprintf( esc_html__( '%1$d of %2$d active', 'pixelgrade_assistant' ), $active_count, $total );
+			$value  = sprintf( esc_html__( '%1$d of %2$d active', 'pixelgrade-assistant' ), $active_count, $total );
 		} else {
 			$status = 'ok';
-			$value  = sprintf( esc_html__( 'All %d active and up to date', 'pixelgrade_assistant' ), $total );
+			$value  = sprintf( esc_html__( 'All %d active and up to date', 'pixelgrade-assistant' ), $total );
 		}
 
 		$items = array_merge( $required_missing, $optional_missing, $outdated );
@@ -227,11 +227,11 @@ if ( ! function_exists( 'pixassist_build_setup_plugins_check' ) ) {
 		return array(
 			'id'       => 'plugins',
 			'group'    => 'plugins',
-			'label'    => esc_html__( 'Recommended plugins', 'pixelgrade_assistant' ),
+			'label'    => esc_html__( 'Recommended plugins', 'pixelgrade-assistant' ),
 			'status'   => $status,
 			'value'    => $value,
-			'expected' => esc_html__( 'All recommended plugins installed, active, and up to date', 'pixelgrade_assistant' ),
-			'why'      => esc_html__( 'Pixelgrade Design relies on these plugins for blocks, styles, and starter content. Use the list below to install or activate anything missing.', 'pixelgrade_assistant' ),
+			'expected' => esc_html__( 'All recommended plugins installed, active, and up to date', 'pixelgrade-assistant' ),
+			'why'      => esc_html__( 'Pixelgrade Design relies on these plugins for blocks, styles, and starter content. Use the list below to install or activate anything missing.', 'pixelgrade-assistant' ),
 			'action'   => null,
 			'items'    => $items,
 		);
@@ -286,13 +286,13 @@ if ( ! function_exists( 'pixassist_build_setup_companions_check' ) ) {
 		return array(
 			'id'       => 'companions',
 			'group'    => 'companions',
-			'label'    => esc_html__( 'Companion plugin versions', 'pixelgrade_assistant' ),
+			'label'    => esc_html__( 'Companion plugin versions', 'pixelgrade-assistant' ),
 			'status'   => $status,
 			'value'    => empty( $out_of_range )
-				? esc_html__( 'Within the versions your theme is tested against', 'pixelgrade_assistant' )
-				: sprintf( esc_html__( '%d outside the tested range', 'pixelgrade_assistant' ), count( $out_of_range ) ),
-			'expected' => esc_html__( 'Within the versions your theme declares support for', 'pixelgrade_assistant' ),
-			'why'      => esc_html__( 'Your theme is tested against specific companion plugin versions. Running outside that range can cause layout or styling differences.', 'pixelgrade_assistant' ),
+				? esc_html__( 'Within the versions your theme is tested against', 'pixelgrade-assistant' )
+				: sprintf( esc_html__( '%d outside the tested range', 'pixelgrade-assistant' ), count( $out_of_range ) ),
+			'expected' => esc_html__( 'Within the versions your theme declares support for', 'pixelgrade-assistant' ),
+			'why'      => esc_html__( 'Your theme is tested against specific companion plugin versions. Running outside that range can cause layout or styling differences.', 'pixelgrade-assistant' ),
 			'action'   => null,
 			'items'    => $items,
 		);
@@ -335,16 +335,16 @@ if ( ! function_exists( 'pixassist_build_setup_checks' ) ) {
 		$is_pixelgrade = ! empty( $theme['is_pixelgrade'] );
 		$theme_value   = trim( $theme_name . ( '' !== $theme_version ? ' ' . $theme_version : '' ) );
 		if ( '' === $theme_value ) {
-			$theme_value = esc_html__( 'Unknown theme', 'pixelgrade_assistant' );
+			$theme_value = esc_html__( 'Unknown theme', 'pixelgrade-assistant' );
 		}
 		$checks[] = array(
 			'id'       => 'theme',
 			'group'    => 'theme',
-			'label'    => esc_html__( 'Active theme', 'pixelgrade_assistant' ),
+			'label'    => esc_html__( 'Active theme', 'pixelgrade-assistant' ),
 			'status'   => $is_pixelgrade ? 'ok' : 'blocked',
 			'value'    => $theme_value,
-			'expected' => esc_html__( 'An active Pixelgrade theme', 'pixelgrade_assistant' ),
-			'why'      => esc_html__( 'Pixelgrade Design styles, blocks, and starter content are built for Pixelgrade themes. Activate one to use these tools.', 'pixelgrade_assistant' ),
+			'expected' => esc_html__( 'An active Pixelgrade theme', 'pixelgrade-assistant' ),
+			'why'      => esc_html__( 'Pixelgrade Design styles, blocks, and starter content are built for Pixelgrade themes. Activate one to use these tools.', 'pixelgrade-assistant' ),
 			'action'   => $is_pixelgrade ? null : ( isset( $actions['theme'] ) ? $actions['theme'] : null ),
 			'items'    => array(),
 		);
@@ -354,13 +354,13 @@ if ( ! function_exists( 'pixassist_build_setup_checks' ) ) {
 		$checks[]    = array(
 			'id'       => 'care',
 			'group'    => 'theme',
-			'label'    => esc_html__( 'Plugin coexistence', 'pixelgrade_assistant' ),
+			'label'    => esc_html__( 'Plugin coexistence', 'pixelgrade-assistant' ),
 			'status'   => $care_active ? 'blocked' : 'ok',
 			'value'    => $care_active
-				? esc_html__( 'Pixelgrade Care is active', 'pixelgrade_assistant' )
-				: esc_html__( 'No conflicting Pixelgrade plugins', 'pixelgrade_assistant' ),
-			'expected' => esc_html__( 'Pixelgrade Care deactivated', 'pixelgrade_assistant' ),
-			'why'      => esc_html__( 'Pixelgrade Care and Pixelgrade Assistant cannot run together. Deactivate Pixelgrade Care so Assistant can power the Pixelgrade Design tools.', 'pixelgrade_assistant' ),
+				? esc_html__( 'Pixelgrade Care is active', 'pixelgrade-assistant' )
+				: esc_html__( 'No conflicting Pixelgrade plugins', 'pixelgrade-assistant' ),
+			'expected' => esc_html__( 'Pixelgrade Care deactivated', 'pixelgrade-assistant' ),
+			'why'      => esc_html__( 'Pixelgrade Care and Pixelgrade Assistant cannot run together. Deactivate Pixelgrade Care so Assistant can power the Pixelgrade Design tools.', 'pixelgrade-assistant' ),
 			'action'   => $care_active ? ( isset( $actions['care'] ) ? $actions['care'] : null ) : null,
 			'items'    => array(),
 		);
@@ -387,11 +387,11 @@ if ( ! function_exists( 'pixassist_build_setup_checks' ) ) {
 		$checks[]    = array(
 			'id'       => 'php',
 			'group'    => 'environment',
-			'label'    => esc_html__( 'PHP version', 'pixelgrade_assistant' ),
+			'label'    => esc_html__( 'PHP version', 'pixelgrade-assistant' ),
 			'status'   => $php_status,
-			'value'    => '' !== $php_version ? $php_version : esc_html__( 'Unknown', 'pixelgrade_assistant' ),
-			'expected' => sprintf( esc_html__( '%s or newer', 'pixelgrade_assistant' ), isset( $php_t['recommended'] ) ? (string) $php_t['recommended'] : '' ),
-			'why'      => esc_html__( 'A modern PHP version keeps the editor, Style Manager, and starter imports fast and stable.', 'pixelgrade_assistant' ),
+			'value'    => '' !== $php_version ? $php_version : esc_html__( 'Unknown', 'pixelgrade-assistant' ),
+			'expected' => sprintf( esc_html__( '%s or newer', 'pixelgrade-assistant' ), isset( $php_t['recommended'] ) ? (string) $php_t['recommended'] : '' ),
+			'why'      => esc_html__( 'A modern PHP version keeps the editor, Style Manager, and starter imports fast and stable.', 'pixelgrade-assistant' ),
 			'action'   => ( 'ok' !== $php_status && isset( $actions['php'] ) ) ? $actions['php'] : null,
 			'items'    => array(),
 		);
@@ -402,11 +402,11 @@ if ( ! function_exists( 'pixassist_build_setup_checks' ) ) {
 		$checks[]   = array(
 			'id'       => 'wp',
 			'group'    => 'environment',
-			'label'    => esc_html__( 'WordPress version', 'pixelgrade_assistant' ),
+			'label'    => esc_html__( 'WordPress version', 'pixelgrade-assistant' ),
 			'status'   => $wp_status,
-			'value'    => '' !== $wp_version ? $wp_version : esc_html__( 'Unknown', 'pixelgrade_assistant' ),
-			'expected' => sprintf( esc_html__( '%s or newer', 'pixelgrade_assistant' ), isset( $wp_t['recommended'] ) ? (string) $wp_t['recommended'] : '' ),
-			'why'      => esc_html__( 'The Site Editor and global styles that Pixelgrade Design uses need a current WordPress version.', 'pixelgrade_assistant' ),
+			'value'    => '' !== $wp_version ? $wp_version : esc_html__( 'Unknown', 'pixelgrade-assistant' ),
+			'expected' => sprintf( esc_html__( '%s or newer', 'pixelgrade-assistant' ), isset( $wp_t['recommended'] ) ? (string) $wp_t['recommended'] : '' ),
+			'why'      => esc_html__( 'The Site Editor and global styles that Pixelgrade Design uses need a current WordPress version.', 'pixelgrade-assistant' ),
 			'action'   => ( 'ok' !== $wp_status && isset( $actions['wp'] ) ) ? $actions['wp'] : null,
 			'items'    => array(),
 		);
@@ -417,11 +417,11 @@ if ( ! function_exists( 'pixassist_build_setup_checks' ) ) {
 		$checks[]      = array(
 			'id'       => 'memory',
 			'group'    => 'environment',
-			'label'    => esc_html__( 'Memory limit', 'pixelgrade_assistant' ),
+			'label'    => esc_html__( 'Memory limit', 'pixelgrade-assistant' ),
 			'status'   => $memory_status,
-			'value'    => '' !== pixassist_setup_format_bytes( $memory_bytes ) ? pixassist_setup_format_bytes( $memory_bytes ) : esc_html__( 'Unknown', 'pixelgrade_assistant' ),
-			'expected' => sprintf( esc_html__( '%s or more', 'pixelgrade_assistant' ), pixassist_setup_format_bytes( isset( $memory_t['recommended'] ) ? $memory_t['recommended'] : 0 ) ),
-			'why'      => esc_html__( 'Starter-content imports and the block editor can run out of memory on tight limits. More headroom (256 MB+) is ideal for large imports.', 'pixelgrade_assistant' ),
+			'value'    => '' !== pixassist_setup_format_bytes( $memory_bytes ) ? pixassist_setup_format_bytes( $memory_bytes ) : esc_html__( 'Unknown', 'pixelgrade-assistant' ),
+			'expected' => sprintf( esc_html__( '%s or more', 'pixelgrade-assistant' ), pixassist_setup_format_bytes( isset( $memory_t['recommended'] ) ? $memory_t['recommended'] : 0 ) ),
+			'why'      => esc_html__( 'Starter-content imports and the block editor can run out of memory on tight limits. More headroom (256 MB+) is ideal for large imports.', 'pixelgrade-assistant' ),
 			'action'   => ( 'ok' !== $memory_status && isset( $actions['memory'] ) ) ? $actions['memory'] : null,
 			'items'    => array(),
 		);
@@ -538,16 +538,16 @@ if ( ! function_exists( 'pixassist_classify_setup_overall' ) ) {
 
 		if ( $counts['blocked'] > 0 ) {
 			$status      = 'blocked';
-			$title       = esc_html__( 'Setup needs attention before you start', 'pixelgrade_assistant' );
-			$description = esc_html__( 'Resolve the blockers below to use Pixelgrade Design on this site.', 'pixelgrade_assistant' );
+			$title       = esc_html__( 'Setup needs attention before you start', 'pixelgrade-assistant' );
+			$description = esc_html__( 'Resolve the blockers below to use Pixelgrade Design on this site.', 'pixelgrade-assistant' );
 		} elseif ( $counts['warning'] > 0 ) {
 			$status      = 'attention';
-			$title       = esc_html__( 'A few things need attention', 'pixelgrade_assistant' );
-			$description = esc_html__( 'Pixelgrade Design will work, but resolving these gives you the best results.', 'pixelgrade_assistant' );
+			$title       = esc_html__( 'A few things need attention', 'pixelgrade-assistant' );
+			$description = esc_html__( 'Pixelgrade Design will work, but resolving these gives you the best results.', 'pixelgrade-assistant' );
 		} else {
 			$status      = 'ready';
-			$title       = esc_html__( 'Pixelgrade Design is ready on this site', 'pixelgrade_assistant' );
-			$description = esc_html__( 'Everything checks out. You can start designing.', 'pixelgrade_assistant' );
+			$title       = esc_html__( 'Pixelgrade Design is ready on this site', 'pixelgrade-assistant' );
+			$description = esc_html__( 'Everything checks out. You can start designing.', 'pixelgrade-assistant' );
 		}
 
 		return array(
@@ -807,27 +807,27 @@ if ( ! function_exists( 'pixassist_get_setup_readiness_actions' ) ) {
 
 		$actions = array(
 			'theme'   => array(
-				'label' => esc_html__( 'Choose a theme', 'pixelgrade_assistant' ),
+				'label' => esc_html__( 'Choose a theme', 'pixelgrade-assistant' ),
 				'url'   => $admin ? admin_url( 'themes.php' ) : 'themes.php',
 			),
 			'care'    => array(
-				'label' => esc_html__( 'Manage plugins', 'pixelgrade_assistant' ),
+				'label' => esc_html__( 'Manage plugins', 'pixelgrade-assistant' ),
 				'url'   => $admin ? admin_url( 'plugins.php' ) : 'plugins.php',
 			),
 			'php'     => array(
-				'label' => esc_html__( 'How to update PHP', 'pixelgrade_assistant' ),
+				'label' => esc_html__( 'How to update PHP', 'pixelgrade-assistant' ),
 				'url'   => $php_url,
 			),
 			'wp'      => array(
-				'label' => esc_html__( 'Update WordPress', 'pixelgrade_assistant' ),
+				'label' => esc_html__( 'Update WordPress', 'pixelgrade-assistant' ),
 				'url'   => $admin ? admin_url( 'update-core.php' ) : 'update-core.php',
 			),
 			'memory'  => array(
-				'label' => esc_html__( 'How to increase memory', 'pixelgrade_assistant' ),
+				'label' => esc_html__( 'How to increase memory', 'pixelgrade-assistant' ),
 				'url'   => 'https://wordpress.org/documentation/article/editing-wp-config-php/#increasing-memory-allocated-to-php',
 			),
 			'companions' => array(
-				'label' => esc_html__( 'Manage plugins', 'pixelgrade_assistant' ),
+				'label' => esc_html__( 'Manage plugins', 'pixelgrade-assistant' ),
 				'url'   => $admin ? admin_url( 'plugins.php' ) : 'plugins.php',
 			),
 		);
@@ -851,35 +851,35 @@ if ( ! function_exists( 'pixassist_get_setup_environment_summary' ) ) {
 
 		$rows = array(
 			array(
-				'label' => esc_html__( 'PHP', 'pixelgrade_assistant' ),
-				'value' => isset( $env['php_version'] ) && '' !== $env['php_version'] ? (string) $env['php_version'] : esc_html__( 'Unknown', 'pixelgrade_assistant' ),
+				'label' => esc_html__( 'PHP', 'pixelgrade-assistant' ),
+				'value' => isset( $env['php_version'] ) && '' !== $env['php_version'] ? (string) $env['php_version'] : esc_html__( 'Unknown', 'pixelgrade-assistant' ),
 			),
 			array(
-				'label' => esc_html__( 'WordPress', 'pixelgrade_assistant' ),
-				'value' => isset( $env['wp_version'] ) && '' !== $env['wp_version'] ? (string) $env['wp_version'] : esc_html__( 'Unknown', 'pixelgrade_assistant' ),
+				'label' => esc_html__( 'WordPress', 'pixelgrade-assistant' ),
+				'value' => isset( $env['wp_version'] ) && '' !== $env['wp_version'] ? (string) $env['wp_version'] : esc_html__( 'Unknown', 'pixelgrade-assistant' ),
 			),
 			array(
-				'label' => esc_html__( 'Database', 'pixelgrade_assistant' ),
-				'value' => isset( $env['db_version'] ) && '' !== $env['db_version'] ? (string) $env['db_version'] : esc_html__( 'Unknown', 'pixelgrade_assistant' ),
+				'label' => esc_html__( 'Database', 'pixelgrade-assistant' ),
+				'value' => isset( $env['db_version'] ) && '' !== $env['db_version'] ? (string) $env['db_version'] : esc_html__( 'Unknown', 'pixelgrade-assistant' ),
 			),
 			array(
-				'label' => esc_html__( 'Memory limit', 'pixelgrade_assistant' ),
+				'label' => esc_html__( 'Memory limit', 'pixelgrade-assistant' ),
 				'value' => '' !== pixassist_setup_format_bytes( isset( $env['memory_limit_bytes'] ) ? $env['memory_limit_bytes'] : 0 )
 					? pixassist_setup_format_bytes( $env['memory_limit_bytes'] )
-					: esc_html__( 'Unknown', 'pixelgrade_assistant' ),
+					: esc_html__( 'Unknown', 'pixelgrade-assistant' ),
 			),
 		);
 
 		if ( ! empty( $env['max_execution_time'] ) ) {
 			$rows[] = array(
-				'label' => esc_html__( 'Max execution time', 'pixelgrade_assistant' ),
-				'value' => sprintf( esc_html__( '%s s', 'pixelgrade_assistant' ), (string) $env['max_execution_time'] ),
+				'label' => esc_html__( 'Max execution time', 'pixelgrade-assistant' ),
+				'value' => sprintf( esc_html__( '%s s', 'pixelgrade-assistant' ), (string) $env['max_execution_time'] ),
 			);
 		}
 
 		if ( ! empty( $env['upload_max_bytes'] ) ) {
 			$rows[] = array(
-				'label' => esc_html__( 'Max upload size', 'pixelgrade_assistant' ),
+				'label' => esc_html__( 'Max upload size', 'pixelgrade-assistant' ),
 				'value' => pixassist_setup_format_bytes( (int) $env['upload_max_bytes'] ),
 			);
 		}
@@ -896,16 +896,16 @@ if ( ! function_exists( 'pixassist_get_setup_readiness_copy' ) ) {
 	 */
 	function pixassist_get_setup_readiness_copy() {
 		return array(
-			'issuesTitle'      => esc_html__( 'Needs attention', 'pixelgrade_assistant' ),
-			'currentLabel'     => esc_html__( 'Current', 'pixelgrade_assistant' ),
-			'expectedLabel'    => esc_html__( 'Recommended', 'pixelgrade_assistant' ),
-			'whyLabel'         => esc_html__( 'Why it matters', 'pixelgrade_assistant' ),
-			'pluginsTitle'     => esc_html__( 'Recommended plugins', 'pixelgrade_assistant' ),
-			'environmentTitle' => esc_html__( 'Site environment', 'pixelgrade_assistant' ),
-			'diagnosticsLabel' => esc_html__( 'Open System Status', 'pixelgrade_assistant' ),
-			'diagnosticsHint'  => esc_html__( 'Detailed tables, data collection, and the copyable report live in System Status.', 'pixelgrade_assistant' ),
-			'blockedBadge'     => esc_html__( 'Blocker', 'pixelgrade_assistant' ),
-			'warningBadge'     => esc_html__( 'Heads up', 'pixelgrade_assistant' ),
+			'issuesTitle'      => esc_html__( 'Needs attention', 'pixelgrade-assistant' ),
+			'currentLabel'     => esc_html__( 'Current', 'pixelgrade-assistant' ),
+			'expectedLabel'    => esc_html__( 'Recommended', 'pixelgrade-assistant' ),
+			'whyLabel'         => esc_html__( 'Why it matters', 'pixelgrade-assistant' ),
+			'pluginsTitle'     => esc_html__( 'Recommended plugins', 'pixelgrade-assistant' ),
+			'environmentTitle' => esc_html__( 'Site environment', 'pixelgrade-assistant' ),
+			'diagnosticsLabel' => esc_html__( 'Open System Status', 'pixelgrade-assistant' ),
+			'diagnosticsHint'  => esc_html__( 'Detailed tables, data collection, and the copyable report live in System Status.', 'pixelgrade-assistant' ),
+			'blockedBadge'     => esc_html__( 'Blocker', 'pixelgrade-assistant' ),
+			'warningBadge'     => esc_html__( 'Heads up', 'pixelgrade-assistant' ),
 		);
 	}
 }

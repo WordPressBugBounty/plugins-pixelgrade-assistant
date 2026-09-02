@@ -10,6 +10,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
+// What each Design Library source contributes (parts and/or content records).
+require_once __DIR__ . '/starter-sources.php';
+
 if ( ! function_exists( 'pixassist_register_content_patterns_tab' ) ) {
 	/**
 	 * Preserve the legacy registration callback without exposing Page Patterns in navigation.
@@ -74,46 +77,46 @@ if ( ! function_exists( 'pixassist_get_content_patterns_copy' ) ) {
 	 */
 	function pixassist_get_content_patterns_copy() {
 		return array(
-			'title'          => esc_html__( 'Page Patterns', 'pixelgrade_assistant' ),
-			'description'    => esc_html__( 'Add ready-made content — a single page or post from a starter — instead of importing a whole starter site. For reusable parts like headers, footers, and templates, use the Site Parts section.', 'pixelgrade_assistant' ),
-			'sourceLabel'    => esc_html__( 'Source', 'pixelgrade_assistant' ),
-			'typeLabel'      => esc_html__( 'Type', 'pixelgrade_assistant' ),
-			'allSources'     => esc_html__( 'All sources', 'pixelgrade_assistant' ),
-			'allTypes'       => esc_html__( 'All types', 'pixelgrade_assistant' ),
-			'searchLabel'    => esc_html__( 'Search page patterns', 'pixelgrade_assistant' ),
-			'loadLabel'      => esc_html__( 'Load page patterns', 'pixelgrade_assistant' ),
-			'refreshLabel'   => esc_html__( 'Refresh', 'pixelgrade_assistant' ),
-			'loading'        => esc_html__( 'Loading page patterns...', 'pixelgrade_assistant' ),
-			'empty'          => esc_html__( 'No page patterns are available from these sources.', 'pixelgrade_assistant' ),
-			'emptyFiltered'  => esc_html__( 'No page patterns match these filters.', 'pixelgrade_assistant' ),
-			'failure'        => esc_html__( 'Page patterns could not be loaded. Please try again.', 'pixelgrade_assistant' ),
-			'partialFailure' => esc_html__( 'Some page-pattern sources could not be loaded.', 'pixelgrade_assistant' ),
-			'partialFailureNamed' => esc_html__( 'Some sources are temporarily unavailable: %s. The other page patterns loaded fine.', 'pixelgrade_assistant' ),
-			'importLabel'    => esc_html__( 'Apply', 'pixelgrade_assistant' ),
-			'replaceLabel'   => esc_html__( 'Replace', 'pixelgrade_assistant' ),
-			'importing'      => esc_html__( 'Applying page pattern...', 'pixelgrade_assistant' ),
-			'importSuccess'  => esc_html__( 'Page pattern applied.', 'pixelgrade_assistant' ),
-			'importSuccessNamed' => esc_html__( 'Added “%s” to your site.', 'pixelgrade_assistant' ),
-			'viewLabel'      => esc_html__( 'View', 'pixelgrade_assistant' ),
-			'editLabel'      => esc_html__( 'Edit', 'pixelgrade_assistant' ),
-			'importFailure'  => esc_html__( 'Page pattern could not be applied. Please try again.', 'pixelgrade_assistant' ),
-			'undoLabel'      => esc_html__( 'Remove', 'pixelgrade_assistant' ),
-			'undoing'        => esc_html__( 'Removing page pattern...', 'pixelgrade_assistant' ),
-			'undoSuccess'    => esc_html__( 'Page pattern removed.', 'pixelgrade_assistant' ),
-			'undoFailure'    => esc_html__( 'Page pattern could not be removed. Please try again.', 'pixelgrade_assistant' ),
-			'appliedTitle'   => esc_html__( 'Applied page patterns', 'pixelgrade_assistant' ),
-			'appliedEmpty'   => esc_html__( 'No page patterns are applied yet.', 'pixelgrade_assistant' ),
-			'appliedLabel'   => esc_html__( 'Applied', 'pixelgrade_assistant' ),
-			'activeBadge'    => esc_html__( 'Active', 'pixelgrade_assistant' ),
-			'sectionNoneApplied' => esc_html__( 'None applied yet', 'pixelgrade_assistant' ),
-			'sourceHeading'  => esc_html__( 'Source', 'pixelgrade_assistant' ),
-			'premiumLabel'   => esc_html__( 'Plus', 'pixelgrade_assistant' ),
-			'lockedLabel'    => esc_html__( 'Unavailable', 'pixelgrade_assistant' ),
-			'mediaLabel'     => esc_html__( 'media', 'pixelgrade_assistant' ),
-			'previewLabel'   => esc_html__( 'Expand', 'pixelgrade_assistant' ),
-			'previewFull'    => esc_html__( 'Open the full page pattern preview', 'pixelgrade_assistant' ),
-			'noPreview'      => esc_html__( 'No preview', 'pixelgrade_assistant' ),
-			'refreshTitle'   => esc_html__( 'Reload page patterns from your starters', 'pixelgrade_assistant' ),
+			'title'          => esc_html__( 'Page Patterns', 'pixelgrade-assistant' ),
+			'description'    => esc_html__( 'Add ready-made content — one complete page or post — instead of importing a whole starter site. For reusable parts like headers, footers, and templates, use the Site Parts section.', 'pixelgrade-assistant' ),
+			'sourceLabel'    => esc_html__( 'Source', 'pixelgrade-assistant' ),
+			'typeLabel'      => esc_html__( 'Type', 'pixelgrade-assistant' ),
+			'allSources'     => esc_html__( 'All sources', 'pixelgrade-assistant' ),
+			'allTypes'       => esc_html__( 'All types', 'pixelgrade-assistant' ),
+			'searchLabel'    => esc_html__( 'Search page patterns', 'pixelgrade-assistant' ),
+			'loadLabel'      => esc_html__( 'Load page patterns', 'pixelgrade-assistant' ),
+			'refreshLabel'   => esc_html__( 'Refresh', 'pixelgrade-assistant' ),
+			'loading'        => esc_html__( 'Loading page patterns...', 'pixelgrade-assistant' ),
+			'empty'          => esc_html__( 'No page patterns are available from these sources.', 'pixelgrade-assistant' ),
+			'emptyFiltered'  => esc_html__( 'No page patterns match these filters.', 'pixelgrade-assistant' ),
+			'failure'        => esc_html__( 'Page patterns could not be loaded. Please try again.', 'pixelgrade-assistant' ),
+			'partialFailure' => esc_html__( 'Some page-pattern sources could not be loaded.', 'pixelgrade-assistant' ),
+			'partialFailureNamed' => esc_html__( 'Some sources are temporarily unavailable: %s. The other page patterns loaded fine.', 'pixelgrade-assistant' ),
+			'importLabel'    => esc_html__( 'Apply', 'pixelgrade-assistant' ),
+			'replaceLabel'   => esc_html__( 'Replace', 'pixelgrade-assistant' ),
+			'importing'      => esc_html__( 'Applying page pattern...', 'pixelgrade-assistant' ),
+			'importSuccess'  => esc_html__( 'Page pattern applied.', 'pixelgrade-assistant' ),
+			'importSuccessNamed' => esc_html__( 'Added “%s” to your site.', 'pixelgrade-assistant' ),
+			'viewLabel'      => esc_html__( 'View', 'pixelgrade-assistant' ),
+			'editLabel'      => esc_html__( 'Edit', 'pixelgrade-assistant' ),
+			'importFailure'  => esc_html__( 'Page pattern could not be applied. Please try again.', 'pixelgrade-assistant' ),
+			'undoLabel'      => esc_html__( 'Remove', 'pixelgrade-assistant' ),
+			'undoing'        => esc_html__( 'Removing page pattern...', 'pixelgrade-assistant' ),
+			'undoSuccess'    => esc_html__( 'Page pattern removed.', 'pixelgrade-assistant' ),
+			'undoFailure'    => esc_html__( 'Page pattern could not be removed. Please try again.', 'pixelgrade-assistant' ),
+			'appliedTitle'   => esc_html__( 'Applied page patterns', 'pixelgrade-assistant' ),
+			'appliedEmpty'   => esc_html__( 'No page patterns are applied yet.', 'pixelgrade-assistant' ),
+			'appliedLabel'   => esc_html__( 'Applied', 'pixelgrade-assistant' ),
+			'activeBadge'    => esc_html__( 'Active', 'pixelgrade-assistant' ),
+			'sectionNoneApplied' => esc_html__( 'None applied yet', 'pixelgrade-assistant' ),
+			'sourceHeading'  => esc_html__( 'Source', 'pixelgrade-assistant' ),
+			'premiumLabel'   => esc_html__( 'Plus', 'pixelgrade-assistant' ),
+			'lockedLabel'    => esc_html__( 'Unavailable', 'pixelgrade-assistant' ),
+			'mediaLabel'     => esc_html__( 'media', 'pixelgrade-assistant' ),
+			'previewLabel'   => esc_html__( 'Expand', 'pixelgrade-assistant' ),
+			'previewFull'    => esc_html__( 'Open the full page pattern preview', 'pixelgrade-assistant' ),
+			'noPreview'      => esc_html__( 'No preview', 'pixelgrade-assistant' ),
+			'refreshTitle'   => esc_html__( 'Reload page patterns from their sources', 'pixelgrade-assistant' ),
 		);
 	}
 }
@@ -136,8 +139,9 @@ if ( ! function_exists( 'pixassist_get_content_patterns_sources' ) ) {
 				continue;
 			}
 
-			$role = ! empty( $starter['role'] ) ? sanitize_key( $starter['role'] ) : 'starter';
-			if ( 'library' === $role ) {
+			// A source is listed here only if it declares that it serves content records. Parts-only
+			// catalogs (and anything that predates `serves`, which resolves to parts-only) stay out.
+			if ( ! pixassist_starter_serves( $starter, 'content' ) ) {
 				continue;
 			}
 

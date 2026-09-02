@@ -141,14 +141,14 @@ class PixelgradeAssistant_AdminRestInterface {
 		if ( false === PixelgradeAssistant_Admin::save_options() ) {
 			return rest_ensure_response( array(
 				'code'    => 'error_saving',
-				'message' => esc_html__( 'Something went wrong. Could not dismiss the guide.', 'pixelgrade_assistant' ),
+				'message' => esc_html__( 'Something went wrong. Could not dismiss the guide.', 'pixelgrade-assistant' ),
 				'data'    => array(),
 			) );
 		}
 
 		return rest_ensure_response( array(
 			'code'    => 'success',
-			'message' => esc_html__( 'Guide dismissed.', 'pixelgrade_assistant' ),
+			'message' => esc_html__( 'Guide dismissed.', 'pixelgrade-assistant' ),
 			'data'    => array(
 				'dismissed' => true,
 			),
@@ -178,14 +178,14 @@ class PixelgradeAssistant_AdminRestInterface {
 		if ( false === PixelgradeAssistant_Admin::save_options() ) {
 			return rest_ensure_response( array(
 				'code'    => 'error_saving',
-				'message' => esc_html__( 'Something went wrong. Could not resume the guide.', 'pixelgrade_assistant' ),
+				'message' => esc_html__( 'Something went wrong. Could not resume the guide.', 'pixelgrade-assistant' ),
 				'data'    => array(),
 			) );
 		}
 
 		return rest_ensure_response( array(
 			'code'    => 'success',
-			'message' => esc_html__( 'Guide resumed.', 'pixelgrade_assistant' ),
+			'message' => esc_html__( 'Guide resumed.', 'pixelgrade-assistant' ),
 			'data'    => array(
 				'dismissed' => false,
 			),
@@ -221,14 +221,14 @@ class PixelgradeAssistant_AdminRestInterface {
 		if ( ! function_exists( 'pixassist_save_seen_starter_ids' ) || ! pixassist_save_seen_starter_ids( $merged ) ) {
 			return rest_ensure_response( array(
 				'code'    => 'error_saving',
-				'message' => esc_html__( 'Something went wrong. Could not record the collection as seen.', 'pixelgrade_assistant' ),
+				'message' => esc_html__( 'Something went wrong. Could not record the collection as seen.', 'pixelgrade-assistant' ),
 				'data'    => array(),
 			) );
 		}
 
 		return rest_ensure_response( array(
 			'code'    => 'success',
-			'message' => esc_html__( 'Collection recorded as seen.', 'pixelgrade_assistant' ),
+			'message' => esc_html__( 'Collection recorded as seen.', 'pixelgrade-assistant' ),
 			'data'    => array(
 				'seenCount' => count( $merged ),
 			),
@@ -371,7 +371,7 @@ class PixelgradeAssistant_AdminRestInterface {
 
 		return rest_ensure_response( array(
 			'code'    => 'success',
-			'message' => esc_html__( 'State saved successfully!', 'pixelgrade_assistant' ),
+			'message' => esc_html__( 'State saved successfully!', 'pixelgrade-assistant' ),
 			'data'    => array(),
 		) );
 	}
@@ -414,7 +414,7 @@ class PixelgradeAssistant_AdminRestInterface {
 		if ( ! empty( $request ) ) {
 			return rest_ensure_response( array(
 				'code'    => 'success',
-				'message' => esc_html__( 'State deleted successfully!', 'pixelgrade_assistant' ),
+				'message' => esc_html__( 'State deleted successfully!', 'pixelgrade-assistant' ),
 				'data'    => array(),
 			) );
 		} else {
@@ -471,7 +471,7 @@ class PixelgradeAssistant_AdminRestInterface {
 		if ( ! isset( $params['allow_data_collect'] ) ) {
 			return rest_ensure_response( array(
 				'code'    => 'missing_data',
-				'message' => esc_html__( 'You haven\'t provided the necessary data.', 'pixelgrade_assistant' ),
+				'message' => esc_html__( 'You haven\'t provided the necessary data.', 'pixelgrade-assistant' ),
 				'data'    => array(),
 			) );
 		}
@@ -484,14 +484,14 @@ class PixelgradeAssistant_AdminRestInterface {
 		if ( false === PixelgradeAssistant_Admin::save_options() ) {
 			return rest_ensure_response( array(
 				'code'    => 'error_saving',
-				'message' => esc_html__( 'Something went wrong. Could not save the option.', 'pixelgrade_assistant' ),
+				'message' => esc_html__( 'Something went wrong. Could not save the option.', 'pixelgrade-assistant' ),
 				'data'    => array(),
 			) );
 		}
 
 		return rest_ensure_response( array(
 			'code'    => 'success',
-			'message' => esc_html__( 'Data saved successfully!', 'pixelgrade_assistant' ),
+			'message' => esc_html__( 'Data saved successfully!', 'pixelgrade-assistant' ),
 			'data'    => array(
 				// We will retrieve the actual value in the DB, just to be sure
 				'allow_data_collect' => PixelgradeAssistant_Admin::get_option( 'allow_data_collect' ),
@@ -515,7 +515,7 @@ class PixelgradeAssistant_AdminRestInterface {
 		     (int) $params['test1'] + (int) $params['test2'] !== (int) $params['confirm'] ) {
 			return rest_ensure_response( array(
 				'code'    => 'test_failure',
-				'message' => esc_html__( 'Your need to do better on your math.', 'pixelgrade_assistant' ),
+				'message' => esc_html__( 'Your need to do better on your math.', 'pixelgrade-assistant' ),
 				'data'    => array(),
 			) );
 		}
@@ -542,7 +542,7 @@ class PixelgradeAssistant_AdminRestInterface {
 
 		return rest_ensure_response( array(
 			'code'    => 'success',
-			'message' => esc_html__( 'All nice and clean!', 'pixelgrade_assistant' ),
+			'message' => esc_html__( 'All nice and clean!', 'pixelgrade-assistant' ),
 			'data'    => array(),
 		) );
 	}

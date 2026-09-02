@@ -29,7 +29,7 @@ if ( ! function_exists( 'pixassist_register_system_status_tab' ) ) {
 
 		$tabs[] = array(
 			'id'         => 'system-status',
-			'label'      => esc_html__( 'System Status', 'pixelgrade_assistant' ),
+			'label'      => esc_html__( 'System Status', 'pixelgrade-assistant' ),
 			'capability' => 'manage_options',
 			'component'  => 'systemStatus',
 			'gate'       => '',
@@ -111,21 +111,21 @@ if ( ! function_exists( 'pixassist_get_system_status_copy' ) ) {
 			: array();
 
 		return array(
-			'title'           => isset( $l10n['title'] ) ? (string) $l10n['title'] : esc_html__( 'System Status', 'pixelgrade_assistant' ),
-			'description'     => isset( $l10n['description'] ) ? (string) $l10n['description'] : esc_html__( 'Review your WordPress installation, server details, and active plugins.', 'pixelgrade_assistant' ),
-			'collectLabel'    => isset( $l10n['allowDataCollectText'] ) ? (string) $l10n['allowDataCollectText'] : esc_html__( 'Allow diagnostic data collection', 'pixelgrade_assistant' ),
-			'collectEnabled'  => isset( $l10n['allowDataCollectStatusText'] ) ? (string) $l10n['allowDataCollectStatusText'] : esc_html__( 'Diagnostic data collection is enabled.', 'pixelgrade_assistant' ),
-			'collectDisabled' => isset( $l10n['disallowDataCollectText'] ) ? (string) $l10n['disallowDataCollectText'] : esc_html__( 'Diagnostic data collection is disabled.', 'pixelgrade_assistant' ),
-			'enable'          => esc_html__( 'Enable', 'pixelgrade_assistant' ),
-			'disable'         => esc_html__( 'Disable', 'pixelgrade_assistant' ),
-			'refresh'         => esc_html__( 'Refresh data', 'pixelgrade_assistant' ),
-			'siteHealth'      => esc_html__( 'Open Site Health', 'pixelgrade_assistant' ),
-			'empty'           => esc_html__( 'No diagnostic rows are available yet.', 'pixelgrade_assistant' ),
-			'unavailable'     => esc_html__( 'Enable diagnostic data collection to show installation and system details.', 'pixelgrade_assistant' ),
+			'title'           => isset( $l10n['title'] ) ? (string) $l10n['title'] : esc_html__( 'System Status', 'pixelgrade-assistant' ),
+			'description'     => isset( $l10n['description'] ) ? (string) $l10n['description'] : esc_html__( 'Review your WordPress installation, server details, and active plugins.', 'pixelgrade-assistant' ),
+			'collectLabel'    => isset( $l10n['allowDataCollectText'] ) ? (string) $l10n['allowDataCollectText'] : esc_html__( 'Allow diagnostic data collection', 'pixelgrade-assistant' ),
+			'collectEnabled'  => isset( $l10n['allowDataCollectStatusText'] ) ? (string) $l10n['allowDataCollectStatusText'] : esc_html__( 'Diagnostic data collection is enabled.', 'pixelgrade-assistant' ),
+			'collectDisabled' => isset( $l10n['disallowDataCollectText'] ) ? (string) $l10n['disallowDataCollectText'] : esc_html__( 'Diagnostic data collection is disabled.', 'pixelgrade-assistant' ),
+			'enable'          => esc_html__( 'Enable', 'pixelgrade-assistant' ),
+			'disable'         => esc_html__( 'Disable', 'pixelgrade-assistant' ),
+			'refresh'         => esc_html__( 'Refresh data', 'pixelgrade-assistant' ),
+			'siteHealth'      => esc_html__( 'Open Site Health', 'pixelgrade-assistant' ),
+			'empty'           => esc_html__( 'No diagnostic rows are available yet.', 'pixelgrade-assistant' ),
+			'unavailable'     => esc_html__( 'Enable diagnostic data collection to show installation and system details.', 'pixelgrade-assistant' ),
 			'sections'        => array(
-				'installation'  => isset( $l10n['tableWPDataTitle'] ) ? (string) $l10n['tableWPDataTitle'] : esc_html__( 'WordPress Installation', 'pixelgrade_assistant' ),
-				'system'        => isset( $l10n['tableSystemDataTitle'] ) ? (string) $l10n['tableSystemDataTitle'] : esc_html__( 'System', 'pixelgrade_assistant' ),
-				'activePlugins' => isset( $l10n['tableActivePluginsTitle'] ) ? (string) $l10n['tableActivePluginsTitle'] : esc_html__( 'Active Plugins', 'pixelgrade_assistant' ),
+				'installation'  => isset( $l10n['tableWPDataTitle'] ) ? (string) $l10n['tableWPDataTitle'] : esc_html__( 'WordPress Installation', 'pixelgrade-assistant' ),
+				'system'        => isset( $l10n['tableSystemDataTitle'] ) ? (string) $l10n['tableSystemDataTitle'] : esc_html__( 'System', 'pixelgrade-assistant' ),
+				'activePlugins' => isset( $l10n['tableActivePluginsTitle'] ) ? (string) $l10n['tableActivePluginsTitle'] : esc_html__( 'Active Plugins', 'pixelgrade-assistant' ),
 			),
 		);
 	}

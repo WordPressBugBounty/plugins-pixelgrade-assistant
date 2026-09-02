@@ -3,14 +3,14 @@
  * Plugin Name:       Pixelgrade Assistant
  * Plugin URI:        https://github.com/pixelgrade/pixelgrade-assistant
  * Description:       We care about giving you the best experience with your free Pixelgrade theme.
- * Version:           2.3.3
+ * Version:           2.4.0
  * Requires at least: 5.9
  * Requires PHP:      7.4
  * Author:            Pixelgrade
  * Author URI:        https://pixelgrade.com
  * License:           GPL-3.0
  * License URI:       https://www.gnu.org/licenses/gpl-3.0.en.html
- * Text Domain:       pixelgrade_assistant
+ * Text Domain:       pixelgrade-assistant
  * Domain Path:       /languages/
  */
 
@@ -23,7 +23,7 @@ define( 'PIXELGRADE_ASSISTANT__PLUGIN_DIR', plugin_dir_path( __FILE__ ) );
 define( 'PIXELGRADE_ASSISTANT__PLUGIN_FILE', __FILE__ );
 
 // Define our constants or make sure they have a value
-defined( 'PIXELGRADE_ASSISTANT__VERSION' )           || define( 'PIXELGRADE_ASSISTANT__VERSION', '2.3.3' );
+defined( 'PIXELGRADE_ASSISTANT__VERSION' )           || define( 'PIXELGRADE_ASSISTANT__VERSION', '2.4.0' );
 defined( 'PIXELGRADE_ASSISTANT__API_BASE' )          || define( 'PIXELGRADE_ASSISTANT__API_BASE', 'https://pixelgrade.com/' );
 defined( 'PIXELGRADE_ASSISTANT__API_BASE_DOMAIN' )   || define( 'PIXELGRADE_ASSISTANT__API_BASE_DOMAIN', 'pixelgrade.com' );
 defined( 'PIXELGRADE_ASSISTANT__SHOP_BASE' )         || define( 'PIXELGRADE_ASSISTANT__SHOP_BASE', 'https://pixelgrade.com/' );
@@ -99,6 +99,25 @@ require_once plugin_dir_path( __FILE__ ) . 'includes/admin-help.php';
 
 // Include functions that might assist when in dev mode.
 require_once plugin_dir_path( __FILE__ ) . 'includes/integrations/devmode.php';
+
+// The agent surface: the shared verb bodies that both the CLI and the abilities run, the
+// `pixelgrade/*` ability registrations, and the curated MCP server. The core loads first and
+// unconditionally, because abilities register outside WP-CLI.
+require_once plugin_dir_path( __FILE__ ) . 'includes/agent/class-pixelgrade_assistant-agent-core.php';
+require_once plugin_dir_path( __FILE__ ) . 'includes/agent/class-pixelgrade_assistant-abilities.php';
+require_once plugin_dir_path( __FILE__ ) . 'includes/agent/class-pixelgrade_assistant-mcp-server.php';
+
+// WP-CLI subtree: `wp pixelgrade assist …`. Inert (no-op) outside WP-CLI — see the
+// class_exists( '\WP_CLI' ) guard inside.
+require_once plugin_dir_path( __FILE__ ) . 'includes/cli/class-pixelgrade_assistant-cli.php';
+
+// Abilities register on `wp_abilities_api_init` (WordPress 6.9+); the MCP server must be wired
+// before the adapter's own `init`/`rest_api_init` hooks fire, so both happen at load time here.
+// Assistant hosts the curated server for the whole stack (contract §4, decision D2) — abilities
+// owned by Style Manager, Pixelgrade Plus and Nova Blocks are aggregated without moving their
+// registrations.
+PixelgradeAssistant_Abilities::register();
+PixelgradeAssistant_MCP_Server::register();
 
 /**
  * Returns the main instance of PixelgradeAssistant to prevent the need to use globals.

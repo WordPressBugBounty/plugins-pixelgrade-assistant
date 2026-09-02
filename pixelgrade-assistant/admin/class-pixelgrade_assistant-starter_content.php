@@ -623,7 +623,7 @@ class PixelgradeAssistant_StarterContent {
 		if ( empty( $params['recipe_id'] ) || empty( $params['url'] ) ) {
 			return rest_ensure_response( array(
 				'code'    => 'missing_params',
-				'message' => esc_html__( 'You need to provide all the needed parameters.', 'pixelgrade_assistant' ),
+				'message' => esc_html__( 'You need to provide all the needed parameters.', 'pixelgrade-assistant' ),
 				'data'    => array(),
 			) );
 		}
@@ -655,7 +655,7 @@ class PixelgradeAssistant_StarterContent {
 		if ( empty( $recipe_id ) || empty( $base_url ) ) {
 			return array(
 				'code'    => 'invalid_params',
-				'message' => esc_html__( 'The recipe request is invalid.', 'pixelgrade_assistant' ),
+				'message' => esc_html__( 'The recipe request is invalid.', 'pixelgrade-assistant' ),
 				'data'    => array(),
 			);
 		}
@@ -668,7 +668,7 @@ class PixelgradeAssistant_StarterContent {
 		if ( empty( $recipe['units'] ) || ! is_array( $recipe['units'] ) ) {
 			return array(
 				'code'    => 'recipe_empty',
-				'message' => esc_html__( 'The recipe does not contain any layout units.', 'pixelgrade_assistant' ),
+				'message' => esc_html__( 'The recipe does not contain any layout units.', 'pixelgrade-assistant' ),
 				'data'    => array(),
 			);
 		}
@@ -733,7 +733,7 @@ class PixelgradeAssistant_StarterContent {
 
 		return array(
 			'code'    => 'success',
-			'message' => esc_html__( 'Recipe applied.', 'pixelgrade_assistant' ),
+			'message' => esc_html__( 'Recipe applied.', 'pixelgrade-assistant' ),
 			'data'    => array(
 				'recipe'         => isset( $applied_recipes[ $this->get_recipe_bundle_id( $recipe_id ) ] ) ? $applied_recipes[ $this->get_recipe_bundle_id( $recipe_id ) ] : array(),
 				'appliedUnits'   => $this->get_applied_layout_units(),
@@ -755,7 +755,7 @@ class PixelgradeAssistant_StarterContent {
 		if ( empty( $params['recipe_id'] ) ) {
 			return rest_ensure_response( array(
 				'code'    => 'missing_params',
-				'message' => esc_html__( 'You need to provide all the needed parameters.', 'pixelgrade_assistant' ),
+				'message' => esc_html__( 'You need to provide all the needed parameters.', 'pixelgrade-assistant' ),
 				'data'    => array(),
 			) );
 		}
@@ -777,7 +777,7 @@ class PixelgradeAssistant_StarterContent {
 		if ( empty( $entry ) ) {
 			return array(
 				'code'    => 'recipe_not_found',
-				'message' => esc_html__( 'The requested recipe is not applied.', 'pixelgrade_assistant' ),
+				'message' => esc_html__( 'The requested recipe is not applied.', 'pixelgrade-assistant' ),
 				'data'    => array(),
 			);
 		}
@@ -823,7 +823,7 @@ class PixelgradeAssistant_StarterContent {
 
 		return array(
 			'code'    => 'success',
-			'message' => esc_html__( 'Recipe removed.', 'pixelgrade_assistant' ),
+			'message' => esc_html__( 'Recipe removed.', 'pixelgrade-assistant' ),
 			'data'    => array(
 				'summary'        => $summary,
 				'appliedUnits'   => $this->get_applied_layout_units(),
@@ -908,14 +908,14 @@ class PixelgradeAssistant_StarterContent {
 	private function build_recipe_from_source( $source ) {
 		$source = $this->normalize_recipe_source( $source );
 		if ( empty( $source ) ) {
-			return new WP_Error( 'invalid_recipe_source', esc_html__( 'The recipe source is invalid.', 'pixelgrade_assistant' ) );
+			return new WP_Error( 'invalid_recipe_source', esc_html__( 'The recipe source is invalid.', 'pixelgrade-assistant' ) );
 		}
 
 		$units_response = $this->list_layout_units( $source['id'], $source['baseRestUrl'] );
 		if ( empty( $units_response['code'] ) || 'success' !== $units_response['code'] ) {
 			return new WP_Error(
 				! empty( $units_response['code'] ) ? $units_response['code'] : 'recipe_units_unavailable',
-				! empty( $units_response['message'] ) ? $units_response['message'] : esc_html__( 'The recipe units could not be loaded.', 'pixelgrade_assistant' ),
+				! empty( $units_response['message'] ) ? $units_response['message'] : esc_html__( 'The recipe units could not be loaded.', 'pixelgrade-assistant' ),
 				! empty( $units_response['data'] ) && is_array( $units_response['data'] ) ? $units_response['data'] : array()
 			);
 		}
@@ -1521,7 +1521,7 @@ class PixelgradeAssistant_StarterContent {
 		if ( empty( $params['demo_key'] ) || empty( $params['url'] ) ) {
 			return rest_ensure_response( array(
 				'code'    => 'missing_params',
-				'message' => esc_html__( 'You need to provide all the needed parameters.', 'pixelgrade_assistant' ),
+				'message' => esc_html__( 'You need to provide all the needed parameters.', 'pixelgrade-assistant' ),
 				'data'    => array(),
 			) );
 		}
@@ -1556,7 +1556,7 @@ class PixelgradeAssistant_StarterContent {
 				$results[] = array(
 					'id'      => $demo_key,
 					'code'    => 'invalid_params',
-					'message' => esc_html__( 'The layout unit request is invalid.', 'pixelgrade_assistant' ),
+					'message' => esc_html__( 'The layout unit request is invalid.', 'pixelgrade-assistant' ),
 					'units'   => array(),
 				);
 				continue;
@@ -1595,7 +1595,7 @@ class PixelgradeAssistant_StarterContent {
 		if ( empty( $demo_key ) || empty( $base_url ) ) {
 			return array(
 				'code'    => 'invalid_params',
-				'message' => esc_html__( 'The layout unit request is invalid.', 'pixelgrade_assistant' ),
+				'message' => esc_html__( 'The layout unit request is invalid.', 'pixelgrade-assistant' ),
 				'data'    => array(),
 			);
 		}
@@ -1603,7 +1603,7 @@ class PixelgradeAssistant_StarterContent {
 		if ( ! $this->is_allowed_demo_url( $base_url ) ) {
 			return array(
 				'code'    => 'invalid_source',
-				'message' => esc_html__( 'The starter content source is not allowed.', 'pixelgrade_assistant' ),
+				'message' => esc_html__( 'The starter content source is not allowed.', 'pixelgrade-assistant' ),
 				'data'    => array(),
 			);
 		}
@@ -1677,7 +1677,7 @@ class PixelgradeAssistant_StarterContent {
 		if ( empty( $params['demo_key'] ) || empty( $params['url'] ) ) {
 			return rest_ensure_response( array(
 				'code'    => 'missing_params',
-				'message' => esc_html__( 'You need to provide all the needed parameters.', 'pixelgrade_assistant' ),
+				'message' => esc_html__( 'You need to provide all the needed parameters.', 'pixelgrade-assistant' ),
 				'data'    => array(),
 			) );
 		}
@@ -1710,7 +1710,7 @@ class PixelgradeAssistant_StarterContent {
 				$results[] = array(
 					'id'      => $demo_key,
 					'code'    => 'invalid_params',
-					'message' => esc_html__( 'The content unit request is invalid.', 'pixelgrade_assistant' ),
+					'message' => esc_html__( 'The content unit request is invalid.', 'pixelgrade-assistant' ),
 					'units'   => array(),
 				);
 				continue;
@@ -1750,7 +1750,7 @@ class PixelgradeAssistant_StarterContent {
 		if ( empty( $demo_key ) || empty( $base_url ) ) {
 			return array(
 				'code'    => 'invalid_params',
-				'message' => esc_html__( 'The content unit request is invalid.', 'pixelgrade_assistant' ),
+				'message' => esc_html__( 'The content unit request is invalid.', 'pixelgrade-assistant' ),
 				'data'    => array(),
 			);
 		}
@@ -1758,7 +1758,7 @@ class PixelgradeAssistant_StarterContent {
 		if ( ! $this->is_allowed_demo_url( $base_url ) ) {
 			return array(
 				'code'    => 'invalid_source',
-				'message' => esc_html__( 'The starter content source is not allowed.', 'pixelgrade_assistant' ),
+				'message' => esc_html__( 'The starter content source is not allowed.', 'pixelgrade-assistant' ),
 				'data'    => array(),
 			);
 		}
@@ -1820,7 +1820,7 @@ class PixelgradeAssistant_StarterContent {
 		if ( empty( $params['demo_key'] ) || empty( $params['url'] ) || empty( $params['unit_type'] ) || empty( $params['unit'] ) ) {
 			return rest_ensure_response( array(
 				'code'    => 'missing_params',
-				'message' => esc_html__( 'You need to provide all the needed parameters.', 'pixelgrade_assistant' ),
+				'message' => esc_html__( 'You need to provide all the needed parameters.', 'pixelgrade-assistant' ),
 				'data'    => array(),
 			) );
 		}
@@ -1846,7 +1846,7 @@ class PixelgradeAssistant_StarterContent {
 		if ( empty( $params['unit_type'] ) || empty( $params['unit'] ) ) {
 			return rest_ensure_response( array(
 				'code'    => 'missing_params',
-				'message' => esc_html__( 'You need to provide all the needed parameters.', 'pixelgrade_assistant' ),
+				'message' => esc_html__( 'You need to provide all the needed parameters.', 'pixelgrade-assistant' ),
 				'data'    => array(),
 			) );
 		}
@@ -1870,7 +1870,7 @@ class PixelgradeAssistant_StarterContent {
 		if ( empty( $params['demo_key'] ) || empty( $params['url'] ) || empty( $params['units'] ) || ! is_array( $params['units'] ) ) {
 			return rest_ensure_response( array(
 				'code'    => 'missing_params',
-				'message' => esc_html__( 'You need to provide all the needed parameters.', 'pixelgrade_assistant' ),
+				'message' => esc_html__( 'You need to provide all the needed parameters.', 'pixelgrade-assistant' ),
 				'data'    => array(),
 			) );
 		}
@@ -1902,7 +1902,7 @@ class PixelgradeAssistant_StarterContent {
 		if ( empty( $demo_key ) || empty( $base_url ) || empty( $units ) ) {
 			return array(
 				'code'    => 'invalid_params',
-				'message' => esc_html__( 'The layout bundle request is invalid.', 'pixelgrade_assistant' ),
+				'message' => esc_html__( 'The layout bundle request is invalid.', 'pixelgrade-assistant' ),
 				'data'    => array(),
 			);
 		}
@@ -1910,7 +1910,7 @@ class PixelgradeAssistant_StarterContent {
 		if ( ! $this->is_allowed_demo_url( $base_url ) ) {
 			return array(
 				'code'    => 'invalid_source',
-				'message' => esc_html__( 'The starter content source is not allowed.', 'pixelgrade_assistant' ),
+				'message' => esc_html__( 'The starter content source is not allowed.', 'pixelgrade-assistant' ),
 				'data'    => array(),
 			);
 		}
@@ -1919,7 +1919,7 @@ class PixelgradeAssistant_StarterContent {
 		if ( is_wp_error( $bundle_data ) ) {
 			return array(
 				'code'    => 'bundle_unavailable',
-				'message' => esc_html__( 'The layout bundle endpoint is not available.', 'pixelgrade_assistant' ),
+				'message' => esc_html__( 'The layout bundle endpoint is not available.', 'pixelgrade-assistant' ),
 				'data'    => array(
 					'error' => method_exists( $bundle_data, 'get_error_code' ) ? $bundle_data->get_error_code() : '',
 				),
@@ -2172,7 +2172,7 @@ class PixelgradeAssistant_StarterContent {
 	private function get_layout_feature_definitions() {
 		$features = array(
 			'portfolio' => array(
-				'title'             => esc_html__( 'Portfolio', 'pixelgrade_assistant' ),
+				'title'             => esc_html__( 'Portfolio', 'pixelgrade-assistant' ),
 				'post_type'         => 'portfolio',
 				'required_template' => 'archive-portfolio',
 				'template_slugs'    => array( 'archive-portfolio', 'single-portfolio', 'taxonomy-portfolio_type' ),
@@ -2376,7 +2376,7 @@ class PixelgradeAssistant_StarterContent {
 			'segment'            => $segment_id,
 			'gate'               => 'commerce' === $segment_id ? 'plus' : '',
 			'availability'       => $available ? 'available' : 'unavailable',
-			'availabilityReason' => $available ? '' : esc_html__( 'This page pattern requires a capability that is not available yet.', 'pixelgrade_assistant' ),
+			'availabilityReason' => $available ? '' : esc_html__( 'This page pattern requires a capability that is not available yet.', 'pixelgrade-assistant' ),
 			'available'          => (bool) $available,
 		);
 	}
@@ -2428,19 +2428,19 @@ class PixelgradeAssistant_StarterContent {
 		$post_type = sanitize_key( $post_type );
 
 		if ( 'page' === $post_type ) {
-			return esc_html__( 'Page', 'pixelgrade_assistant' );
+			return esc_html__( 'Page', 'pixelgrade-assistant' );
 		}
 
 		if ( 'post' === $post_type ) {
-			return esc_html__( 'Post', 'pixelgrade_assistant' );
+			return esc_html__( 'Post', 'pixelgrade-assistant' );
 		}
 
 		if ( 'portfolio' === $post_type ) {
-			return esc_html__( 'Project', 'pixelgrade_assistant' );
+			return esc_html__( 'Project', 'pixelgrade-assistant' );
 		}
 
 		if ( 'product' === $post_type ) {
-			return esc_html__( 'Product', 'pixelgrade_assistant' );
+			return esc_html__( 'Product', 'pixelgrade-assistant' );
 		}
 
 		return ucwords( str_replace( array( '-', '_' ), ' ', $post_type ) );
@@ -2531,7 +2531,7 @@ class PixelgradeAssistant_StarterContent {
 				return $term_import;
 			}
 			if ( $term_import instanceof WP_REST_Response ) {
-				return new WP_Error( 'content_terms_import_failed', esc_html__( 'The page pattern terms could not be imported.', 'pixelgrade_assistant' ) );
+				return new WP_Error( 'content_terms_import_failed', esc_html__( 'The page pattern terms could not be imported.', 'pixelgrade-assistant' ) );
 			}
 			if ( is_array( $term_import ) ) {
 				$imported += count( $term_import );
@@ -2804,7 +2804,7 @@ class PixelgradeAssistant_StarterContent {
 			if ( empty( $params['demo_key'] ) || empty( $params['url'] ) || empty( $params['unit_type'] ) || empty( $params['unit'] ) ) {
 			return rest_ensure_response( array(
 				'code'    => 'missing_params',
-				'message' => esc_html__( 'You need to provide all the needed parameters.', 'pixelgrade_assistant' ),
+				'message' => esc_html__( 'You need to provide all the needed parameters.', 'pixelgrade-assistant' ),
 				'data'    => array(),
 			) );
 		}
@@ -2919,7 +2919,7 @@ class PixelgradeAssistant_StarterContent {
 
 			return array(
 				'code'    => 'gated_segment_unavailable',
-				'message' => esc_html__( 'WooCommerce layouts require WooCommerce to be active and the Pixelgrade Plus WooCommerce integration.', 'pixelgrade_assistant' ),
+				'message' => esc_html__( 'WooCommerce layouts require WooCommerce to be active and the Pixelgrade Plus WooCommerce integration.', 'pixelgrade-assistant' ),
 				'data'    => array( 'segment' => 'commerce' ),
 			);
 		}
@@ -2967,7 +2967,7 @@ class PixelgradeAssistant_StarterContent {
 			if ( empty( $availability['available'] ) ) {
 				$this->render_layout_unit_preview_document(
 					'<div style="padding:80px 24px;text-align:center;font-family:sans-serif;color:#50575e;">'
-					. esc_html__( 'Premium page pattern — preview unavailable.', 'pixelgrade_assistant' ) . '</div>'
+					. esc_html__( 'Premium page pattern — preview unavailable.', 'pixelgrade-assistant' ) . '</div>'
 				);
 				exit;
 			}
@@ -3050,7 +3050,7 @@ class PixelgradeAssistant_StarterContent {
 			if ( null !== $this->maybe_block_commerce_unit( $unit_type, $unit ) ) {
 				$this->render_layout_unit_preview_document(
 					'<div style="padding:80px 24px;text-align:center;font-family:sans-serif;color:#50575e;">'
-					. esc_html__( 'Premium layout — preview unavailable.', 'pixelgrade_assistant' ) . '</div>'
+					. esc_html__( 'Premium layout — preview unavailable.', 'pixelgrade-assistant' ) . '</div>'
 				);
 				exit;
 			}
@@ -4609,7 +4609,7 @@ HTML;
 				}
 			}
 
-			return esc_html__( 'Author', 'pixelgrade_assistant' );
+			return esc_html__( 'Author', 'pixelgrade-assistant' );
 		}
 
 		/**
@@ -4707,7 +4707,7 @@ HTML;
 				return $response;
 			}
 			if ( 200 !== (int) wp_remote_retrieve_response_code( $response ) ) {
-				$error = new WP_Error( 'demo_media_unavailable', esc_html__( 'The demo media record could not be reached.', 'pixelgrade_assistant' ) );
+				$error = new WP_Error( 'demo_media_unavailable', esc_html__( 'The demo media record could not be reached.', 'pixelgrade-assistant' ) );
 				$this->preview_demo_media_cache[ $key ] = $error;
 
 				return $error;
@@ -5245,7 +5245,7 @@ HTML;
 			if ( empty( $params['demo_key'] ) || empty( $params['url'] ) || empty( $params['unit_type'] ) || empty( $params['unit'] ) ) {
 				return rest_ensure_response( array(
 					'code'    => 'missing_params',
-					'message' => esc_html__( 'You need to provide all the needed parameters.', 'pixelgrade_assistant' ),
+					'message' => esc_html__( 'You need to provide all the needed parameters.', 'pixelgrade-assistant' ),
 					'data'    => array(),
 				) );
 			}
@@ -5302,7 +5302,7 @@ HTML;
 			if ( empty( $params['job_id'] ) ) {
 				return rest_ensure_response( array(
 					'code'    => 'missing_params',
-					'message' => esc_html__( 'You need to provide all the needed parameters.', 'pixelgrade_assistant' ),
+					'message' => esc_html__( 'You need to provide all the needed parameters.', 'pixelgrade-assistant' ),
 					'data'    => array(),
 				) );
 			}
@@ -5342,7 +5342,7 @@ HTML;
 			if ( empty( $demo_key ) || empty( $base_url ) || empty( $unit ) || ! in_array( $unit_type, array( 'wp_template_part', 'wp_template', 'feature' ), true ) ) {
 				return array(
 					'code'    => 'invalid_params',
-					'message' => esc_html__( 'The layout unit request is invalid.', 'pixelgrade_assistant' ),
+					'message' => esc_html__( 'The layout unit request is invalid.', 'pixelgrade-assistant' ),
 					'data'    => array(),
 				);
 			}
@@ -5350,7 +5350,7 @@ HTML;
 			if ( ! $this->is_allowed_demo_url( $base_url ) ) {
 				return array(
 					'code'    => 'invalid_source',
-					'message' => esc_html__( 'The starter content source is not allowed.', 'pixelgrade_assistant' ),
+					'message' => esc_html__( 'The starter content source is not allowed.', 'pixelgrade-assistant' ),
 					'data'    => array(),
 				);
 			}
@@ -5363,7 +5363,7 @@ HTML;
 					'code'    => 'missing_required_plugins',
 					'message' => sprintf(
 						/* translators: %s: comma-separated list of plugin names. */
-						esc_html__( 'This starter needs these plugins installed and active first: %s. Please install and activate them, then import again.', 'pixelgrade_assistant' ),
+						esc_html__( 'This starter needs these plugins installed and active first: %s. Please install and activate them, then import again.', 'pixelgrade-assistant' ),
 						implode( ', ', $names )
 					),
 					'data'    => array(
@@ -5411,7 +5411,7 @@ HTML;
 
 			return array(
 				'code'    => 'success',
-				'message' => esc_html__( 'Layout import queued.', 'pixelgrade_assistant' ),
+				'message' => esc_html__( 'Layout import queued.', 'pixelgrade-assistant' ),
 				'data'    => $this->format_layout_unit_job( $job, true ),
 			);
 		}
@@ -5432,7 +5432,7 @@ HTML;
 			if ( empty( $job ) ) {
 				return array(
 					'code'    => 'job_not_found',
-					'message' => esc_html__( 'The layout import job could not be found.', 'pixelgrade_assistant' ),
+					'message' => esc_html__( 'The layout import job could not be found.', 'pixelgrade-assistant' ),
 					'data'    => array(),
 				);
 			}
@@ -5440,7 +5440,7 @@ HTML;
 			if ( empty( $job['token'] ) || empty( $token ) || ! hash_equals( (string) $job['token'], (string) $token ) ) {
 				return array(
 					'code'    => 'invalid_job_token',
-					'message' => esc_html__( 'The layout import job token is invalid.', 'pixelgrade_assistant' ),
+					'message' => esc_html__( 'The layout import job token is invalid.', 'pixelgrade-assistant' ),
 					'data'    => array(),
 				);
 			}
@@ -5504,7 +5504,7 @@ HTML;
 			if ( empty( $job ) ) {
 				return array(
 					'code'    => 'job_not_found',
-					'message' => esc_html__( 'The layout import job could not be found.', 'pixelgrade_assistant' ),
+					'message' => esc_html__( 'The layout import job could not be found.', 'pixelgrade-assistant' ),
 					'data'    => array(),
 				);
 			}
@@ -5529,7 +5529,7 @@ HTML;
 		if ( empty( $params['unit_type'] ) || empty( $params['unit'] ) ) {
 			return rest_ensure_response( array(
 				'code'    => 'missing_params',
-				'message' => esc_html__( 'You need to provide all the needed parameters.', 'pixelgrade_assistant' ),
+				'message' => esc_html__( 'You need to provide all the needed parameters.', 'pixelgrade-assistant' ),
 				'data'    => array(),
 			) );
 		}
@@ -5564,7 +5564,7 @@ HTML;
 		if ( empty( $demo_key ) || empty( $base_url ) || empty( $unit ) || ! in_array( $unit_type, array( 'wp_template_part', 'wp_template' ), true ) ) {
 			return array(
 				'code'    => 'invalid_params',
-				'message' => esc_html__( 'The layout unit request is invalid.', 'pixelgrade_assistant' ),
+				'message' => esc_html__( 'The layout unit request is invalid.', 'pixelgrade-assistant' ),
 				'data'    => array(),
 			);
 		}
@@ -5572,7 +5572,7 @@ HTML;
 		if ( ! $this->is_allowed_demo_url( $base_url ) ) {
 			return array(
 				'code'    => 'invalid_source',
-				'message' => esc_html__( 'The starter content source is not allowed.', 'pixelgrade_assistant' ),
+				'message' => esc_html__( 'The starter content source is not allowed.', 'pixelgrade-assistant' ),
 				'data'    => array(),
 			);
 		}
@@ -5585,7 +5585,7 @@ HTML;
 				'code'    => 'missing_required_plugins',
 				'message' => sprintf(
 					/* translators: %s: comma-separated list of plugin names. */
-					esc_html__( 'This starter needs these plugins installed and active first: %s. Please install and activate them, then import again.', 'pixelgrade_assistant' ),
+					esc_html__( 'This starter needs these plugins installed and active first: %s. Please install and activate them, then import again.', 'pixelgrade-assistant' ),
 					implode( ', ', $names )
 				),
 				'data'    => array(
@@ -5613,7 +5613,7 @@ HTML;
 
 			return array(
 				'code'    => 'unit_not_found',
-				'message' => esc_html__( 'The requested layout unit could not be found.', 'pixelgrade_assistant' ),
+				'message' => esc_html__( 'The requested layout unit could not be found.', 'pixelgrade-assistant' ),
 				'data'    => array(),
 			);
 		}
@@ -5730,7 +5730,7 @@ HTML;
 		if ( empty( $unit_import[ $unit_post['ID'] ] ) ) {
 			return array(
 				'code'    => 'unit_import_failed',
-				'message' => esc_html__( 'The layout unit could not be imported.', 'pixelgrade_assistant' ),
+				'message' => esc_html__( 'The layout unit could not be imported.', 'pixelgrade-assistant' ),
 				'data'    => array(),
 			);
 		}
@@ -5749,7 +5749,7 @@ HTML;
 
 		return array(
 			'code'    => 'success',
-			'message' => esc_html__( 'Layout imported.', 'pixelgrade_assistant' ),
+			'message' => esc_html__( 'Layout imported.', 'pixelgrade-assistant' ),
 			'data'    => array(
 				'unit'         => array(
 					'type'     => $unit_type,
@@ -5782,7 +5782,7 @@ HTML;
 		if ( empty( $demo_key ) || empty( $base_url ) || empty( $feature_slug ) || empty( $features[ $feature_slug ] ) || ! is_array( $features[ $feature_slug ] ) ) {
 			return array(
 				'code'    => 'invalid_params',
-				'message' => esc_html__( 'The layout unit request is invalid.', 'pixelgrade_assistant' ),
+				'message' => esc_html__( 'The layout unit request is invalid.', 'pixelgrade-assistant' ),
 				'data'    => array(),
 			);
 		}
@@ -5790,7 +5790,7 @@ HTML;
 		if ( ! $this->is_allowed_demo_url( $base_url ) ) {
 			return array(
 				'code'    => 'invalid_source',
-				'message' => esc_html__( 'The starter content source is not allowed.', 'pixelgrade_assistant' ),
+				'message' => esc_html__( 'The starter content source is not allowed.', 'pixelgrade-assistant' ),
 				'data'    => array(),
 			);
 		}
@@ -5803,7 +5803,7 @@ HTML;
 				'code'    => 'missing_required_plugins',
 				'message' => sprintf(
 					/* translators: %s: comma-separated list of plugin names. */
-					esc_html__( 'This starter needs these plugins installed and active first: %s. Please install and activate them, then import again.', 'pixelgrade_assistant' ),
+					esc_html__( 'This starter needs these plugins installed and active first: %s. Please install and activate them, then import again.', 'pixelgrade-assistant' ),
 					implode( ', ', $names )
 				),
 				'data'    => array(
@@ -5832,7 +5832,7 @@ HTML;
 		if ( empty( $post_type ) || empty( $source_data['post_types'][ $post_type ]['ids'] ) || empty( $template_ids ) ) {
 			return array(
 				'code'    => 'feature_not_found',
-				'message' => esc_html__( 'The requested feature unit could not be found.', 'pixelgrade_assistant' ),
+				'message' => esc_html__( 'The requested feature unit could not be found.', 'pixelgrade-assistant' ),
 				'data'    => array(),
 			);
 		}
@@ -5903,7 +5903,7 @@ HTML;
 
 			return array(
 				'code'    => 'feature_import_failed',
-				'message' => esc_html__( 'The feature templates could not be imported.', 'pixelgrade_assistant' ),
+				'message' => esc_html__( 'The feature templates could not be imported.', 'pixelgrade-assistant' ),
 				'data'    => array(),
 			);
 		}
@@ -6027,7 +6027,7 @@ HTML;
 
 		return array(
 			'code'    => 'success',
-			'message' => esc_html__( 'Feature imported.', 'pixelgrade_assistant' ),
+			'message' => esc_html__( 'Feature imported.', 'pixelgrade-assistant' ),
 			'data'    => array(
 				'unit'         => array(
 					'type' => 'feature',
@@ -6058,7 +6058,7 @@ HTML;
 		if ( empty( $demo_key ) || empty( $base_url ) || empty( $unit ) || ! in_array( $unit_type, $this->get_content_unit_post_types(), true ) ) {
 			return array(
 				'code'    => 'invalid_params',
-				'message' => esc_html__( 'The content unit request is invalid.', 'pixelgrade_assistant' ),
+				'message' => esc_html__( 'The content unit request is invalid.', 'pixelgrade-assistant' ),
 				'data'    => array(),
 			);
 		}
@@ -6066,7 +6066,7 @@ HTML;
 		if ( ! $this->is_allowed_demo_url( $base_url ) ) {
 			return array(
 				'code'    => 'invalid_source',
-				'message' => esc_html__( 'The starter content source is not allowed.', 'pixelgrade_assistant' ),
+				'message' => esc_html__( 'The starter content source is not allowed.', 'pixelgrade-assistant' ),
 				'data'    => array(),
 			);
 		}
@@ -6079,7 +6079,7 @@ HTML;
 				'code'    => 'missing_required_plugins',
 				'message' => sprintf(
 					/* translators: %s: comma-separated list of plugin names. */
-					esc_html__( 'This starter needs these plugins installed and active first: %s. Please install and activate them, then import again.', 'pixelgrade_assistant' ),
+					esc_html__( 'This starter needs these plugins installed and active first: %s. Please install and activate them, then import again.', 'pixelgrade-assistant' ),
 					implode( ', ', $names )
 				),
 				'data'    => array(
@@ -6107,7 +6107,7 @@ HTML;
 
 			return array(
 				'code'    => 'unit_not_found',
-				'message' => esc_html__( 'The requested page pattern could not be found.', 'pixelgrade_assistant' ),
+				'message' => esc_html__( 'The requested page pattern could not be found.', 'pixelgrade-assistant' ),
 				'data'    => array(),
 			);
 		}
@@ -6120,7 +6120,7 @@ HTML;
 				'code'    => 'page_pattern_hidden',
 				'message' => ! empty( $catalog['reason'] )
 					? $catalog['reason']
-					: esc_html__( 'This page pattern has been hidden by the starter source.', 'pixelgrade_assistant' ),
+					: esc_html__( 'This page pattern has been hidden by the starter source.', 'pixelgrade-assistant' ),
 				'data'    => array(
 					'reason' => ! empty( $catalog['reason'] ) ? $catalog['reason'] : '',
 				),
@@ -6135,7 +6135,7 @@ HTML;
 				'code'    => 'gated_segment_unavailable',
 				'message' => ! empty( $availability['availabilityReason'] )
 					? $availability['availabilityReason']
-					: esc_html__( 'This page pattern requires a capability that is not available yet.', 'pixelgrade_assistant' ),
+					: esc_html__( 'This page pattern requires a capability that is not available yet.', 'pixelgrade-assistant' ),
 				'data'    => array(
 					'segment' => isset( $availability['segment'] ) ? sanitize_key( $availability['segment'] ) : '',
 				),
@@ -6204,7 +6204,22 @@ HTML;
 		};
 		add_filter( 'pixassist_sce_insert_post_args', $thumbnail_insert_filter, 10, 3 );
 
-		$import_post = $unit_post;
+		// Re-fetch the record now that this site's media exist, so the source can rewrite the record's
+		// image references against them. The listing fetch above is deliberately map-free (it is a
+		// catalog read, shared by every site), and a saved `<img src>` the source cannot resolve comes
+		// back blanked — which is what leaves a `core/image` block with no source at all. On any
+		// failure the map-free record stands: a rewritten document is an improvement, not a
+		// precondition.
+		$import_source_post = $unit_post;
+		$mapped_posts       = $this->fetch_layout_source_posts( $base_url, $unit_type, array( (int) $unit_post['ID'] ), $demo_key );
+		if ( ! is_wp_error( $mapped_posts ) ) {
+			$mapped_post = $this->find_layout_unit_post( $mapped_posts, $unit );
+			if ( ! empty( $mapped_post ) && is_array( $mapped_post ) && (int) $mapped_post['ID'] === (int) $unit_post['ID'] ) {
+				$import_source_post = $mapped_post;
+			}
+		}
+
+		$import_post = $import_source_post;
 		if ( ! empty( $unit_slug ) ) {
 			$import_post['post_name'] = $this->get_unique_content_unit_slug( $unit_slug, $unit_type );
 		}
@@ -6245,7 +6260,7 @@ HTML;
 		if ( empty( $content_import[ $unit_post['ID'] ] ) ) {
 			return array(
 				'code'    => 'unit_import_failed',
-				'message' => esc_html__( 'The page pattern could not be imported.', 'pixelgrade_assistant' ),
+				'message' => esc_html__( 'The page pattern could not be imported.', 'pixelgrade-assistant' ),
 				'data'    => array(),
 			);
 		}
@@ -6267,7 +6282,7 @@ HTML;
 
 		return array(
 			'code'    => 'success',
-			'message' => esc_html__( 'Page pattern imported.', 'pixelgrade_assistant' ),
+			'message' => esc_html__( 'Page pattern imported.', 'pixelgrade-assistant' ),
 			'data'    => array(
 				'unit'           => array(
 					'type'      => $unit_type,
@@ -6301,7 +6316,7 @@ HTML;
 		if ( empty( $slot ) ) {
 			return array(
 				'code'    => 'invalid_params',
-				'message' => esc_html__( 'The content unit request is invalid.', 'pixelgrade_assistant' ),
+				'message' => esc_html__( 'The content unit request is invalid.', 'pixelgrade-assistant' ),
 				'data'    => array(),
 			);
 		}
@@ -6310,7 +6325,7 @@ HTML;
 		if ( empty( $entry ) ) {
 			return array(
 				'code'    => 'unit_not_found',
-				'message' => esc_html__( 'The requested page pattern is not applied.', 'pixelgrade_assistant' ),
+				'message' => esc_html__( 'The requested page pattern is not applied.', 'pixelgrade-assistant' ),
 				'data'    => array(),
 			);
 		}
@@ -6319,7 +6334,7 @@ HTML;
 		if ( empty( $starter_content ) || ! is_array( $starter_content ) ) {
 			return array(
 				'code'    => 'unit_not_found',
-				'message' => esc_html__( 'The requested page pattern is not applied.', 'pixelgrade_assistant' ),
+				'message' => esc_html__( 'The requested page pattern is not applied.', 'pixelgrade-assistant' ),
 				'data'    => array(),
 			);
 		}
@@ -6365,7 +6380,7 @@ HTML;
 
 		return array(
 			'code'    => 'success',
-			'message' => esc_html__( 'Page pattern removed.', 'pixelgrade_assistant' ),
+			'message' => esc_html__( 'Page pattern removed.', 'pixelgrade-assistant' ),
 			'data'    => array(
 				'summary'        => $summary,
 				'appliedContent' => $this->get_applied_content_units(),
@@ -6391,7 +6406,7 @@ HTML;
 		if ( empty( $slot ) ) {
 			return array(
 				'code'    => 'invalid_params',
-				'message' => esc_html__( 'The layout unit request is invalid.', 'pixelgrade_assistant' ),
+				'message' => esc_html__( 'The layout unit request is invalid.', 'pixelgrade-assistant' ),
 				'data'    => array(),
 			);
 		}
@@ -6400,7 +6415,7 @@ HTML;
 		if ( empty( $entry ) ) {
 			return array(
 				'code'    => 'unit_not_found',
-				'message' => esc_html__( 'The requested layout unit is not applied.', 'pixelgrade_assistant' ),
+				'message' => esc_html__( 'The requested layout unit is not applied.', 'pixelgrade-assistant' ),
 				'data'    => array(),
 			);
 		}
@@ -6409,7 +6424,7 @@ HTML;
 		if ( empty( $starter_content ) || ! is_array( $starter_content ) ) {
 			return array(
 				'code'    => 'unit_not_found',
-				'message' => esc_html__( 'The requested layout unit is not applied.', 'pixelgrade_assistant' ),
+				'message' => esc_html__( 'The requested layout unit is not applied.', 'pixelgrade-assistant' ),
 				'data'    => array(),
 			);
 		}
@@ -6460,7 +6475,7 @@ HTML;
 
 		return array(
 			'code'    => 'success',
-			'message' => esc_html__( 'Layout reverted.', 'pixelgrade_assistant' ),
+			'message' => esc_html__( 'Layout reverted.', 'pixelgrade-assistant' ),
 			'data'    => array(
 				'summary'      => $summary,
 				'appliedUnits' => $this->get_applied_layout_units(),
@@ -6478,7 +6493,7 @@ HTML;
 		public function rest_reset_starter_content( $request ) {
 			return rest_ensure_response( array(
 				'code'    => 'success',
-				'message' => esc_html__( 'Starter content was reset.', 'pixelgrade_assistant' ),
+				'message' => esc_html__( 'Starter content was reset.', 'pixelgrade-assistant' ),
 				'data'    => $this->reset_starter_content(),
 			) );
 		}
@@ -6496,7 +6511,7 @@ HTML;
 			if ( empty( $params['demo_key'] ) || empty( $params['url'] ) ) {
 				return rest_ensure_response( array(
 					'code'    => 'missing_params',
-					'message' => esc_html__( 'You need to provide all the needed parameters.', 'pixelgrade_assistant' ),
+					'message' => esc_html__( 'You need to provide all the needed parameters.', 'pixelgrade-assistant' ),
 					'data'    => array(),
 				) );
 			}
@@ -6527,7 +6542,7 @@ HTML;
 			if ( empty( $demo_key ) || empty( $base_url ) ) {
 				return array(
 					'code'    => 'invalid_params',
-					'message' => esc_html__( 'The starter import request is invalid.', 'pixelgrade_assistant' ),
+					'message' => esc_html__( 'The starter import request is invalid.', 'pixelgrade-assistant' ),
 					'data'    => array(),
 				);
 			}
@@ -6535,7 +6550,22 @@ HTML;
 			if ( ! $this->is_allowed_demo_url( $base_url ) ) {
 				return array(
 					'code'    => 'invalid_source',
-					'message' => esc_html__( 'The starter content source is not allowed.', 'pixelgrade_assistant' ),
+					'message' => esc_html__( 'The starter content source is not allowed.', 'pixelgrade-assistant' ),
+					'data'    => array(),
+				);
+			}
+
+			// A curated catalog is not a site. It exists to be picked from one record at a time, and
+			// applying it whole takes the catalog's own design settings with it — the source exports
+			// its persisted Style Manager state regardless of what its export selection lists, so this
+			// is a measured overwrite of the user's colors, not a theoretical one. The hub already
+			// gives a library no Starter Sites card; this closes the same door on the REST, CLI and
+			// ability paths, which address a source by key and would otherwise reach it. Refused BEFORE
+			// the default-content deletion below, so a refused call provably changes nothing.
+			if ( $this->demo_key_is_library( $demo_key ) ) {
+				return array(
+					'code'    => 'not_a_starter',
+					'message' => esc_html__( 'This source is a library of individual designs, not a whole site. Add its designs one at a time from the Design Library instead.', 'pixelgrade-assistant' ),
 					'data'    => array(),
 				);
 			}
@@ -6548,7 +6578,7 @@ HTML;
 					'code'    => 'missing_required_plugins',
 					'message' => sprintf(
 						/* translators: %s: comma-separated list of plugin names. */
-						esc_html__( 'This starter needs these plugins installed and active first: %s. Please install and activate them, then import again.', 'pixelgrade_assistant' ),
+						esc_html__( 'This starter needs these plugins installed and active first: %s. Please install and activate them, then import again.', 'pixelgrade-assistant' ),
 						implode( ', ', $names )
 					),
 					'data'    => array(
@@ -6568,7 +6598,7 @@ HTML;
 			if ( empty( $source_data ) || ! is_array( $source_data ) ) {
 				return array(
 					'code'    => 'starter_data_missing',
-					'message' => esc_html__( 'The starter source did not provide import data.', 'pixelgrade_assistant' ),
+					'message' => esc_html__( 'The starter source did not provide import data.', 'pixelgrade-assistant' ),
 					'data'    => array(),
 				);
 			}
@@ -6742,7 +6772,7 @@ HTML;
 
 			return array(
 				'code'    => 'success',
-				'message' => esc_html__( 'Starter content imported.', 'pixelgrade_assistant' ),
+				'message' => esc_html__( 'Starter content imported.', 'pixelgrade-assistant' ),
 				'data'    => array(
 					'summary'  => $summary,
 					'imported' => PixelgradeAssistant_Admin::get_option( 'imported_starter_content', array() ),
@@ -7584,7 +7614,7 @@ HTML;
 				$key      = (string) $item['id'];
 				$response = isset( $responses[ $key ] )
 					? $this->normalize_requests_response( $responses[ $key ] )
-					: new WP_Error( 'starter_media_no_response', esc_html__( 'A starter media file could not be fetched.', 'pixelgrade_assistant' ) );
+					: new WP_Error( 'starter_media_no_response', esc_html__( 'A starter media file could not be fetched.', 'pixelgrade-assistant' ) );
 
 				$result = $this->process_starter_media_response( $demo_key, $item['group'], $item['id'], $response, true );
 
@@ -7616,7 +7646,7 @@ HTML;
 		private function import_starter_media_source_url_item( $demo_key, $group, $remote_id, $source_url, $defer_save = false ) {
 			$source_url = esc_url_raw( $source_url );
 			if ( empty( $remote_id ) || empty( $source_url ) || ! $this->is_allowed_demo_url( $source_url ) ) {
-				return new WP_Error( 'starter_media_invalid_source_url', esc_html__( 'A starter media source URL is not allowed.', 'pixelgrade_assistant' ) );
+				return new WP_Error( 'starter_media_invalid_source_url', esc_html__( 'A starter media source URL is not allowed.', 'pixelgrade-assistant' ) );
 			}
 
 			if ( ! function_exists( 'download_url' ) ) {
@@ -7712,12 +7742,12 @@ HTML;
 			}
 
 			if ( 200 !== (int) wp_remote_retrieve_response_code( $response ) ) {
-				return new WP_Error( 'starter_media_missing', esc_html__( 'A starter media file could not be fetched.', 'pixelgrade_assistant' ) );
+				return new WP_Error( 'starter_media_missing', esc_html__( 'A starter media file could not be fetched.', 'pixelgrade-assistant' ) );
 			}
 
 			$data = json_decode( wp_remote_retrieve_body( $response ), true );
 			if ( null === $data ) {
-				return new WP_Error( 'starter_media_json_error', esc_html__( 'A starter media response could not be decoded.', 'pixelgrade_assistant' ) );
+				return new WP_Error( 'starter_media_json_error', esc_html__( 'A starter media response could not be decoded.', 'pixelgrade-assistant' ) );
 			}
 
 			if ( empty( $data['code'] ) || 'success' !== $data['code'] || empty( $data['data']['media'] ) || ! is_array( $data['data']['media'] ) ) {
@@ -7744,7 +7774,7 @@ HTML;
 			if ( empty( $result['code'] ) || 'success' !== $result['code'] ) {
 				return new WP_Error(
 					'starter_media_import_failed',
-					! empty( $result['message'] ) ? $result['message'] : esc_html__( 'A starter media file could not be imported.', 'pixelgrade_assistant' ),
+					! empty( $result['message'] ) ? $result['message'] : esc_html__( 'A starter media file could not be imported.', 'pixelgrade-assistant' ),
 					$result
 				);
 			}
@@ -7883,7 +7913,7 @@ HTML;
 			if ( false === $file_data ) {
 				return array(
 					'code'    => 'error',
-					'message' => esc_html__( 'No file data.', 'pixelgrade_assistant' ),
+					'message' => esc_html__( 'No file data.', 'pixelgrade-assistant' ),
 					'data'    => array(),
 				);
 			}
@@ -7892,7 +7922,7 @@ HTML;
 			if ( $upload_file['error'] ) {
 				return array(
 					'code'    => 'error',
-					'message' => esc_html__( 'File permission error.', 'pixelgrade_assistant' ),
+					'message' => esc_html__( 'File permission error.', 'pixelgrade-assistant' ),
 					'data'    => array(),
 				);
 			}
@@ -7911,7 +7941,7 @@ HTML;
 			if ( is_wp_error( $attachment_id ) ) {
 				return array(
 					'code'    => 'error',
-					'message' => esc_html__( 'Something went wrong with uploading the media file.', 'pixelgrade_assistant' ),
+					'message' => esc_html__( 'Something went wrong with uploading the media file.', 'pixelgrade-assistant' ),
 					'data'    => array(
 						'error' => $attachment_id,
 					),
@@ -8114,7 +8144,7 @@ HTML;
 
 			return rest_ensure_response( array(
 				'code'    => 'missing_params',
-				'message' => esc_html__( 'You need to provide all the needed parameters.', 'pixelgrade_assistant' ),
+				'message' => esc_html__( 'You need to provide all the needed parameters.', 'pixelgrade-assistant' ),
 				'data'    => array(),
 			) );
 		}
@@ -8129,7 +8159,7 @@ HTML;
 		if ( ! $this->is_allowed_demo_url( $base_url ) ) {
 			return rest_ensure_response( array(
 				'code'    => 'invalid_source',
-				'message' => esc_html__( 'The starter content source is not allowed.', 'pixelgrade_assistant' ),
+				'message' => esc_html__( 'The starter content source is not allowed.', 'pixelgrade-assistant' ),
 				'data'    => array(),
 			) );
 		}
@@ -8146,7 +8176,7 @@ HTML;
 				'code'    => 'missing_required_plugins',
 				'message' => sprintf(
 					/* translators: %s: comma-separated list of plugin names. */
-					esc_html__( 'This starter needs these plugins installed and active first: %s. Please install and activate them, then import again.', 'pixelgrade_assistant' ),
+					esc_html__( 'This starter needs these plugins installed and active first: %s. Please install and activate them, then import again.', 'pixelgrade-assistant' ),
 					implode( ', ', $names )
 				),
 				'data'    => array(
@@ -8490,7 +8520,7 @@ HTML;
 			}
 
 			if ( empty( $data['bundles'] ) || ! is_array( $data['bundles'] ) ) {
-				return new WP_Error( 'layout_bundle_empty', esc_html__( 'The layout source did not return bundles.', 'pixelgrade_assistant' ) );
+				return new WP_Error( 'layout_bundle_empty', esc_html__( 'The layout source did not return bundles.', 'pixelgrade-assistant' ) );
 			}
 
 			return $data;
@@ -8728,7 +8758,7 @@ HTML;
 		private function fetch_layout_media_payload( $source_url ) {
 			$source_url = esc_url_raw( $source_url );
 			if ( empty( $source_url ) || ! $this->is_allowed_demo_url( $source_url ) ) {
-				return new WP_Error( 'layout_media_invalid_source', esc_html__( 'The layout media source is not allowed.', 'pixelgrade_assistant' ) );
+				return new WP_Error( 'layout_media_invalid_source', esc_html__( 'The layout media source is not allowed.', 'pixelgrade-assistant' ) );
 			}
 
 			$response = wp_remote_get(
@@ -8741,12 +8771,12 @@ HTML;
 			);
 
 			if ( is_wp_error( $response ) || 200 !== (int) wp_remote_retrieve_response_code( $response ) ) {
-				return new WP_Error( 'layout_media_fetch_failed', esc_html__( 'The layout media file could not be fetched.', 'pixelgrade_assistant' ) );
+				return new WP_Error( 'layout_media_fetch_failed', esc_html__( 'The layout media file could not be fetched.', 'pixelgrade-assistant' ) );
 			}
 
 			$body = wp_remote_retrieve_body( $response );
 			if ( '' === (string) $body ) {
-				return new WP_Error( 'layout_media_empty', esc_html__( 'The layout media file is empty.', 'pixelgrade_assistant' ) );
+				return new WP_Error( 'layout_media_empty', esc_html__( 'The layout media file is empty.', 'pixelgrade-assistant' ) );
 			}
 
 			$path     = (string) wp_parse_url( $source_url, PHP_URL_PATH );
@@ -8754,7 +8784,7 @@ HTML;
 			$ext      = pathinfo( $basename, PATHINFO_EXTENSION );
 			$title    = pathinfo( $basename, PATHINFO_FILENAME );
 			if ( empty( $ext ) ) {
-				return new WP_Error( 'layout_media_missing_extension', esc_html__( 'The layout media file type could not be determined.', 'pixelgrade_assistant' ) );
+				return new WP_Error( 'layout_media_missing_extension', esc_html__( 'The layout media file type could not be determined.', 'pixelgrade-assistant' ) );
 			}
 			if ( empty( $title ) ) {
 				$title = 'layout-media-' . substr( md5( $source_url ), 0, 8 );
@@ -8913,7 +8943,7 @@ HTML;
 
 			$units = $this->normalize_layout_source_units( isset( $data['units'] ) ? $data['units'] : array() );
 			if ( empty( $units ) ) {
-				return new WP_Error( 'layout_units_empty', esc_html__( 'The layout source did not return units.', 'pixelgrade_assistant' ) );
+				return new WP_Error( 'layout_units_empty', esc_html__( 'The layout source did not return units.', 'pixelgrade-assistant' ) );
 			}
 
 			return $this->set_cached_layout_source( $cache, $units );
@@ -9046,7 +9076,7 @@ HTML;
 				return $response;
 			}
 
-			return new WP_Error( 'layout_units_prefetch_failed', esc_html__( 'The layout source did not return a valid response.', 'pixelgrade_assistant' ) );
+			return new WP_Error( 'layout_units_prefetch_failed', esc_html__( 'The layout source did not return a valid response.', 'pixelgrade-assistant' ) );
 		}
 
 		/**
@@ -9117,13 +9147,29 @@ HTML;
 	 *
 		 * @return array|WP_Error Source posts on success.
 		 */
-		private function fetch_layout_source_posts( $base_url, $post_type, $include = '' ) {
+		private function fetch_layout_source_posts( $base_url, $post_type, $include = '', $demo_key = '' ) {
 			$base_url    = trailingslashit( esc_url_raw( $base_url ) );
 			$post_type   = sanitize_key( $post_type );
+			$demo_key    = sanitize_key( $demo_key );
 			$include_ids = $this->normalize_layout_source_include_ids( $include );
 			$include     = empty( $include_ids ) ? '' : $include_ids;
-			$cache       = array( 'posts', $base_url, $post_type, $include_ids );
-			$cached      = $this->get_cached_layout_source( $cache );
+
+			// A demo key means "fetch this for IMPORT": the request carries the media maps this site has
+			// already built, and the source rewrites each record's image references against them. Without
+			// them the source cannot resolve a saved `<img src>` to anything local and blanks it to `#`
+			// (SCE `get_rotated_placeholder_url()`), which is how a `core/image` block arrives with no
+			// source at all. Never cached and never served from the listing cache: the rewritten document
+			// is specific to one site's media map at one moment, and the listing must stay map-free.
+			$media_maps = array();
+			if ( '' !== $demo_key ) {
+				$media_maps = array(
+					'placeholders'   => $this->get_placeholders( $demo_key ),
+					'ignored_images' => $this->get_ignored_images( $demo_key ),
+				);
+			}
+
+			$cache  = array( 'posts', $base_url, $post_type, $include_ids );
+			$cached = empty( $media_maps ) ? $this->get_cached_layout_source( $cache ) : false;
 			if ( false !== $cached ) {
 				return $cached;
 			}
@@ -9143,9 +9189,12 @@ HTML;
 					'method'    => 'POST',
 					'timeout'   => 15,
 					'blocking'  => true,
-					'body'      => array(
-						'post_type' => $post_type,
-						'include'   => $include,
+					'body'      => array_merge(
+						array(
+							'post_type' => $post_type,
+							'include'   => $include,
+						),
+						$media_maps
 					),
 					'sslverify' => true,
 			)
@@ -9167,6 +9216,10 @@ HTML;
 			}
 
 			$posts = isset( $data['posts'] ) && is_array( $data['posts'] ) ? $data['posts'] : array();
+
+			if ( ! empty( $media_maps ) ) {
+				return $posts;
+			}
 
 			return $this->set_cached_layout_source( $cache, $posts );
 		}
@@ -9231,7 +9284,7 @@ HTML;
 		if ( 200 !== $status ) {
 			return new WP_Error(
 				'layout_source_http_error',
-				esc_html__( 'The layout source could not be reached.', 'pixelgrade_assistant' ),
+				esc_html__( 'The layout source could not be reached.', 'pixelgrade-assistant' ),
 				array( 'status' => $status )
 			);
 		}
@@ -9240,14 +9293,14 @@ HTML;
 		if ( null === $data || empty( $data['code'] ) || 'success' !== $data['code'] || ! isset( $data['data'] ) || ! is_array( $data['data'] ) ) {
 			return new WP_Error(
 				'layout_source_invalid_response',
-				esc_html__( 'The layout source returned invalid data.', 'pixelgrade_assistant' )
+				esc_html__( 'The layout source returned invalid data.', 'pixelgrade-assistant' )
 			);
 		}
 
 		if ( ! isset( $data['data'][ $expected ] ) && 'data' !== $expected ) {
 			return new WP_Error(
 				'layout_source_missing_data',
-				esc_html__( 'The layout source response is missing required data.', 'pixelgrade_assistant' )
+				esc_html__( 'The layout source response is missing required data.', 'pixelgrade-assistant' )
 			);
 		}
 
@@ -9365,7 +9418,7 @@ HTML;
 			return $term_import;
 		}
 		if ( $term_import instanceof WP_REST_Response ) {
-			return new WP_Error( 'layout_menu_import_failed', esc_html__( 'The layout menu could not be imported.', 'pixelgrade_assistant' ) );
+			return new WP_Error( 'layout_menu_import_failed', esc_html__( 'The layout menu could not be imported.', 'pixelgrade-assistant' ) );
 		}
 
 		$source_items = $this->fetch_layout_source_posts( $base_url, 'nav_menu_item' );
@@ -9456,7 +9509,7 @@ HTML;
 			return $items_import;
 		}
 		if ( $items_import instanceof WP_REST_Response ) {
-			return new WP_Error( 'layout_menu_item_import_failed', esc_html__( 'The layout menu items could not be imported.', 'pixelgrade_assistant' ) );
+			return new WP_Error( 'layout_menu_item_import_failed', esc_html__( 'The layout menu items could not be imported.', 'pixelgrade-assistant' ) );
 		}
 
 			return array(
@@ -9556,7 +9609,7 @@ HTML;
 			return $result;
 		}
 		if ( $result instanceof WP_REST_Response ) {
-			return new WP_Error( 'layout_settings_import_failed', esc_html__( 'The layout settings could not be imported.', 'pixelgrade_assistant' ) );
+			return new WP_Error( 'layout_settings_import_failed', esc_html__( 'The layout settings could not be imported.', 'pixelgrade-assistant' ) );
 		}
 
 		return array(
@@ -9794,7 +9847,7 @@ HTML;
 		$endpoint = isset( $rest_base[ $object_type ] ) ? $rest_base[ $object_type ] : $object_type . 's';
 		$site_url = $this->get_layout_source_site_url( $base_url );
 		if ( empty( $site_url ) ) {
-			return new WP_Error( 'layout_source_site_missing', esc_html__( 'The layout source site could not be resolved.', 'pixelgrade_assistant' ) );
+			return new WP_Error( 'layout_source_site_missing', esc_html__( 'The layout source site could not be resolved.', 'pixelgrade-assistant' ) );
 		}
 
 		$response = wp_remote_get(
@@ -9810,12 +9863,12 @@ HTML;
 		}
 
 		if ( 200 !== (int) wp_remote_retrieve_response_code( $response ) ) {
-			return new WP_Error( 'layout_source_object_missing', esc_html__( 'The menu item target could not be resolved.', 'pixelgrade_assistant' ) );
+			return new WP_Error( 'layout_source_object_missing', esc_html__( 'The menu item target could not be resolved.', 'pixelgrade-assistant' ) );
 		}
 
 		$data = json_decode( wp_remote_retrieve_body( $response ), true );
 		if ( empty( $data ) || ! is_array( $data ) ) {
-			return new WP_Error( 'layout_source_object_invalid', esc_html__( 'The menu item target response is invalid.', 'pixelgrade_assistant' ) );
+			return new WP_Error( 'layout_source_object_invalid', esc_html__( 'The menu item target response is invalid.', 'pixelgrade-assistant' ) );
 		}
 
 		$title = '';
@@ -10106,7 +10159,7 @@ HTML;
 		 */
 		private function dispatch_layout_unit_job( $job_id, $token ) {
 			if ( ! function_exists( 'wp_remote_post' ) || ! function_exists( 'rest_url' ) ) {
-				return new WP_Error( 'layout_job_dispatch_unavailable', esc_html__( 'The layout import worker could not be started.', 'pixelgrade_assistant' ) );
+				return new WP_Error( 'layout_job_dispatch_unavailable', esc_html__( 'The layout import worker could not be started.', 'pixelgrade-assistant' ) );
 			}
 
 			$response = wp_remote_post(
@@ -11136,6 +11189,31 @@ HTML;
 	 *
 	 * @return array[] Missing required plugins (each: slug, name, isInstalled, isActive). Empty when met.
 	 */
+	/**
+	 * Is this demo key a curated library rather than a whole-site starter?
+	 *
+	 * Unknown keys are NOT libraries: a source the hub cannot resolve must not be blocked by this
+	 * gate, exactly as an unresolvable key does not gain a required-plugin gate either.
+	 *
+	 * @param string $demo_key The starter/demo key being imported.
+	 *
+	 * @return bool
+	 */
+	private function demo_key_is_library( $demo_key ) {
+		$demo_key = sanitize_key( $demo_key );
+		if ( '' === $demo_key || ! function_exists( 'pixassist_get_admin_hub_starters' ) ) {
+			return false;
+		}
+
+		foreach ( (array) pixassist_get_admin_hub_starters() as $starter ) {
+			if ( ! empty( $starter['id'] ) && sanitize_key( $starter['id'] ) === $demo_key ) {
+				return ! empty( $starter['role'] ) && 'library' === sanitize_key( $starter['role'] );
+			}
+		}
+
+		return false;
+	}
+
 	private function get_missing_required_plugins( $demo_key ) {
 		$demo_key = sanitize_key( $demo_key );
 		if ( '' === $demo_key || ! function_exists( 'pixassist_get_admin_hub_starters' ) ) {
@@ -11247,7 +11325,7 @@ HTML;
 		if ( null === $response_data ) {
 			return rest_ensure_response( array(
 				'code'    => 'json_error',
-				'message' => esc_html__( 'Something went wrong with decoding the data received.', 'pixelgrade_assistant' ),
+				'message' => esc_html__( 'Something went wrong with decoding the data received.', 'pixelgrade-assistant' ),
 				'data'    => array(
 					'response' => wp_remote_retrieve_body( $response ),
 				),
@@ -12118,7 +12196,7 @@ HTML;
 			return rest_ensure_response( array(
 				'code'    => 'missing_tax',
 				/* translators: %s: the taxonomy name */
-				'message' => sprintf( esc_html__( '%s does not exists!', 'pixelgrade_assistant' ), $args['tax'] ),
+				'message' => sprintf( esc_html__( '%s does not exists!', 'pixelgrade-assistant' ), $args['tax'] ),
 				'data'    => array(),
 			) );
 		}
@@ -12168,7 +12246,7 @@ HTML;
 		if ( null === $response_data ) {
 			return rest_ensure_response( array(
 				'code'    => 'json_error',
-				'message' => esc_html__( 'Something went wrong with decoding the data received.', 'pixelgrade_assistant' ),
+				'message' => esc_html__( 'Something went wrong with decoding the data received.', 'pixelgrade-assistant' ),
 				'data'    => array(
 					'response' => wp_remote_retrieve_body( $response ),
 				),
@@ -13012,7 +13090,7 @@ HTML;
 			'post_name'    => 'front-page',
 			'post_title'   => 'Front Page',
 			'post_content' => $content,
-			'post_excerpt' => esc_html__( 'Renders the page assigned as the static front page, overriding the theme placeholder front page.', 'pixelgrade_assistant' ),
+			'post_excerpt' => esc_html__( 'Renders the page assigned as the static front page, overriding the theme placeholder front page.', 'pixelgrade-assistant' ),
 		), true );
 
 		if ( is_wp_error( $template_id ) || empty( $template_id ) ) {
@@ -13888,8 +13966,13 @@ HTML;
 		foreach ( $map as $old_id => $new_id ) {
 			$sizes = $this->get_image_thumbnails_urls( $new_id );
 			if ( ! empty( $sizes ) ) {
-				$imported_ids[ $old_id ] = array(
-					'id'    => $new_id,
+				$imported_ids[ absint( $old_id ) ] = array(
+					// An attachment id is an integer. The journal can hold it as a numeric STRING, and
+					// the source writes whatever it receives straight into a block's `id` attribute —
+					// where `core/image` declares that attribute as a number. A string there parses fine
+					// but is not what the block's save() produces, so the document stops being a
+					// serialization fixed point and the next editor save silently rewrites it.
+					'id'    => absint( $new_id ),
 					'sizes' => $sizes,
 				);
 			}
@@ -14002,7 +14085,13 @@ HTML;
 	private function the_slug_exists( $post_name, $post_type ) {
 		global $wpdb;
 
-		$post_id = $wpdb->get_var( "SELECT ID FROM $wpdb->posts WHERE post_name = '" . $post_name . "' AND post_type = '" . $post_type . "' LIMIT 1" );
+		$post_id = $wpdb->get_var(
+			$wpdb->prepare(
+				"SELECT ID FROM {$wpdb->posts} WHERE post_name = %s AND post_type = %s LIMIT 1",
+				$post_name,
+				$post_type
+			)
+		);
 		if ( ! empty( $post_id ) ) {
 			return $post_id;
 		} else {
@@ -14035,7 +14124,7 @@ HTML;
 	 */
 	public function __clone() {
 
-		_doing_it_wrong( __FUNCTION__, esc_html__( 'You should not do that!', 'pixelgrade_assistant' ), esc_html( $this->parent->get_version() ) );
+		_doing_it_wrong( __FUNCTION__, esc_html__( 'You should not do that!', 'pixelgrade-assistant' ), esc_html( $this->parent->get_version() ) );
 	}
 
 	/**
@@ -14043,6 +14132,6 @@ HTML;
 	 */
 	public function __wakeup() {
 
-		_doing_it_wrong( __FUNCTION__, esc_html__( 'You should not do that!', 'pixelgrade_assistant' ), esc_html( $this->parent->get_version() ) );
+		_doing_it_wrong( __FUNCTION__, esc_html__( 'You should not do that!', 'pixelgrade-assistant' ), esc_html( $this->parent->get_version() ) );
 	}
 }

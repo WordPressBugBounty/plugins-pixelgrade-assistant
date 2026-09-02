@@ -4,7 +4,7 @@ Tags: dashboard, starter-content, demo-content, recommended-plugins, pixelgrade
 Requires at least: 5.9
 Tested up to: 7.1
 Requires PHP: 7.4
-Stable tag: 2.3.3
+Stable tag: 2.4.0
 License: GPLv3.0
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 
@@ -88,6 +88,14 @@ Pixelgrade Plus is the optional premium companion for the Pixelgrade LT stack �
 
 No. If Pixelgrade Care (our legacy companion for premium themes) is active, Pixelgrade Assistant detects it and stays out of the way — it does not load a second dashboard or touch your existing license. Your current setup keeps working exactly as before. New LT-stack sites use Pixelgrade Assistant, with Pixelgrade Plus as the optional premium path.
 
+= How do I turn the AI assistant endpoint off completely? =
+
+Add this to a small plugin or your theme's `functions.php`:
+
+`add_filter( 'pixelgrade/mcp/enabled', '__return_false' );`
+
+That is a full withdrawal rather than a locked door: the endpoint is never registered, so there is no route to reach, and no operation is offered to any caller. The rest of the plugin — the dashboard, Site Setup, starter content and the WP-CLI commands — is unaffected. The endpoint also stays completely inactive on WordPress older than 6.9 whether or not you use this filter.
+
 = Is this plugin tracking me? =
 
 Pixelgrade Assistant does not perform advertising, cross-site, or event-level behavioral tracking. The first-party services required for configuration, documentation, design assets, and starter content automatically retain your canonical site URL and the minimal operational context listed in the External services section. They do not receive your site content, credentials, license hashes, support messages, email address, user name, or IP address as part of the site registry.
@@ -100,6 +108,19 @@ Pixelgrade Assistant does not perform advertising, cross-site, or event-level be
 4. Preview the live color, typography, and spacing systems, then jump straight into the matching Style Manager controls.
 
 == Changelog ==
+
+= 2.4.0 =
+* New: run the Assistant from the command line — `wp pixelgrade assist` lists and imports starter sites, lists and applies recipes, and resets imported starter content, with human-readable tables or machine-readable JSON/YAML output.
+* New: an optional endpoint lets an AI assistant you authorise read your design system, block inventory and starter catalog, and apply a small, reviewed set of changes. It is closed by default: only a reviewed list of operations is ever exposed, the caller must be a logged-in WordPress user with editing rights, each operation still enforces its own stricter permission, and anything that changes or removes content must be confirmed explicitly. It needs WordPress 6.9 or newer; on older versions this part of the plugin stays completely inactive and everything else works as before.
+* New: a bundled operating guide documents both surfaces, so an assistant works from the same rules the plugin enforces instead of guessing.
+* Site Setup now places rows contributed by companion plugins where they belong in the list, so an independently updated companion can slot in without waiting for an Assistant release.
+* Starter import, starter reset and recipe apply now refuse to run without an explicit confirmation on the machine paths, and accept starter sources only over `https`.
+* Clearer failure reporting throughout the new command paths: every outcome carries a stable code, a plain-language summary and any warnings, and a partly-completed import is reported as such rather than as a success.
+* New: the `pixelgrade/mcp/enabled` filter turns the assistant endpoint off completely — return false and it is never registered at all, so there is no route to reach. Everything else in the plugin is unaffected. See the FAQ.
+* The reviewed list of operations the endpoint may expose is sixteen: twelve that only read, and four that change something. Two of them are Pixelgrade Plus features, so on a site without Plus they never register and what the endpoint offers is unchanged.
+* Fix: the starter importer's internal slug lookup now uses a prepared database statement.
+* Fix: the plugin's text domain is now its slug, `pixelgrade-assistant`. The previous value was not a valid text domain, so WordPress.org translations could never be delivered; they can be now.
+* Four dashboard card titles loaded a small decorative image from a remote server. They now use the character directly, so the dashboard renders from the plugin alone.
 
 = 2.3.3 =
 * WordPress 7.1 compatibility: updated editor controls to use current core component defaults, restored the documentation toolbar launcher, and verified the Assistant hub, documentation window, and editor integrations.

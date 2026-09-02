@@ -35,7 +35,7 @@ if ( ! function_exists( 'pixassist_register_help_tab' ) ) {
 
 		$tabs[] = array(
 			'id'         => 'help',
-			'label'      => esc_html__( 'Help', 'pixelgrade_assistant' ),
+			'label'      => esc_html__( 'Help', 'pixelgrade-assistant' ),
 			'capability' => 'edit_theme_options',
 			'component'  => 'help',
 			'gate'       => '',

@@ -92,7 +92,7 @@ class Pixassist_ThemeSupport {
 	 */
 	public function __clone() {
 
-		_doing_it_wrong( __FUNCTION__, esc_html__( 'You should not do that!', 'pixelgrade_assistant' ), '' );
+		_doing_it_wrong( __FUNCTION__, esc_html__( 'You should not do that!', 'pixelgrade-assistant' ), '' );
 	} // End __clone ()
 
 	/**
@@ -100,7 +100,7 @@ class Pixassist_ThemeSupport {
 	 */
 	public function __wakeup() {
 
-		_doing_it_wrong( __FUNCTION__, esc_html__( 'You should not do that!', 'pixelgrade_assistant' ), '' );
+		_doing_it_wrong( __FUNCTION__, esc_html__( 'You should not do that!', 'pixelgrade-assistant' ), '' );
 	} // End __wakeup ()
 }
 

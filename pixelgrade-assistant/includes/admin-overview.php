@@ -43,7 +43,7 @@ if ( ! function_exists( 'pixassist_register_overview_tab' ) ) {
 
 		$tabs[] = array(
 			'id'         => 'overview',
-			'label'      => esc_html__( 'Home', 'pixelgrade_assistant' ),
+			'label'      => esc_html__( 'Home', 'pixelgrade-assistant' ),
 			'capability' => 'edit_theme_options',
 			'component'  => 'overview',
 			'gate'       => '',
@@ -157,23 +157,23 @@ if ( ! function_exists( 'pixassist_get_overview_greeting' ) ) {
 	function pixassist_get_overview_greeting( $items, $onboarding, $site_title = '' ) {
 		foreach ( (array) $items as $item ) {
 			if ( isset( $item['tone'] ) && 'needs-attention' === $item['tone'] ) {
-				return esc_html__( 'One thing below needs your attention.', 'pixelgrade_assistant' );
+				return esc_html__( 'One thing below needs your attention.', 'pixelgrade-assistant' );
 			}
 		}
 
 		if ( empty( $onboarding['completed'] ) ) {
-			return esc_html__( 'Here is where your site stands.', 'pixelgrade_assistant' );
+			return esc_html__( 'Here is where your site stands.', 'pixelgrade-assistant' );
 		}
 
 		if ( '' !== (string) $site_title ) {
 			return sprintf(
 				/* translators: %s: the site title. */
-				esc_html__( '%s is set up and ready to work on.', 'pixelgrade_assistant' ),
+				esc_html__( '%s is set up and ready to work on.', 'pixelgrade-assistant' ),
 				(string) $site_title
 			);
 		}
 
-		return esc_html__( 'Your site is set up and ready to work on.', 'pixelgrade_assistant' );
+		return esc_html__( 'Your site is set up and ready to work on.', 'pixelgrade-assistant' );
 	}
 }
 
@@ -202,20 +202,20 @@ if ( ! function_exists( 'pixassist_get_overview_state_summary' ) ) {
 		$plugin_state  = pixassist_get_overview_plugin_state();
 		$starter_state = pixassist_get_overview_starter_state();
 
-		$theme_value = ! empty( $theme['name'] ) ? (string) $theme['name'] : esc_html__( 'Active theme', 'pixelgrade_assistant' );
+		$theme_value = ! empty( $theme['name'] ) ? (string) $theme['name'] : esc_html__( 'Active theme', 'pixelgrade-assistant' );
 		if ( ! empty( $theme['version'] ) ) {
 			$theme_value .= ' ' . sprintf(
 				/* translators: %s: theme version number. */
-				esc_html__( 'v%s', 'pixelgrade_assistant' ),
+				esc_html__( 'v%s', 'pixelgrade-assistant' ),
 				(string) $theme['version']
 			);
 		}
-		$theme_value .= ' · ' . ( ! empty( $theme['isBlockTheme'] ) ? esc_html__( 'Block theme', 'pixelgrade_assistant' ) : esc_html__( 'Classic theme', 'pixelgrade_assistant' ) );
+		$theme_value .= ' · ' . ( ! empty( $theme['isBlockTheme'] ) ? esc_html__( 'Block theme', 'pixelgrade-assistant' ) : esc_html__( 'Classic theme', 'pixelgrade-assistant' ) );
 
 		$items = array(
 			array(
 				'id'     => 'theme',
-				'label'  => esc_html__( 'Theme', 'pixelgrade_assistant' ),
+				'label'  => esc_html__( 'Theme', 'pixelgrade-assistant' ),
 				'value'  => $theme_value,
 				'detail' => '',
 				'tone'   => 'ok',
@@ -223,7 +223,7 @@ if ( ! function_exists( 'pixassist_get_overview_state_summary' ) ) {
 			),
 			array(
 				'id'     => 'setup',
-				'label'  => esc_html__( 'Site Setup', 'pixelgrade_assistant' ),
+				'label'  => esc_html__( 'Site Setup', 'pixelgrade-assistant' ),
 				'value'  => pixassist_get_overview_plugin_state_value( $plugin_state ),
 				'detail' => $plugin_state['ready'] ? '' : pixassist_get_overview_plugin_state_detail( $plugin_state ),
 				'tone'   => $plugin_state['ready'] ? 'ok' : 'needs-attention',
@@ -231,7 +231,7 @@ if ( ! function_exists( 'pixassist_get_overview_state_summary' ) ) {
 			),
 			array(
 				'id'     => 'starter',
-				'label'  => esc_html__( 'Started from', 'pixelgrade_assistant' ),
+				'label'  => esc_html__( 'Started from', 'pixelgrade-assistant' ),
 				'value'  => pixassist_get_overview_starter_state_value( $starter_state ),
 				'detail' => '',
 				'tone'   => $starter_state['has_imported'] ? 'ok' : 'neutral',
@@ -257,8 +257,8 @@ if ( ! function_exists( 'pixassist_get_overview_state_summary' ) ) {
 
 		$items[] = array(
 			'id'     => 'account',
-			'label'  => esc_html__( 'Account', 'pixelgrade_assistant' ),
-			'value'  => ! empty( $account['is_connected'] ) ? pixassist_get_overview_account_label( $account ) : esc_html__( 'Not connected', 'pixelgrade_assistant' ),
+			'label'  => esc_html__( 'Account', 'pixelgrade-assistant' ),
+			'value'  => ! empty( $account['is_connected'] ) ? pixassist_get_overview_account_label( $account ) : esc_html__( 'Not connected', 'pixelgrade-assistant' ),
 			'detail' => '',
 			'tone'   => ! empty( $account['is_connected'] ) ? 'ok' : 'neutral',
 			'url'    => pixassist_overview_tab_url_by_id( $tabs, $base_url, 'account' ),
@@ -346,21 +346,21 @@ if ( ! function_exists( 'pixassist_get_overview_links' ) ) {
 		if ( $styles ) {
 			$links[] = array(
 				'id'      => 'styles',
-				'label'   => esc_html__( 'Open Design System', 'pixelgrade_assistant' ),
+				'label'   => esc_html__( 'Open Design System', 'pixelgrade-assistant' ),
 				'url'     => pixassist_overview_tab_url( $styles, $base_url ),
 				'primary' => true,
 			);
 		} elseif ( $is_block ) {
 			$links[] = array(
 				'id'      => 'site-editor',
-				'label'   => esc_html__( 'Open Style Manager', 'pixelgrade_assistant' ),
+				'label'   => esc_html__( 'Open Style Manager', 'pixelgrade-assistant' ),
 				'url'     => pixassist_get_styles_url( true ),
 				'primary' => true,
 			);
 		} else {
 			$links[] = array(
 				'id'      => 'customize',
-				'label'   => esc_html__( 'Open Style Manager', 'pixelgrade_assistant' ),
+				'label'   => esc_html__( 'Open Style Manager', 'pixelgrade-assistant' ),
 				'url'     => pixassist_get_styles_url( false ),
 				'primary' => true,
 			);
@@ -372,7 +372,7 @@ if ( ! function_exists( 'pixassist_get_overview_links' ) ) {
 		if ( $library ) {
 			$links[] = array(
 				'id'      => 'design-library',
-				'label'   => esc_html__( 'Browse the Design Library', 'pixelgrade_assistant' ),
+				'label'   => esc_html__( 'Browse the Design Library', 'pixelgrade-assistant' ),
 				'url'     => pixassist_overview_tab_url( $library, $base_url ),
 				'primary' => false,
 			);
@@ -383,14 +383,14 @@ if ( ! function_exists( 'pixassist_get_overview_links' ) ) {
 		if ( $help ) {
 			$links[] = array(
 				'id'      => 'help',
-				'label'   => esc_html__( 'Get Help', 'pixelgrade_assistant' ),
+				'label'   => esc_html__( 'Get Help', 'pixelgrade-assistant' ),
 				'url'     => pixassist_overview_tab_url( $help, $base_url ),
 				'primary' => false,
 			);
 		} else {
 			$links[] = array(
 				'id'      => 'help',
-				'label'   => esc_html__( 'Get Help', 'pixelgrade_assistant' ),
+				'label'   => esc_html__( 'Get Help', 'pixelgrade-assistant' ),
 				'url'     => $base_url . '&tab=help',
 				'primary' => false,
 			);
@@ -530,16 +530,16 @@ if ( ! function_exists( 'pixassist_get_overview_plugin_state_value' ) ) {
 	 */
 	function pixassist_get_overview_plugin_state_value( $state ) {
 		if ( empty( $state['total'] ) ) {
-			return esc_html__( 'No plugin requirements', 'pixelgrade_assistant' );
+			return esc_html__( 'No plugin requirements', 'pixelgrade-assistant' );
 		}
 
 		if ( ! empty( $state['ready'] ) ) {
-			return esc_html__( 'All ready', 'pixelgrade_assistant' );
+			return esc_html__( 'All ready', 'pixelgrade-assistant' );
 		}
 
 		return sprintf(
 			/* translators: 1: ready plugin count, 2: total plugin count. */
-			esc_html__( '%1$d of %2$d ready', 'pixelgrade_assistant' ),
+			esc_html__( '%1$d of %2$d ready', 'pixelgrade-assistant' ),
 			(int) $state['readyCount'],
 			(int) $state['total']
 		);
@@ -556,20 +556,20 @@ if ( ! function_exists( 'pixassist_get_overview_plugin_state_detail' ) ) {
 	 */
 	function pixassist_get_overview_plugin_state_detail( $state ) {
 		if ( empty( $state['total'] ) ) {
-			return esc_html__( 'No recommended plugins are required for this theme.', 'pixelgrade_assistant' );
+			return esc_html__( 'No recommended plugins are required for this theme.', 'pixelgrade-assistant' );
 		}
 
 		if ( ! empty( $state['ready'] ) ) {
-			return esc_html__( 'Recommended plugins are installed and active.', 'pixelgrade_assistant' );
+			return esc_html__( 'Recommended plugins are installed and active.', 'pixelgrade-assistant' );
 		}
 
 		if ( 1 === (int) $state['pending'] ) {
-			return esc_html__( '1 plugin needs setup.', 'pixelgrade_assistant' );
+			return esc_html__( '1 plugin needs setup.', 'pixelgrade-assistant' );
 		}
 
 		return sprintf(
 			/* translators: %d: number of plugins needing setup. */
-			esc_html__( '%d plugins need setup.', 'pixelgrade_assistant' ),
+			esc_html__( '%d plugins need setup.', 'pixelgrade-assistant' ),
 			(int) $state['pending']
 		);
 	}
@@ -689,7 +689,7 @@ if ( ! function_exists( 'pixassist_get_overview_starter_state_value' ) ) {
 	 */
 	function pixassist_get_overview_starter_state_value( $state, $now = null ) {
 		if ( ! empty( $state['has_imported'] ) ) {
-			$title = ! empty( $state['active_title'] ) ? (string) $state['active_title'] : esc_html__( 'A starter design', 'pixelgrade_assistant' );
+			$title = ! empty( $state['active_title'] ) ? (string) $state['active_title'] : esc_html__( 'A starter design', 'pixelgrade-assistant' );
 
 			$imported_at = ! empty( $state['imported_at'] ) ? (int) $state['imported_at'] : 0;
 			if ( $imported_at > 0 ) {
@@ -700,17 +700,17 @@ if ( ! function_exists( 'pixassist_get_overview_starter_state_value' ) ) {
 		}
 
 		if ( ! empty( $state['starters_count'] ) ) {
-			return esc_html__( 'Ready to choose a design', 'pixelgrade_assistant' );
+			return esc_html__( 'Ready to choose a design', 'pixelgrade-assistant' );
 		}
 
 		// An empty catalog on a not-yet-Pixelgrade theme is a symptom of the pending theme step —
 		// point forward instead of reading as a dead end. A Pixelgrade theme that genuinely exposes
 		// no demos keeps the plain fact.
 		if ( empty( $state['theme_ready'] ) ) {
-			return esc_html__( 'Available after Anima LT is installed', 'pixelgrade_assistant' );
+			return esc_html__( 'Available after Anima LT is installed', 'pixelgrade-assistant' );
 		}
 
-		return esc_html__( 'No designs available', 'pixelgrade_assistant' );
+		return esc_html__( 'No designs available', 'pixelgrade-assistant' );
 	}
 }
 
@@ -732,12 +732,12 @@ if ( ! function_exists( 'pixassist_get_overview_account_label' ) ) {
 		}
 
 		if ( '' === $name ) {
-			return esc_html__( 'Connected', 'pixelgrade_assistant' );
+			return esc_html__( 'Connected', 'pixelgrade-assistant' );
 		}
 
 		return sprintf(
 			/* translators: %s: account display name, login, or email. */
-			esc_html__( 'Connected as %s', 'pixelgrade_assistant' ),
+			esc_html__( 'Connected as %s', 'pixelgrade-assistant' ),
 			$name
 		);
 	}
@@ -753,14 +753,14 @@ if ( ! function_exists( 'pixassist_get_overview_plus_state_label' ) ) {
 	 */
 	function pixassist_get_overview_plus_state_label( $plus ) {
 		if ( ! empty( $plus['isLicensed'] ) ) {
-			return esc_html__( 'Licensed', 'pixelgrade_assistant' );
+			return esc_html__( 'Licensed', 'pixelgrade-assistant' );
 		}
 
 		if ( ! empty( $plus['isActive'] ) ) {
-			return esc_html__( 'Installed, not licensed', 'pixelgrade_assistant' );
+			return esc_html__( 'Installed, not licensed', 'pixelgrade-assistant' );
 		}
 
-		return esc_html__( 'Available', 'pixelgrade_assistant' );
+		return esc_html__( 'Available', 'pixelgrade-assistant' );
 	}
 }
 
@@ -774,14 +774,14 @@ if ( ! function_exists( 'pixassist_get_overview_plus_state_detail' ) ) {
 	 */
 	function pixassist_get_overview_plus_state_detail( $plus ) {
 		if ( ! empty( $plus['isLicensed'] ) ) {
-			return esc_html__( 'Premium features are unlocked on this site.', 'pixelgrade_assistant' );
+			return esc_html__( 'Premium features are unlocked on this site.', 'pixelgrade-assistant' );
 		}
 
 		if ( ! empty( $plus['isActive'] ) ) {
-			return esc_html__( 'Activate a license to unlock premium features.', 'pixelgrade_assistant' );
+			return esc_html__( 'Activate a license to unlock premium features.', 'pixelgrade-assistant' );
 		}
 
-		return esc_html__( 'Premium features can extend your free Pixelgrade theme.', 'pixelgrade_assistant' );
+		return esc_html__( 'Premium features can extend your free Pixelgrade theme.', 'pixelgrade-assistant' );
 	}
 }
 
@@ -811,22 +811,22 @@ if ( ! function_exists( 'pixassist_get_overview_plus_card' ) ) {
 		if ( empty( $status['is_plus_active'] ) ) {
 			$card = array(
 				'state'       => 'discover',
-				'label'       => esc_html__( 'Explore Pixelgrade Plus', 'pixelgrade_assistant' ),
-				'description' => esc_html__( 'Premium design tools and support that extend your free theme — there when you want them.', 'pixelgrade_assistant' ),
+				'label'       => esc_html__( 'Explore Pixelgrade Plus', 'pixelgrade-assistant' ),
+				'description' => esc_html__( 'Premium design tools and support that extend your free theme — there when you want them.', 'pixelgrade-assistant' ),
 				'url'         => $discover_url,
 			);
 		} elseif ( empty( $status['is_plus_licensed'] ) ) {
 			$card = array(
 				'state'       => 'setup',
-				'label'       => esc_html__( 'Set up Pixelgrade Plus', 'pixelgrade_assistant' ),
-				'description' => esc_html__( 'Pixelgrade Plus is installed. Activate it to unlock its advanced design tools.', 'pixelgrade_assistant' ),
+				'label'       => esc_html__( 'Set up Pixelgrade Plus', 'pixelgrade-assistant' ),
+				'description' => esc_html__( 'Pixelgrade Plus is installed. Activate it to unlock its advanced design tools.', 'pixelgrade-assistant' ),
 				'url'         => '' !== $settings_url ? $settings_url : $account_url,
 			);
 		} else {
 			$card = array(
 				'state'       => 'manage',
-				'label'       => esc_html__( 'Manage Pixelgrade Plus', 'pixelgrade_assistant' ),
-				'description' => esc_html__( 'Pixelgrade Plus is active. Manage your advanced design tools and settings.', 'pixelgrade_assistant' ),
+				'label'       => esc_html__( 'Manage Pixelgrade Plus', 'pixelgrade-assistant' ),
+				'description' => esc_html__( 'Pixelgrade Plus is active. Manage your advanced design tools and settings.', 'pixelgrade-assistant' ),
 				'url'         => '' !== $settings_url ? $settings_url : $account_url,
 			);
 		}
@@ -869,34 +869,34 @@ if ( ! function_exists( 'pixassist_overview_relative_time' ) ) {
 		$diff = max( 0, (int) $now - (int) $timestamp );
 
 		if ( $diff < $day ) {
-			return esc_html__( 'today', 'pixelgrade_assistant' );
+			return esc_html__( 'today', 'pixelgrade-assistant' );
 		}
 
 		if ( $diff < 2 * $day ) {
-			return esc_html__( 'yesterday', 'pixelgrade_assistant' );
+			return esc_html__( 'yesterday', 'pixelgrade-assistant' );
 		}
 
 		if ( $diff < 14 * $day ) {
 			/* translators: %d: number of days (always 2 or more). */
-			return sprintf( esc_html__( '%d days ago', 'pixelgrade_assistant' ), (int) floor( $diff / $day ) );
+			return sprintf( esc_html__( '%d days ago', 'pixelgrade-assistant' ), (int) floor( $diff / $day ) );
 		}
 
 		if ( $diff < 61 * $day ) {
 			/* translators: %d: number of weeks (always 2 or more). */
-			return sprintf( esc_html__( '%d weeks ago', 'pixelgrade_assistant' ), (int) floor( $diff / ( 7 * $day ) ) );
+			return sprintf( esc_html__( '%d weeks ago', 'pixelgrade-assistant' ), (int) floor( $diff / ( 7 * $day ) ) );
 		}
 
 		if ( $diff < 365 * $day ) {
 			/* translators: %d: number of months (always 2 or more). */
-			return sprintf( esc_html__( '%d months ago', 'pixelgrade_assistant' ), (int) floor( $diff / ( 30 * $day ) ) );
+			return sprintf( esc_html__( '%d months ago', 'pixelgrade-assistant' ), (int) floor( $diff / ( 30 * $day ) ) );
 		}
 
 		if ( $diff < 730 * $day ) {
-			return esc_html__( 'a year ago', 'pixelgrade_assistant' );
+			return esc_html__( 'a year ago', 'pixelgrade-assistant' );
 		}
 
 		/* translators: %d: number of years (always 2 or more). */
-		return sprintf( esc_html__( '%d years ago', 'pixelgrade_assistant' ), (int) floor( $diff / ( 365 * $day ) ) );
+		return sprintf( esc_html__( '%d years ago', 'pixelgrade-assistant' ), (int) floor( $diff / ( 365 * $day ) ) );
 	}
 }
 
@@ -919,11 +919,11 @@ if ( ! function_exists( 'pixassist_get_overview_last_change_entry' ) ) {
 
 		$collections = array(
 			/* translators: %s: layout part title (a header, footer, or template). */
-			'layoutUnits'  => esc_html__( '%s applied', 'pixelgrade_assistant' ),
+			'layoutUnits'  => esc_html__( '%s applied', 'pixelgrade-assistant' ),
 			/* translators: %s: page/content pattern title. */
-			'contentUnits' => esc_html__( '%s added', 'pixelgrade_assistant' ),
+			'contentUnits' => esc_html__( '%s added', 'pixelgrade-assistant' ),
 			/* translators: %s: layout recipe title. */
-			'recipes'      => esc_html__( '%s applied', 'pixelgrade_assistant' ),
+			'recipes'      => esc_html__( '%s applied', 'pixelgrade-assistant' ),
 		);
 
 		foreach ( $collections as $key => $template ) {
@@ -976,7 +976,7 @@ if ( ! function_exists( 'pixassist_get_overview_last_change_entry' ) ) {
 			$best = array(
 				'timestamp' => $timestamp,
 				/* translators: %s: starter design title. */
-				'text'      => sprintf( esc_html__( '%s imported', 'pixelgrade_assistant' ), $title ),
+				'text'      => sprintf( esc_html__( '%s imported', 'pixelgrade-assistant' ), $title ),
 			);
 		}
 
@@ -1031,7 +1031,7 @@ if ( ! function_exists( 'pixassist_get_overview_last_change_row' ) ) {
 
 		return array(
 			'id'     => 'last-change',
-			'label'  => esc_html__( 'Last change', 'pixelgrade_assistant' ),
+			'label'  => esc_html__( 'Last change', 'pixelgrade-assistant' ),
 			'value'  => $entry['value'],
 			'detail' => '',
 			'tone'   => 'ok',
@@ -1170,8 +1170,8 @@ if ( ! function_exists( 'pixassist_get_overview_style_row' ) ) {
 
 		return array(
 			'id'       => 'style',
-			'label'    => esc_html__( 'Your style', 'pixelgrade_assistant' ),
-			'value'    => 'sm' === $facts['source'] ? esc_html__( 'Your palette', 'pixelgrade_assistant' ) : esc_html__( 'Theme defaults', 'pixelgrade_assistant' ),
+			'label'    => esc_html__( 'Your style', 'pixelgrade-assistant' ),
+			'value'    => 'sm' === $facts['source'] ? esc_html__( 'Your palette', 'pixelgrade-assistant' ) : esc_html__( 'Theme defaults', 'pixelgrade-assistant' ),
 			'detail'   => '',
 			'tone'     => 'ok',
 			'url'      => pixassist_overview_tab_url_by_id( $tabs, $base_url, 'styles' ),
@@ -1218,7 +1218,7 @@ if ( ! function_exists( 'pixassist_get_overview_diagnostics_parts' ) ) {
 
 		if ( ! empty( $blocked ) ) {
 			return array(
-				'value'  => esc_html__( 'Needs your attention', 'pixelgrade_assistant' ),
+				'value'  => esc_html__( 'Needs your attention', 'pixelgrade-assistant' ),
 				'detail' => pixassist_overview_diagnostics_check_summary( $blocked[0] ),
 				'tone'   => 'needs-attention',
 			);
@@ -1229,16 +1229,16 @@ if ( ! function_exists( 'pixassist_get_overview_diagnostics_parts' ) ) {
 
 			return array(
 				'value'  => 1 === $count
-					? esc_html__( '1 check to review', 'pixelgrade_assistant' )
+					? esc_html__( '1 check to review', 'pixelgrade-assistant' )
 					/* translators: %d: number of readiness checks with warnings (always 2 or more). */
-					: sprintf( esc_html__( '%d checks to review', 'pixelgrade_assistant' ), $count ),
+					: sprintf( esc_html__( '%d checks to review', 'pixelgrade-assistant' ), $count ),
 				'detail' => pixassist_overview_diagnostics_check_summary( $warnings[0] ),
 				'tone'   => 'neutral',
 			);
 		}
 
 		return array(
-			'value'  => esc_html__( 'No known conflicts', 'pixelgrade_assistant' ),
+			'value'  => esc_html__( 'No known conflicts', 'pixelgrade-assistant' ),
 			'detail' => '',
 			'tone'   => 'ok',
 		);
@@ -1293,7 +1293,7 @@ if ( ! function_exists( 'pixassist_get_overview_diagnostics_row' ) ) {
 
 		return array(
 			'id'     => 'diagnostics',
-			'label'  => esc_html__( 'Diagnostics', 'pixelgrade_assistant' ),
+			'label'  => esc_html__( 'Diagnostics', 'pixelgrade-assistant' ),
 			'value'  => $parts['value'],
 			'detail' => $parts['detail'],
 			'tone'   => $parts['tone'],
@@ -1332,16 +1332,16 @@ if ( ! function_exists( 'pixassist_get_onboarding_steps' ) ) {
 		$steps = array(
 			array(
 				'id'          => 'theme',
-				'title'       => esc_html__( 'Install and activate Anima LT', 'pixelgrade_assistant' ),
-				'description' => esc_html__( 'Start with the free Pixelgrade theme built for these design tools.', 'pixelgrade_assistant' ),
+				'title'       => esc_html__( 'Install and activate Anima LT', 'pixelgrade-assistant' ),
+				'description' => esc_html__( 'Start with the free Pixelgrade theme built for these design tools.', 'pixelgrade-assistant' ),
 				'url'         => $base_url . '&tab=plugins',
 				'done'        => ! empty( $facts['theme_ready'] ),
 				'optional'    => false,
 			),
 			array(
 				'id'          => 'plugins',
-				'title'       => esc_html__( 'Install recommended plugins', 'pixelgrade_assistant' ),
-				'description' => esc_html__( 'Add the plugins this theme is designed to use.', 'pixelgrade_assistant' ),
+				'title'       => esc_html__( 'Install recommended plugins', 'pixelgrade-assistant' ),
+				'description' => esc_html__( 'Add the plugins this theme is designed to use.', 'pixelgrade-assistant' ),
 				'url'         => $base_url . '&tab=plugins',
 				'done'        => ! empty( $facts['plugins_ready'] ),
 				'optional'    => false,
@@ -1355,8 +1355,8 @@ if ( ! function_exists( 'pixassist_get_onboarding_steps' ) ) {
 		if ( ! empty( $facts['demos_exist'] ) ) {
 			$steps[] = array(
 				'id'          => 'starter',
-				'title'       => esc_html__( 'Choose a starter site', 'pixelgrade_assistant' ),
-				'description' => esc_html__( 'Launch from a ready-made starter instead of a blank canvas.', 'pixelgrade_assistant' ),
+				'title'       => esc_html__( 'Choose a starter site', 'pixelgrade-assistant' ),
+				'description' => esc_html__( 'Launch from a ready-made starter instead of a blank canvas.', 'pixelgrade-assistant' ),
 				'url'         => $base_url . '&tab=starter-sites',
 				'done'        => ! empty( $facts['starter_imported'] ),
 				'optional'    => false,
@@ -1365,8 +1365,8 @@ if ( ! function_exists( 'pixassist_get_onboarding_steps' ) ) {
 		} elseif ( empty( $facts['theme_ready'] ) ) {
 			$steps[] = array(
 				'id'          => 'starter',
-				'title'       => esc_html__( 'Choose a starter site', 'pixelgrade_assistant' ),
-				'description' => esc_html__( 'Unlocks after Anima LT is installed.', 'pixelgrade_assistant' ),
+				'title'       => esc_html__( 'Choose a starter site', 'pixelgrade-assistant' ),
+				'description' => esc_html__( 'Unlocks after Anima LT is installed.', 'pixelgrade-assistant' ),
 				'url'         => $base_url . '&tab=starter-sites',
 				'done'        => false,
 				'optional'    => false,
@@ -1438,14 +1438,14 @@ if ( ! function_exists( 'pixassist_get_onboarding_finish_setup' ) ) {
 			'show'        => $enabled && ! empty( $state['dismissed'] ) && ! pixassist_onboarding_is_complete( $steps ),
 			'label'       => sprintf(
 				/* translators: 1: number of completed setup steps, 2: total setup steps. */
-				esc_html__( 'Finish setup — %1$d of %2$d done', 'pixelgrade_assistant' ),
+				esc_html__( 'Finish setup — %1$d of %2$d done', 'pixelgrade-assistant' ),
 				$done,
 				count( $required )
 			),
 			'description' => 'choose' === $mode
-				? esc_html__( 'Choose a starter site to see your design tools in action.', 'pixelgrade_assistant' )
-				: esc_html__( 'Install the essentials to unlock your design tools.', 'pixelgrade_assistant' ),
-			'resumeLabel' => esc_html__( 'Resume', 'pixelgrade_assistant' ),
+				? esc_html__( 'Choose a starter site to see your design tools in action.', 'pixelgrade-assistant' )
+				: esc_html__( 'Install the essentials to unlock your design tools.', 'pixelgrade-assistant' ),
+			'resumeLabel' => esc_html__( 'Resume', 'pixelgrade-assistant' ),
 		);
 	}
 }
@@ -1487,12 +1487,12 @@ if ( ! function_exists( 'pixassist_get_onboarding_starter_picker' ) ) {
 		return array(
 			'ids'          => $ids,
 			'browseUrl'    => (string) $base_url . '&tab=starter-sites',
-			'browseLabel'  => esc_html__( 'Browse all designs', 'pixelgrade_assistant' ),
-			'startLabel'   => esc_html__( 'Start with this design', 'pixelgrade_assistant' ),
+			'browseLabel'  => esc_html__( 'Browse all designs', 'pixelgrade-assistant' ),
+			'startLabel'   => esc_html__( 'Start with this design', 'pixelgrade-assistant' ),
 			/* translators: %s: starter design name. */
-			'confirmBody'  => esc_html__( 'Import everything from %s? This adds its content, layouts, menus, and design to this site.', 'pixelgrade_assistant' ),
-			'confirmLabel' => esc_html__( 'Import full site', 'pixelgrade_assistant' ),
-			'cancelLabel'  => esc_html__( 'Cancel', 'pixelgrade_assistant' ),
+			'confirmBody'  => esc_html__( 'Import everything from %s? This adds its content, layouts, menus, and design to this site.', 'pixelgrade-assistant' ),
+			'confirmLabel' => esc_html__( 'Import full site', 'pixelgrade-assistant' ),
+			'cancelLabel'  => esc_html__( 'Cancel', 'pixelgrade-assistant' ),
 		);
 	}
 }

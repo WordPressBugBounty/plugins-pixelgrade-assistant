@@ -144,47 +144,47 @@ if ( ! function_exists( 'pixassist_get_docs_data' ) ) {
 				'subjectMaxLength' => pixassist_docs_ticket_subject_max_length(),
 			),
 			'copy'      => array(
-				'title'                  => esc_html__( 'Pixelgrade Design Docs', 'pixelgrade_assistant' ),
-				'menuLabel'              => esc_html__( 'Pixelgrade Design Docs', 'pixelgrade_assistant' ),
-				'searchPlaceholder'      => esc_html__( 'Search the design docs...', 'pixelgrade_assistant' ),
-				'allTopics'              => esc_html__( 'All topics', 'pixelgrade_assistant' ),
-				'back'                   => esc_html__( 'Back', 'pixelgrade_assistant' ),
-				'empty'                  => esc_html__( 'No matching articles.', 'pixelgrade_assistant' ),
-				'loading'                => esc_html__( 'Loading documentation...', 'pixelgrade_assistant' ),
-				'fallback'               => esc_html__( 'Browse the full documentation for step-by-step guides and answers.', 'pixelgrade_assistant' ),
-				'browseDocs'             => esc_html__( 'Browse docs', 'pixelgrade_assistant' ),
-				'readOnline'             => esc_html__( 'Read online', 'pixelgrade_assistant' ),
-				'feedbackPrompt'         => esc_html__( 'Was this helpful?', 'pixelgrade_assistant' ),
-				'feedbackYes'            => esc_html__( 'Yes', 'pixelgrade_assistant' ),
-				'feedbackNo'             => esc_html__( 'No', 'pixelgrade_assistant' ),
-				'feedbackThanks'         => esc_html__( 'Thanks for your feedback.', 'pixelgrade_assistant' ),
-				'escalationTitle'        => esc_html__( 'Still need help?', 'pixelgrade_assistant' ),
-				'escalationDescription'  => esc_html__( 'Send the current context to Pixelgrade support.', 'pixelgrade_assistant' ),
-				'connectDescription'     => esc_html__( 'Connect a free pixelgrade.com account to send a support request — free for everyone. Browsing the docs stays open without it.', 'pixelgrade_assistant' ),
-				'connectLabel'           => esc_html__( 'Connect account', 'pixelgrade_assistant' ),
-				'ticketSubjectLabel'     => esc_html__( 'Subject', 'pixelgrade_assistant' ),
-				'ticketDetailsLabel'     => esc_html__( 'Details', 'pixelgrade_assistant' ),
-				'ticketTopicLabel'       => esc_html__( 'Type', 'pixelgrade_assistant' ),
-				'ticketTopicHelp'        => esc_html__( 'Help request', 'pixelgrade_assistant' ),
-				'ticketTopicBug'         => esc_html__( 'Bug report', 'pixelgrade_assistant' ),
-				'ticketSubmitLabel'      => esc_html__( 'Send request', 'pixelgrade_assistant' ),
-				'ticketSubmittingLabel'  => esc_html__( 'Sending...', 'pixelgrade_assistant' ),
-				'ticketSuccess'          => esc_html__( 'Your request has been sent.', 'pixelgrade_assistant' ),
-				'ticketFailure'          => esc_html__( 'The request could not be sent. Please try again.', 'pixelgrade_assistant' ),
-				'ticketSubjectHelp'      => esc_html__( 'Keep the subject under %d characters. Add extra context in Details.', 'pixelgrade_assistant' ),
-				'ticketSubjectTooLong'   => esc_html__( 'The subject is too long. Shorten it and move the extra context to Details.', 'pixelgrade_assistant' ),
-				'welcomeTitle'           => __( 'Design & site-building help', 'pixelgrade_assistant' ),
-				'welcomeText'            => esc_html__( 'Guides for designing and building your site with your Pixelgrade theme — search or browse a topic to get started.', 'pixelgrade_assistant' ),
-				'relatedTitle'           => esc_html__( 'Related articles', 'pixelgrade_assistant' ),
-				'suggestionsTitle'       => esc_html__( 'These articles might already answer it:', 'pixelgrade_assistant' ),
-				'feedbackNoPrompt'       => esc_html__( 'Sorry about that — what were you looking for?', 'pixelgrade_assistant' ),
-				'feedbackNoPlaceholder'  => esc_html__( 'Tell us what you needed (optional). We will help.', 'pixelgrade_assistant' ),
-				'feedbackSendToSupport'  => esc_html__( 'Send to support', 'pixelgrade_assistant' ),
-				'articleLoading'         => esc_html__( 'Loading article…', 'pixelgrade_assistant' ),
-				'articleNotFound'        => esc_html__( 'We could not open that article here — try the online docs.', 'pixelgrade_assistant' ),
-				'openInNewTab'           => esc_html__( 'Open in new tab', 'pixelgrade_assistant' ),
-				'minimize'               => esc_html__( 'Minimize', 'pixelgrade_assistant' ),
-				'close'                  => esc_html__( 'Close', 'pixelgrade_assistant' ),
+				'title'                  => esc_html__( 'Pixelgrade Design Docs', 'pixelgrade-assistant' ),
+				'menuLabel'              => esc_html__( 'Pixelgrade Design Docs', 'pixelgrade-assistant' ),
+				'searchPlaceholder'      => esc_html__( 'Search the design docs...', 'pixelgrade-assistant' ),
+				'allTopics'              => esc_html__( 'All topics', 'pixelgrade-assistant' ),
+				'back'                   => esc_html__( 'Back', 'pixelgrade-assistant' ),
+				'empty'                  => esc_html__( 'No matching articles.', 'pixelgrade-assistant' ),
+				'loading'                => esc_html__( 'Loading documentation...', 'pixelgrade-assistant' ),
+				'fallback'               => esc_html__( 'Browse the full documentation for step-by-step guides and answers.', 'pixelgrade-assistant' ),
+				'browseDocs'             => esc_html__( 'Browse docs', 'pixelgrade-assistant' ),
+				'readOnline'             => esc_html__( 'Read online', 'pixelgrade-assistant' ),
+				'feedbackPrompt'         => esc_html__( 'Was this helpful?', 'pixelgrade-assistant' ),
+				'feedbackYes'            => esc_html__( 'Yes', 'pixelgrade-assistant' ),
+				'feedbackNo'             => esc_html__( 'No', 'pixelgrade-assistant' ),
+				'feedbackThanks'         => esc_html__( 'Thanks for your feedback.', 'pixelgrade-assistant' ),
+				'escalationTitle'        => esc_html__( 'Still need help?', 'pixelgrade-assistant' ),
+				'escalationDescription'  => esc_html__( 'Send the current context to Pixelgrade support.', 'pixelgrade-assistant' ),
+				'connectDescription'     => esc_html__( 'Connect a free pixelgrade.com account to send a support request — free for everyone. Browsing the docs stays open without it.', 'pixelgrade-assistant' ),
+				'connectLabel'           => esc_html__( 'Connect account', 'pixelgrade-assistant' ),
+				'ticketSubjectLabel'     => esc_html__( 'Subject', 'pixelgrade-assistant' ),
+				'ticketDetailsLabel'     => esc_html__( 'Details', 'pixelgrade-assistant' ),
+				'ticketTopicLabel'       => esc_html__( 'Type', 'pixelgrade-assistant' ),
+				'ticketTopicHelp'        => esc_html__( 'Help request', 'pixelgrade-assistant' ),
+				'ticketTopicBug'         => esc_html__( 'Bug report', 'pixelgrade-assistant' ),
+				'ticketSubmitLabel'      => esc_html__( 'Send request', 'pixelgrade-assistant' ),
+				'ticketSubmittingLabel'  => esc_html__( 'Sending...', 'pixelgrade-assistant' ),
+				'ticketSuccess'          => esc_html__( 'Your request has been sent.', 'pixelgrade-assistant' ),
+				'ticketFailure'          => esc_html__( 'The request could not be sent. Please try again.', 'pixelgrade-assistant' ),
+				'ticketSubjectHelp'      => esc_html__( 'Keep the subject under %d characters. Add extra context in Details.', 'pixelgrade-assistant' ),
+				'ticketSubjectTooLong'   => esc_html__( 'The subject is too long. Shorten it and move the extra context to Details.', 'pixelgrade-assistant' ),
+				'welcomeTitle'           => __( 'Design & site-building help', 'pixelgrade-assistant' ),
+				'welcomeText'            => esc_html__( 'Guides for designing and building your site with your Pixelgrade theme — search or browse a topic to get started.', 'pixelgrade-assistant' ),
+				'relatedTitle'           => esc_html__( 'Related articles', 'pixelgrade-assistant' ),
+				'suggestionsTitle'       => esc_html__( 'These articles might already answer it:', 'pixelgrade-assistant' ),
+				'feedbackNoPrompt'       => esc_html__( 'Sorry about that — what were you looking for?', 'pixelgrade-assistant' ),
+				'feedbackNoPlaceholder'  => esc_html__( 'Tell us what you needed (optional). We will help.', 'pixelgrade-assistant' ),
+				'feedbackSendToSupport'  => esc_html__( 'Send to support', 'pixelgrade-assistant' ),
+				'articleLoading'         => esc_html__( 'Loading article…', 'pixelgrade-assistant' ),
+				'articleNotFound'        => esc_html__( 'We could not open that article here — try the online docs.', 'pixelgrade-assistant' ),
+				'openInNewTab'           => esc_html__( 'Open in new tab', 'pixelgrade-assistant' ),
+				'minimize'               => esc_html__( 'Minimize', 'pixelgrade-assistant' ),
+				'close'                  => esc_html__( 'Close', 'pixelgrade-assistant' ),
 			),
 		);
 	}
@@ -360,7 +360,7 @@ if ( ! function_exists( 'pixassist_docs_post_envelope' ) ) {
 	 */
 	function pixassist_docs_post_envelope( $endpoint, $body, $headers = array() ) {
 		if ( ! function_exists( 'wp_remote_request' ) ) {
-			return pixassist_docs_response( 'failed', esc_html__( 'The request could not be sent.', 'pixelgrade_assistant' ) );
+			return pixassist_docs_response( 'failed', esc_html__( 'The request could not be sent.', 'pixelgrade-assistant' ) );
 		}
 
 		$args = array(
@@ -376,12 +376,12 @@ if ( ! function_exists( 'pixassist_docs_post_envelope' ) ) {
 
 		$response = wp_remote_request( $endpoint, $args );
 		if ( function_exists( 'is_wp_error' ) && is_wp_error( $response ) ) {
-			return pixassist_docs_response( 'failed', esc_html__( 'The request could not be sent.', 'pixelgrade_assistant' ) );
+			return pixassist_docs_response( 'failed', esc_html__( 'The request could not be sent.', 'pixelgrade-assistant' ) );
 		}
 
 		$decoded = json_decode( (string) wp_remote_retrieve_body( $response ), true );
 		if ( ! is_array( $decoded ) ) {
-			return pixassist_docs_response( 'failed', esc_html__( 'The request returned an invalid response.', 'pixelgrade_assistant' ) );
+			return pixassist_docs_response( 'failed', esc_html__( 'The request returned an invalid response.', 'pixelgrade-assistant' ) );
 		}
 
 		return wp_parse_args(
@@ -405,7 +405,7 @@ if ( ! function_exists( 'pixassist_record_docs_vote' ) ) {
 	 */
 	function pixassist_record_docs_vote( $request ) {
 		if ( ! pixassist_docs_can_access() ) {
-			return pixassist_docs_response( 'denied', esc_html__( 'You are not allowed to record documentation feedback.', 'pixelgrade_assistant' ) );
+			return pixassist_docs_response( 'denied', esc_html__( 'You are not allowed to record documentation feedback.', 'pixelgrade-assistant' ) );
 		}
 
 		$article_id = absint( pixassist_docs_request_value( $request, 'article_id' ) );
@@ -419,7 +419,7 @@ if ( ! function_exists( 'pixassist_record_docs_vote' ) ) {
 		}
 
 		if ( 0 >= $article_id || ! in_array( $direction, array( 'up', 'down' ), true ) ) {
-			return pixassist_docs_response( 'invalid', esc_html__( 'The documentation feedback request is invalid.', 'pixelgrade_assistant' ) );
+			return pixassist_docs_response( 'invalid', esc_html__( 'The documentation feedback request is invalid.', 'pixelgrade-assistant' ) );
 		}
 
 		$body = array(
@@ -563,7 +563,7 @@ if ( ! function_exists( 'pixassist_get_docs_article' ) ) {
 	 */
 	function pixassist_get_docs_article( $request ) {
 		if ( ! pixassist_docs_can_access() ) {
-			return pixassist_docs_response( 'denied', esc_html__( 'You are not allowed to read the documentation.', 'pixelgrade_assistant' ), array( 'article' => null ) );
+			return pixassist_docs_response( 'denied', esc_html__( 'You are not allowed to read the documentation.', 'pixelgrade-assistant' ), array( 'article' => null ) );
 		}
 
 		$id   = absint( pixassist_docs_request_value( $request, 'id' ) );
@@ -577,7 +577,7 @@ if ( ! function_exists( 'pixassist_get_docs_article' ) ) {
 		$article = pixassist_docs_find_article( array( 'id' => $id, 'slug' => $slug ), $skip_cache );
 
 		if ( empty( $article ) ) {
-			return pixassist_docs_response( 'not_found', esc_html__( 'That article is not available here.', 'pixelgrade_assistant' ), array( 'article' => null ) );
+			return pixassist_docs_response( 'not_found', esc_html__( 'That article is not available here.', 'pixelgrade-assistant' ), array( 'article' => null ) );
 		}
 
 		return pixassist_docs_response( 'success', '', array( 'article' => $article ) );
@@ -699,32 +699,32 @@ if ( ! function_exists( 'pixassist_submit_docs_ticket' ) ) {
 	 */
 	function pixassist_submit_docs_ticket( $request ) {
 		if ( ! pixassist_docs_can_access() ) {
-			return pixassist_docs_response( 'denied', esc_html__( 'You are not allowed to submit a support request.', 'pixelgrade_assistant' ) );
+			return pixassist_docs_response( 'denied', esc_html__( 'You are not allowed to submit a support request.', 'pixelgrade-assistant' ) );
 		}
 
 		$account     = function_exists( 'pixassist_get_account' ) ? pixassist_get_account() : array();
 		$credentials = function_exists( 'pixassist_get_account_credentials' ) ? pixassist_get_account_credentials() : null;
 
 		if ( empty( $account['is_connected'] ) || empty( $credentials['token'] ) ) {
-			return pixassist_docs_response( 'not_connected', esc_html__( 'Connect your Pixelgrade account before submitting a support request.', 'pixelgrade_assistant' ) );
+			return pixassist_docs_response( 'not_connected', esc_html__( 'Connect your Pixelgrade account before submitting a support request.', 'pixelgrade-assistant' ) );
 		}
 
 		// Eligibility gate: support is for recognized Pixelgrade themes. Assistant only loads for
 		// Pixelgrade themes, so this is cheap belt-and-suspenders that also keeps tickets triageable.
 		if ( '' === pixassist_docs_theme_hash_id() ) {
-			return pixassist_docs_response( 'no_pixelgrade_theme', esc_html__( 'Support is available for active Pixelgrade themes.', 'pixelgrade_assistant' ) );
+			return pixassist_docs_response( 'no_pixelgrade_theme', esc_html__( 'Support is available for active Pixelgrade themes.', 'pixelgrade-assistant' ) );
 		}
 
 		$body = pixassist_docs_ticket_body( $request );
 		if ( '' === $body['subject'] || '' === $body['details'] ) {
-			return pixassist_docs_response( 'invalid', esc_html__( 'Please add a subject and details before sending your request.', 'pixelgrade_assistant' ) );
+			return pixassist_docs_response( 'invalid', esc_html__( 'Please add a subject and details before sending your request.', 'pixelgrade-assistant' ) );
 		}
 
 		if ( pixassist_docs_ticket_subject_is_too_long( $body['subject'] ) ) {
 			return pixassist_docs_response(
 				'invalid',
 				sprintf(
-					esc_html__( 'Keep the subject under %d characters and add extra context in Details.', 'pixelgrade_assistant' ),
+					esc_html__( 'Keep the subject under %d characters and add extra context in Details.', 'pixelgrade-assistant' ),
 					pixassist_docs_ticket_subject_max_length()
 				)
 			);
@@ -733,12 +733,12 @@ if ( ! function_exists( 'pixassist_submit_docs_ticket' ) ) {
 			if ( ! function_exists( 'pixassist_account_oauth_config' )
 				|| ! function_exists( 'pixassist_account_oauth_base_params' )
 				|| ! function_exists( 'pixassist_oauth1_authorization_header' ) ) {
-				return pixassist_docs_response( 'not_configured', esc_html__( 'The Pixelgrade account connection is not configured for support requests.', 'pixelgrade_assistant' ) );
+				return pixassist_docs_response( 'not_configured', esc_html__( 'The Pixelgrade account connection is not configured for support requests.', 'pixelgrade-assistant' ) );
 			}
 
 			$config = pixassist_account_oauth_config();
 		if ( empty( $config['consumer_key'] ) || empty( $config['consumer_secret'] ) ) {
-			return pixassist_docs_response( 'not_configured', esc_html__( 'The Pixelgrade account connection is not configured for support requests.', 'pixelgrade_assistant' ) );
+			return pixassist_docs_response( 'not_configured', esc_html__( 'The Pixelgrade account connection is not configured for support requests.', 'pixelgrade-assistant' ) );
 		}
 
 		$endpoint = pixassist_docs_remote_endpoint( 'create_ticket' );

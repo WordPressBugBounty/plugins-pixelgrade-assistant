@@ -66,8 +66,8 @@ class PixelgradeAssistant_SetupWizard {
 		// then remove the item from the visible menu (the page stays registered + accessible).
 		add_submenu_page(
 			'themes.php',
-			esc_html__( 'Setup Wizard', 'pixelgrade_assistant' ),
-			esc_html__( 'Setup Wizard', 'pixelgrade_assistant' ),
+			esc_html__( 'Setup Wizard', 'pixelgrade-assistant' ),
+			esc_html__( 'Setup Wizard', 'pixelgrade-assistant' ),
 			'manage_options',
 			'pixelgrade_assistant-setup-wizard',
 			null
@@ -128,7 +128,7 @@ class PixelgradeAssistant_SetupWizard {
 		<head>
 			<meta name="viewport" content="width=device-width"/>
 			<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-			<title><?php esc_html_e( 'Pixelgrade Assistant &rsaquo; Setup Wizard', 'pixelgrade_assistant' ); ?></title>
+			<title><?php esc_html_e( 'Pixelgrade Assistant &rsaquo; Setup Wizard', 'pixelgrade-assistant' ); ?></title>
 			<script type="text/javascript">
 				var ajaxurl = '<?php echo admin_url( 'admin-ajax.php', 'relative' ); ?>',
 					pagenow = 'plugins';
@@ -212,7 +212,7 @@ class PixelgradeAssistant_SetupWizard {
 	 */
 	public function __clone() {
 
-		_doing_it_wrong( __FUNCTION__, esc_html__( 'You should not do that!', 'pixelgrade_assistant' ), esc_html( $this->parent->get_version() ) );
+		_doing_it_wrong( __FUNCTION__, esc_html__( 'You should not do that!', 'pixelgrade-assistant' ), esc_html( $this->parent->get_version() ) );
 	}
 
 	/**
@@ -220,6 +220,6 @@ class PixelgradeAssistant_SetupWizard {
 	 */
 	public function __wakeup() {
 
-		_doing_it_wrong( __FUNCTION__, esc_html__( 'You should not do that!', 'pixelgrade_assistant' ), esc_html( $this->parent->get_version() ) );
+		_doing_it_wrong( __FUNCTION__, esc_html__( 'You should not do that!', 'pixelgrade-assistant' ), esc_html( $this->parent->get_version() ) );
 	}
 }

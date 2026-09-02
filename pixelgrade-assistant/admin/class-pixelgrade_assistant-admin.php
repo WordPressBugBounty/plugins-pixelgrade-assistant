@@ -499,9 +499,9 @@ class PixelgradeAssistant_Admin {
 
 		$wp_admin_bar->add_node( array(
 			'id'    => 'pixassist-docs',
-			'title' => '<span class="ab-icon dashicons dashicons-art" aria-hidden="true" style="top:2px;"></span>' . esc_html__( 'Design Docs', 'pixelgrade_assistant' ),
+			'title' => '<span class="ab-icon dashicons dashicons-art" aria-hidden="true" style="top:2px;"></span>' . esc_html__( 'Design Docs', 'pixelgrade-assistant' ),
 			'href'  => esc_url( add_query_arg( 'pixassist_open_docs', '1' ) ),
-			'meta'  => array( 'title' => esc_attr__( 'Open Pixelgrade design & site-building docs', 'pixelgrade_assistant' ) ),
+			'meta'  => array( 'title' => esc_attr__( 'Open Pixelgrade design & site-building docs', 'pixelgrade-assistant' ) ),
 		) );
 	}
 
@@ -575,8 +575,8 @@ class PixelgradeAssistant_Admin {
 		// wraps), and the ecosystem convention for a suite's home (Jetpack, WooCommerce). The
 		// page title (H1 / browser tab) keeps the functional "Pixelgrade Design".
 		add_menu_page(
-			esc_html__( 'Pixelgrade Design', 'pixelgrade_assistant' ),
-			esc_html__( 'Pixelgrade', 'pixelgrade_assistant' ),
+			esc_html__( 'Pixelgrade Design', 'pixelgrade-assistant' ),
+			esc_html__( 'Pixelgrade', 'pixelgrade-assistant' ),
 			'edit_theme_options',
 			'pixelgrade',
 			array( $this, 'render_admin_hub_page' ),
@@ -856,7 +856,7 @@ class PixelgradeAssistant_Admin {
 
 	        // Add the optional description link details
 	        if ( ! empty( $plugin['descriptionLink']['url'] ) ) {
-		        $label = esc_html__( 'Learn more', 'pixelgrade_assistant' );
+		        $label = esc_html__( 'Learn more', 'pixelgrade-assistant' );
 		        $tgmpa->plugins[ $slug ]['description'] .= ' <a class="description-link" href="' . esc_url( $plugin['descriptionLink']['url'] ) . '" target="_blank">' . esc_html( $label ) . '</a>';
 	        }
 
@@ -2032,9 +2032,9 @@ class PixelgradeAssistant_Admin {
 	        if ( ! empty( $new_theme_version['new_version'] ) && ! empty( $theme_name ) && ! empty( $theme_support['theme_version'] ) && true === version_compare( $theme_support['theme_version'], $new_theme_version['new_version'], '<' ) ) {
                 ?>
                 <div class="notice notice-warning is-dismissible">
-                    <h3><?php esc_html_e( 'New Theme Update is Available!', 'pixelgrade_assistant' ); ?></h3>
+                    <h3><?php esc_html_e( 'New Theme Update is Available!', 'pixelgrade-assistant' ); ?></h3>
                     <hr>
-                    <p><?php printf( wp_kses_post( __( 'Great news! A new theme update is available for your <strong>%s</strong> theme, version <strong>%s</strong>. To update go to your <a href="%s">Theme Dashboard</a>.', 'pixelgrade_assistant' ) ), esc_html( $theme_name ), esc_html( $new_theme_version['new_version'] ), esc_url( pixassist_get_hub_url() ) ); ?></p>
+                    <p><?php printf( wp_kses_post( __( 'Great news! A new theme update is available for your <strong>%s</strong> theme, version <strong>%s</strong>. To update go to your <a href="%s">Theme Dashboard</a>.', 'pixelgrade-assistant' ) ), esc_html( $theme_name ), esc_html( $new_theme_version['new_version'] ), esc_url( pixassist_get_hub_url() ) ); ?></p>
                 </div>
                 <?php
             }
@@ -2246,13 +2246,13 @@ class PixelgradeAssistant_Admin {
      * Cloning is forbidden.
      */
     public function __clone() {
-        _doing_it_wrong( __FUNCTION__, esc_html__( 'You should not do that!', 'pixelgrade_assistant' ), esc_html( $this->parent->get_version() ) );
+        _doing_it_wrong( __FUNCTION__, esc_html__( 'You should not do that!', 'pixelgrade-assistant' ), esc_html( $this->parent->get_version() ) );
     }
 
     /**
      * Unserializing instances of this class is forbidden.
      */
     public function __wakeup() {
-        _doing_it_wrong( __FUNCTION__, esc_html__( 'You should not do that!', 'pixelgrade_assistant' ), esc_html( $this->parent->get_version() ) );
+        _doing_it_wrong( __FUNCTION__, esc_html__( 'You should not do that!', 'pixelgrade-assistant' ), esc_html( $this->parent->get_version() ) );
     }
 }

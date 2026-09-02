@@ -137,7 +137,7 @@ if ( ! class_exists( 'Jetpack_Portfolio' ) ) {
 		function settings_api_init() {
 			add_settings_field(
 				self::OPTION_NAME,
-				'<span class="cpt-options">' . esc_html__( 'Portfolio Projects', 'pixelgrade_assistant' ) . '</span>',
+				'<span class="cpt-options">' . esc_html__( 'Portfolio Projects', 'pixelgrade-assistant' ) . '</span>',
 				array( $this, 'setting_html' ),
 				'writing',
 				'jetpack_cpt_section'
@@ -166,21 +166,21 @@ if ( ! class_exists( 'Jetpack_Portfolio' ) ) {
 		 */
 		function setting_html() {
 			if ( current_theme_supports( self::CUSTOM_POST_TYPE ) ) : ?>
-				<p><?php printf( wp_kses_post( __( 'Your theme supports <strong>%s</strong>', 'pixelgrade_assistant' ) ), self::CUSTOM_POST_TYPE ); ?></p>
+				<p><?php printf( wp_kses_post( __( 'Your theme supports <strong>%s</strong>', 'pixelgrade-assistant' ) ), self::CUSTOM_POST_TYPE ); ?></p>
 			<?php else : ?>
 				<label for="<?php echo esc_attr( self::OPTION_NAME ); ?>">
 					<input name="<?php echo esc_attr( self::OPTION_NAME ); ?>"
 					       id="<?php echo esc_attr( self::OPTION_NAME ); ?>" <?php echo checked( get_option( self::OPTION_NAME, '0' ), true, false ); ?>
 					       type="checkbox" value="1"/>
-					<?php esc_html_e( 'Enable Portfolio Projects for this site.', 'pixelgrade_assistant' ); ?>
+					<?php esc_html_e( 'Enable Portfolio Projects for this site.', 'pixelgrade-assistant' ); ?>
 					<a target="_blank"
-					   href="http://en.support.wordpress.com/portfolios/"><?php esc_html_e( 'Learn More', 'pixelgrade_assistant' ); ?></a>
+					   href="http://en.support.wordpress.com/portfolios/"><?php esc_html_e( 'Learn More', 'pixelgrade-assistant' ); ?></a>
 				</label>
 			<?php endif;
 			if ( get_option( self::OPTION_NAME, '0' ) || current_theme_supports( self::CUSTOM_POST_TYPE ) ) :
 				printf( '<p><label for="%1$s">%2$s</label></p>',
 					esc_attr( self::OPTION_READING_SETTING ),
-					sprintf( esc_html__( 'Portfolio pages display at most %1$s projects', 'pixelgrade_assistant' ),
+					sprintf( esc_html__( 'Portfolio pages display at most %1$s projects', 'pixelgrade-assistant' ),
 						sprintf( '<input name="%1$s" id="%1$s" type="number" step="1" min="1" value="%2$s" class="small-text" />',
 							esc_attr( self::OPTION_READING_SETTING ),
 							esc_attr( get_option( self::OPTION_READING_SETTING, '10' ) )
@@ -270,23 +270,23 @@ if ( ! class_exists( 'Jetpack_Portfolio' ) ) {
 			}
 
 			register_post_type( self::CUSTOM_POST_TYPE, array(
-				'description'     => __( 'Portfolio Items', 'pixelgrade_assistant' ),
+				'description'     => __( 'Portfolio Items', 'pixelgrade-assistant' ),
 				'labels'          => array(
-					'name'                  => esc_html__( 'Projects', 'pixelgrade_assistant' ),
-					'singular_name'         => esc_html__( 'Project', 'pixelgrade_assistant' ),
-					'menu_name'             => esc_html__( 'Portfolio', 'pixelgrade_assistant' ),
-					'all_items'             => esc_html__( 'All Projects', 'pixelgrade_assistant' ),
-					'add_new'               => esc_html__( 'Add New', 'pixelgrade_assistant' ),
-					'add_new_item'          => esc_html__( 'Add New Project', 'pixelgrade_assistant' ),
-					'edit_item'             => esc_html__( 'Edit Project', 'pixelgrade_assistant' ),
-					'new_item'              => esc_html__( 'New Project', 'pixelgrade_assistant' ),
-					'view_item'             => esc_html__( 'View Project', 'pixelgrade_assistant' ),
-					'search_items'          => esc_html__( 'Search Projects', 'pixelgrade_assistant' ),
-					'not_found'             => esc_html__( 'No Projects found', 'pixelgrade_assistant' ),
-					'not_found_in_trash'    => esc_html__( 'No Projects found in Trash', 'pixelgrade_assistant' ),
-					'filter_items_list'     => esc_html__( 'Filter projects list', 'pixelgrade_assistant' ),
-					'items_list_navigation' => esc_html__( 'Project list navigation', 'pixelgrade_assistant' ),
-					'items_list'            => esc_html__( 'Projects list', 'pixelgrade_assistant' ),
+					'name'                  => esc_html__( 'Projects', 'pixelgrade-assistant' ),
+					'singular_name'         => esc_html__( 'Project', 'pixelgrade-assistant' ),
+					'menu_name'             => esc_html__( 'Portfolio', 'pixelgrade-assistant' ),
+					'all_items'             => esc_html__( 'All Projects', 'pixelgrade-assistant' ),
+					'add_new'               => esc_html__( 'Add New', 'pixelgrade-assistant' ),
+					'add_new_item'          => esc_html__( 'Add New Project', 'pixelgrade-assistant' ),
+					'edit_item'             => esc_html__( 'Edit Project', 'pixelgrade-assistant' ),
+					'new_item'              => esc_html__( 'New Project', 'pixelgrade-assistant' ),
+					'view_item'             => esc_html__( 'View Project', 'pixelgrade-assistant' ),
+					'search_items'          => esc_html__( 'Search Projects', 'pixelgrade-assistant' ),
+					'not_found'             => esc_html__( 'No Projects found', 'pixelgrade-assistant' ),
+					'not_found_in_trash'    => esc_html__( 'No Projects found in Trash', 'pixelgrade-assistant' ),
+					'filter_items_list'     => esc_html__( 'Filter projects list', 'pixelgrade-assistant' ),
+					'items_list_navigation' => esc_html__( 'Project list navigation', 'pixelgrade-assistant' ),
+					'items_list'            => esc_html__( 'Projects list', 'pixelgrade-assistant' ),
 				),
 				'supports'        => array(
 					'title',
@@ -318,20 +318,20 @@ if ( ! class_exists( 'Jetpack_Portfolio' ) ) {
 			register_taxonomy( self::CUSTOM_TAXONOMY_TYPE, self::CUSTOM_POST_TYPE, array(
 				'hierarchical'      => true,
 				'labels'            => array(
-					'name'                  => esc_html__( 'Project Types', 'pixelgrade_assistant' ),
-					'singular_name'         => esc_html__( 'Project Type', 'pixelgrade_assistant' ),
-					'menu_name'             => esc_html__( 'Project Types', 'pixelgrade_assistant' ),
-					'all_items'             => esc_html__( 'All Project Types', 'pixelgrade_assistant' ),
-					'edit_item'             => esc_html__( 'Edit Project Type', 'pixelgrade_assistant' ),
-					'view_item'             => esc_html__( 'View Project Type', 'pixelgrade_assistant' ),
-					'update_item'           => esc_html__( 'Update Project Type', 'pixelgrade_assistant' ),
-					'add_new_item'          => esc_html__( 'Add New Project Type', 'pixelgrade_assistant' ),
-					'new_item_name'         => esc_html__( 'New Project Type Name', 'pixelgrade_assistant' ),
-					'parent_item'           => esc_html__( 'Parent Project Type', 'pixelgrade_assistant' ),
-					'parent_item_colon'     => esc_html__( 'Parent Project Type:', 'pixelgrade_assistant' ),
-					'search_items'          => esc_html__( 'Search Project Types', 'pixelgrade_assistant' ),
-					'items_list_navigation' => esc_html__( 'Project type list navigation', 'pixelgrade_assistant' ),
-					'items_list'            => esc_html__( 'Project type list', 'pixelgrade_assistant' ),
+					'name'                  => esc_html__( 'Project Types', 'pixelgrade-assistant' ),
+					'singular_name'         => esc_html__( 'Project Type', 'pixelgrade-assistant' ),
+					'menu_name'             => esc_html__( 'Project Types', 'pixelgrade-assistant' ),
+					'all_items'             => esc_html__( 'All Project Types', 'pixelgrade-assistant' ),
+					'edit_item'             => esc_html__( 'Edit Project Type', 'pixelgrade-assistant' ),
+					'view_item'             => esc_html__( 'View Project Type', 'pixelgrade-assistant' ),
+					'update_item'           => esc_html__( 'Update Project Type', 'pixelgrade-assistant' ),
+					'add_new_item'          => esc_html__( 'Add New Project Type', 'pixelgrade-assistant' ),
+					'new_item_name'         => esc_html__( 'New Project Type Name', 'pixelgrade-assistant' ),
+					'parent_item'           => esc_html__( 'Parent Project Type', 'pixelgrade-assistant' ),
+					'parent_item_colon'     => esc_html__( 'Parent Project Type:', 'pixelgrade-assistant' ),
+					'search_items'          => esc_html__( 'Search Project Types', 'pixelgrade-assistant' ),
+					'items_list_navigation' => esc_html__( 'Project type list navigation', 'pixelgrade-assistant' ),
+					'items_list'            => esc_html__( 'Project type list', 'pixelgrade-assistant' ),
 				),
 				'public'            => true,
 				'show_ui'           => true,
@@ -345,23 +345,23 @@ if ( ! class_exists( 'Jetpack_Portfolio' ) ) {
 			register_taxonomy( self::CUSTOM_TAXONOMY_TAG, self::CUSTOM_POST_TYPE, array(
 				'hierarchical'      => false,
 				'labels'            => array(
-					'name'                       => esc_html__( 'Project Tags', 'pixelgrade_assistant' ),
-					'singular_name'              => esc_html__( 'Project Tag', 'pixelgrade_assistant' ),
-					'menu_name'                  => esc_html__( 'Project Tags', 'pixelgrade_assistant' ),
-					'all_items'                  => esc_html__( 'All Project Tags', 'pixelgrade_assistant' ),
-					'edit_item'                  => esc_html__( 'Edit Project Tag', 'pixelgrade_assistant' ),
-					'view_item'                  => esc_html__( 'View Project Tag', 'pixelgrade_assistant' ),
-					'update_item'                => esc_html__( 'Update Project Tag', 'pixelgrade_assistant' ),
-					'add_new_item'               => esc_html__( 'Add New Project Tag', 'pixelgrade_assistant' ),
-					'new_item_name'              => esc_html__( 'New Project Tag Name', 'pixelgrade_assistant' ),
-					'search_items'               => esc_html__( 'Search Project Tags', 'pixelgrade_assistant' ),
-					'popular_items'              => esc_html__( 'Popular Project Tags', 'pixelgrade_assistant' ),
-					'separate_items_with_commas' => esc_html__( 'Separate tags with commas', 'pixelgrade_assistant' ),
-					'add_or_remove_items'        => esc_html__( 'Add or remove tags', 'pixelgrade_assistant' ),
-					'choose_from_most_used'      => esc_html__( 'Choose from the most used tags', 'pixelgrade_assistant' ),
-					'not_found'                  => esc_html__( 'No tags found.', 'pixelgrade_assistant' ),
-					'items_list_navigation'      => esc_html__( 'Project tag list navigation', 'pixelgrade_assistant' ),
-					'items_list'                 => esc_html__( 'Project tag list', 'pixelgrade_assistant' ),
+					'name'                       => esc_html__( 'Project Tags', 'pixelgrade-assistant' ),
+					'singular_name'              => esc_html__( 'Project Tag', 'pixelgrade-assistant' ),
+					'menu_name'                  => esc_html__( 'Project Tags', 'pixelgrade-assistant' ),
+					'all_items'                  => esc_html__( 'All Project Tags', 'pixelgrade-assistant' ),
+					'edit_item'                  => esc_html__( 'Edit Project Tag', 'pixelgrade-assistant' ),
+					'view_item'                  => esc_html__( 'View Project Tag', 'pixelgrade-assistant' ),
+					'update_item'                => esc_html__( 'Update Project Tag', 'pixelgrade-assistant' ),
+					'add_new_item'               => esc_html__( 'Add New Project Tag', 'pixelgrade-assistant' ),
+					'new_item_name'              => esc_html__( 'New Project Tag Name', 'pixelgrade-assistant' ),
+					'search_items'               => esc_html__( 'Search Project Tags', 'pixelgrade-assistant' ),
+					'popular_items'              => esc_html__( 'Popular Project Tags', 'pixelgrade-assistant' ),
+					'separate_items_with_commas' => esc_html__( 'Separate tags with commas', 'pixelgrade-assistant' ),
+					'add_or_remove_items'        => esc_html__( 'Add or remove tags', 'pixelgrade-assistant' ),
+					'choose_from_most_used'      => esc_html__( 'Choose from the most used tags', 'pixelgrade-assistant' ),
+					'not_found'                  => esc_html__( 'No tags found.', 'pixelgrade-assistant' ),
+					'items_list_navigation'      => esc_html__( 'Project tag list navigation', 'pixelgrade-assistant' ),
+					'items_list'                 => esc_html__( 'Project tag list', 'pixelgrade-assistant' ),
 				),
 				'public'            => true,
 				'show_ui'           => true,
@@ -381,19 +381,19 @@ if ( ! class_exists( 'Jetpack_Portfolio' ) ) {
 
 			$messages[ self::CUSTOM_POST_TYPE ] = array(
 				0  => '', // Unused. Messages start at index 1.
-				1  => sprintf( wp_kses_post( __( 'Project updated. <a href="%s">View item</a>', 'pixelgrade_assistant' ) ), esc_url( get_permalink( $post->ID ) ) ),
-				2  => esc_html__( 'Custom field updated.', 'pixelgrade_assistant' ),
-				3  => esc_html__( 'Custom field deleted.', 'pixelgrade_assistant' ),
-				4  => esc_html__( 'Project updated.', 'pixelgrade_assistant' ),
+				1  => sprintf( wp_kses_post( __( 'Project updated. <a href="%s">View item</a>', 'pixelgrade-assistant' ) ), esc_url( get_permalink( $post->ID ) ) ),
+				2  => esc_html__( 'Custom field updated.', 'pixelgrade-assistant' ),
+				3  => esc_html__( 'Custom field deleted.', 'pixelgrade-assistant' ),
+				4  => esc_html__( 'Project updated.', 'pixelgrade-assistant' ),
 				/* translators: %s: date and time of the revision */
-				5  => isset( $_GET['revision'] ) ? sprintf( esc_html__( 'Project restored to revision from %s', 'pixelgrade_assistant' ), wp_post_revision_title( (int) $_GET['revision'], false ) ) : false,
-				6  => sprintf( wp_kses_post( __( 'Project published. <a href="%s">View project</a>', 'pixelgrade_assistant' ) ), esc_url( get_permalink( $post->ID ) ) ),
-				7  => esc_html__( 'Project saved.', 'pixelgrade_assistant' ),
-				8  => sprintf( wp_kses_post( __( 'Project submitted. <a target="_blank" href="%s">Preview project</a>', 'pixelgrade_assistant' ) ), esc_url( add_query_arg( 'preview', 'true', get_permalink( $post->ID ) ) ) ),
-				9  => sprintf( wp_kses_post( __( 'Project scheduled for: <strong>%1$s</strong>. <a target="_blank" href="%2$s">Preview project</a>', 'pixelgrade_assistant' ) ),
+				5  => isset( $_GET['revision'] ) ? sprintf( esc_html__( 'Project restored to revision from %s', 'pixelgrade-assistant' ), wp_post_revision_title( (int) $_GET['revision'], false ) ) : false,
+				6  => sprintf( wp_kses_post( __( 'Project published. <a href="%s">View project</a>', 'pixelgrade-assistant' ) ), esc_url( get_permalink( $post->ID ) ) ),
+				7  => esc_html__( 'Project saved.', 'pixelgrade-assistant' ),
+				8  => sprintf( wp_kses_post( __( 'Project submitted. <a target="_blank" href="%s">Preview project</a>', 'pixelgrade-assistant' ) ), esc_url( add_query_arg( 'preview', 'true', get_permalink( $post->ID ) ) ) ),
+				9  => sprintf( wp_kses_post( __( 'Project scheduled for: <strong>%1$s</strong>. <a target="_blank" href="%2$s">Preview project</a>', 'pixelgrade-assistant' ) ),
 					// translators: Publish box date format, see http://php.net/date
-					date_i18n( esc_html__( 'M j, Y @ G:i', 'pixelgrade_assistant' ), strtotime( $post->post_date ) ), esc_url( get_permalink( $post->ID ) ) ),
-				10 => sprintf( wp_kses_post( __( 'Project item draft updated. <a target="_blank" href="%s">Preview project</a>', 'pixelgrade_assistant' ) ), esc_url( add_query_arg( 'preview', 'true', get_permalink( $post->ID ) ) ) ),
+					date_i18n( esc_html__( 'M j, Y @ G:i', 'pixelgrade-assistant' ), strtotime( $post->post_date ) ), esc_url( get_permalink( $post->ID ) ) ),
+				10 => sprintf( wp_kses_post( __( 'Project item draft updated. <a target="_blank" href="%s">Preview project</a>', 'pixelgrade-assistant' ) ), esc_url( add_query_arg( 'preview', 'true', get_permalink( $post->ID ) ) ) ),
 			);
 
 			return $messages;
@@ -405,7 +405,7 @@ if ( ! class_exists( 'Jetpack_Portfolio' ) ) {
 		 */
 		function edit_admin_columns( $columns ) {
 			// change 'Title' to 'Project'
-			$columns['title'] = esc_html__( 'Project', 'pixelgrade_assistant' );
+			$columns['title'] = esc_html__( 'Project', 'pixelgrade-assistant' );
 			if ( current_theme_supports( 'post-thumbnails' ) ) {
 				// add featured image before 'Project'
 				$columns = array_slice( $columns, 0, 1, true ) + array( 'thumbnail' => '' ) + array_slice( $columns, 1, null, true );
@@ -450,14 +450,14 @@ if ( ! class_exists( 'Jetpack_Portfolio' ) ) {
 			}
 
 			$wp_customize->add_section( 'jetpack_portfolio', array(
-				'title'          => esc_html__( 'Portfolio', 'pixelgrade_assistant' ),
+				'title'          => esc_html__( 'Portfolio', 'pixelgrade-assistant' ),
 				'theme_supports' => self::CUSTOM_POST_TYPE,
 				'priority'       => 130,
 			) );
 
 			if ( isset( $options[0]['title'] ) && true === $options[0]['title'] ) {
 				$wp_customize->add_setting( 'jetpack_portfolio_title', array(
-					'default'              => esc_html__( 'Projects', 'pixelgrade_assistant' ),
+					'default'              => esc_html__( 'Projects', 'pixelgrade-assistant' ),
 					'type'                 => 'option',
 					'sanitize_callback'    => 'sanitize_text_field',
 					'sanitize_js_callback' => 'sanitize_text_field',
@@ -465,7 +465,7 @@ if ( ! class_exists( 'Jetpack_Portfolio' ) ) {
 
 				$wp_customize->add_control( 'jetpack_portfolio_title', array(
 					'section' => 'jetpack_portfolio',
-					'label'   => esc_html__( 'Portfolio Archive Title', 'pixelgrade_assistant' ),
+					'label'   => esc_html__( 'Portfolio Archive Title', 'pixelgrade-assistant' ),
 					'type'    => 'text',
 				) );
 			}
@@ -480,7 +480,7 @@ if ( ! class_exists( 'Jetpack_Portfolio' ) ) {
 
 				$wp_customize->add_control( 'jetpack_portfolio_content', array(
 					'section' => 'jetpack_portfolio',
-					'label'   => esc_html__( 'Portfolio Archive Content', 'pixelgrade_assistant' ),
+					'label'   => esc_html__( 'Portfolio Archive Content', 'pixelgrade-assistant' ),
 					'type'    => 'textarea',
 				) );
 			}
@@ -496,7 +496,7 @@ if ( ! class_exists( 'Jetpack_Portfolio' ) ) {
 
 				$wp_customize->add_control( new WP_Customize_Image_Control( $wp_customize, 'jetpack_portfolio_featured_image', array(
 					'section' => 'jetpack_portfolio',
-					'label'   => esc_html__( 'Portfolio Archive Featured Image', 'pixelgrade_assistant' ),
+					'label'   => esc_html__( 'Portfolio Archive Featured Image', 'pixelgrade-assistant' ),
 				) ) );
 			}
 		}
@@ -747,7 +747,7 @@ if ( ! class_exists( 'Jetpack_Portfolio' ) ) {
 				<?php
 			} else { ?>
 				<p>
-					<em><?php esc_html_e( 'Your Portfolio Archive currently has no entries. You can start creating them on your dashboard.', 'pixelgrade_assistant' ); ?>
+					<em><?php esc_html_e( 'Your Portfolio Archive currently has no entries. You can start creating them on your dashboard.', 'pixelgrade-assistant' ); ?>
 				</p></em>
 				<?php
 			}
@@ -820,7 +820,7 @@ if ( ! class_exists( 'Jetpack_Portfolio' ) ) {
 				return;
 			}
 
-			$html  = '<div class="project-types"><span>' . esc_html__( 'Types', 'pixelgrade_assistant' ) . ':</span>';
+			$html  = '<div class="project-types"><span>' . esc_html__( 'Types', 'pixelgrade-assistant' ) . ':</span>';
 			$types = array();
 			// Loop thorugh all the types
 			foreach ( $project_types as $project_type ) {
@@ -851,7 +851,7 @@ if ( ! class_exists( 'Jetpack_Portfolio' ) ) {
 				return false;
 			}
 
-			$html = '<div class="project-tags"><span>' . esc_html__( 'Tags', 'pixelgrade_assistant' ) . ':</span>';
+			$html = '<div class="project-tags"><span>' . esc_html__( 'Tags', 'pixelgrade-assistant' ) . ':</span>';
 			$tags = array();
 			// Loop thorugh all the tags
 			foreach ( $project_tags as $project_tag ) {
@@ -877,7 +877,7 @@ if ( ! class_exists( 'Jetpack_Portfolio' ) ) {
 		static function get_project_author() {
 			$html = '<div class="project-author">';
 			/* translators: %1$s is link to author posts, %2$s is author display name */
-			$html .= sprintf( wp_kses_post( __( '<span>Author:</span> <a href="%1$s">%2$s</a>', 'pixelgrade_assistant' ) ),
+			$html .= sprintf( wp_kses_post( __( '<span>Author:</span> <a href="%1$s">%2$s</a>', 'pixelgrade-assistant' ) ),
 				esc_url( get_author_posts_url( get_the_author_meta( 'ID' ) ) ),
 				esc_html( get_the_author() )
 			);

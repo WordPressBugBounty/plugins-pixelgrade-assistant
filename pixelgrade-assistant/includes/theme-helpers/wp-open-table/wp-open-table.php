@@ -14,9 +14,9 @@ class Pixassist_Open_Table_Widget extends WP_Widget {
 	public function __construct() {
 		parent::__construct(
 			'Pixassist_Open_Table_Widget',
-			esc_html__( 'OpenTable Widget', 'pixelgrade_assistant' ),
+			esc_html__( 'OpenTable Widget', 'pixelgrade-assistant' ),
 			array(
-				'description' => __( 'OpenTable Widget for WordPress', 'pixelgrade_assistant' ),
+				'description' => __( 'OpenTable Widget for WordPress', 'pixelgrade-assistant' ),
 			)
 		);
 	}
@@ -49,7 +49,7 @@ class Pixassist_Open_Table_Widget extends WP_Widget {
 			// Now rebuild the parameters with out special alterations depending on widget options
 			echo '<script type="text/javascript" src="' . esc_url( self::build_embed_url( $params ) ) . '"></script>';
 		} else {
-			printf( __( '<p>You first need to copy&paste your EMBED code from <a href="%s">OpenTable Reservations</a> in <a href="%s">Appearance > Customize > General</a>.</p>', 'pixelgrade_assistant' ),
+			printf( __( '<p>You first need to copy&paste your EMBED code from <a href="%s">OpenTable Reservations</a> in <a href="%s">Appearance > Customize > General</a>.</p>', 'pixelgrade-assistant' ),
 				'https://www.otrestaurant.com/marketing/ReservationWidget" target="_blank',
 				esc_url( add_query_arg(
 					array(
@@ -97,25 +97,25 @@ class Pixassist_Open_Table_Widget extends WP_Widget {
 	?>
 		<p>
 			<label for="<?php echo esc_attr( $this->get_field_id( 'title' ) ); ?>">
-				<?php esc_html_e( 'Title:', 'pixelgrade_assistant' ); ?>
+				<?php esc_html_e( 'Title:', 'pixelgrade-assistant' ); ?>
 			</label>
 			<?php
 			printf( '<input class="widefat" id="%1$s" name="%2$s" type="text" value="%3$s" />',
 				esc_attr( $this->get_field_id( 'title' ) ),
 				esc_attr( $this->get_field_name( 'title' ) ),
-				isset( $instance['title'] ) ? esc_attr( $instance['title'] ) : esc_attr__( 'My OpenTable Widget', 'pixelgrade_assistant' )
+				isset( $instance['title'] ) ? esc_attr( $instance['title'] ) : esc_attr__( 'My OpenTable Widget', 'pixelgrade-assistant' )
 			);
 			?>
 		</p>
 		<p>
-			<label for="<?php echo esc_attr( $this->get_field_id( 'widget_style' ) ); ?>"><?php esc_html_e( 'Widget Style', 'pixelgrade_assistant' ); ?>:</label>
+			<label for="<?php echo esc_attr( $this->get_field_id( 'widget_style' ) ); ?>"><?php esc_html_e( 'Widget Style', 'pixelgrade-assistant' ); ?>:</label>
 			<select id="<?php echo esc_attr( $this->get_field_id( 'widget_style' ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( 'widget_style' ) ); ?>" class="widefat">
 				<?php
 				$options = array(
-					'standard' => esc_html__( 'Standard', 'pixelgrade_assistant' ),
-					'tall' => esc_html__( 'Tall', 'pixelgrade_assistant' ),
-					'wide' => esc_html__( 'Wide', 'pixelgrade_assistant' ),
-					'button' => esc_html__( 'Button', 'pixelgrade_assistant' ),
+					'standard' => esc_html__( 'Standard', 'pixelgrade-assistant' ),
+					'tall' => esc_html__( 'Tall', 'pixelgrade-assistant' ),
+					'wide' => esc_html__( 'Wide', 'pixelgrade-assistant' ),
+					'button' => esc_html__( 'Button', 'pixelgrade-assistant' ),
 				);
 
 				foreach ( $options as $option_value => $option_name ) {
@@ -243,9 +243,9 @@ function pixelgrade_open_table_customify_option( $options ) {
 	// We add a field for the embed code
 	$options['general']['options']['open_table_embed_code'] = array(
 		'type'    => 'textarea',
-		'label'   => esc_html__( 'OpenTable Embed Code', 'pixelgrade_assistant' ),
+		'label'   => esc_html__( 'OpenTable Embed Code', 'pixelgrade-assistant' ),
 		'default' => '',
-		'desc'    => sprintf( __( 'Paste your EMBED code from <a href="%s">OpenTable Reservations</a>.', 'pixelgrade_assistant' ),
+		'desc'    => sprintf( __( 'Paste your EMBED code from <a href="%s">OpenTable Reservations</a>.', 'pixelgrade-assistant' ),
 			'https://www.otrestaurant.com/marketing/ReservationWidget" target="_blank'
 		),
 		'priority' => 30,
@@ -287,7 +287,7 @@ function pixelgrade_ot_reservation_widget_shortcode( $atts ) {
 		// Now rebuild the parameters with out special alterations depending on widget options
 		return '<script type="text/javascript" src="' . esc_attr( Pixassist_Open_Table_Widget::build_embed_url( $params ) ) . '"></script>';
 	} else {
-		return sprintf( __( '<p>You first need to copy&paste your EMBED code from <a href="%s">OpenTable Reservations</a> in <a href="%s">Appearance > Customize > General</a>.</p>', 'pixelgrade_assistant' ),
+		return sprintf( __( '<p>You first need to copy&paste your EMBED code from <a href="%s">OpenTable Reservations</a> in <a href="%s">Appearance > Customize > General</a>.</p>', 'pixelgrade-assistant' ),
 			'https://www.otrestaurant.com/marketing/ReservationWidget" target="_blank',
 			esc_url( add_query_arg(
 				array(

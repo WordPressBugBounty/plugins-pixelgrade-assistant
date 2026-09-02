@@ -13,6 +13,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
+// What each Design Library source contributes (parts and/or content records).
+require_once __DIR__ . '/starter-sources.php';
+
 if ( ! function_exists( 'pixassist_register_layout_units_tab' ) ) {
 	/**
 	 * Preserve the legacy registration callback without exposing Site Parts in navigation.
@@ -85,33 +88,33 @@ if ( ! function_exists( 'pixassist_get_layout_units_copy' ) ) {
 	 */
 	function pixassist_get_layout_units_copy() {
 		return array(
-			'title'         => esc_html__( 'Site Parts', 'pixelgrade_assistant' ),
-			'description'   => esc_html__( 'Apply a single reusable part — a header, footer, or full page template — without importing a whole site. For complete ready-made pages, use Page Patterns; for an entire site, use Starter Sites.', 'pixelgrade_assistant' ),
-			'sourceLabel'   => esc_html__( 'Source', 'pixelgrade_assistant' ),
-			'loadLabel'     => esc_html__( 'Load layouts', 'pixelgrade_assistant' ),
-			'loading'       => esc_html__( 'Loading layouts...', 'pixelgrade_assistant' ),
-			'empty'         => esc_html__( 'No layouts are available from this source.', 'pixelgrade_assistant' ),
-			'failure'       => esc_html__( 'Layouts could not be loaded. Please try again.', 'pixelgrade_assistant' ),
-			'importLabel'   => esc_html__( 'Apply', 'pixelgrade_assistant' ),
-			'importing'     => esc_html__( 'Applying layout...', 'pixelgrade_assistant' ),
-			'importSuccess' => esc_html__( 'Layout applied.', 'pixelgrade_assistant' ),
-			'importFailure' => esc_html__( 'Layout could not be applied. Please try again.', 'pixelgrade_assistant' ),
-			'undoLabel'     => esc_html__( 'Remove', 'pixelgrade_assistant' ),
-			'undoing'       => esc_html__( 'Removing layout...', 'pixelgrade_assistant' ),
-			'undoSuccess'   => esc_html__( 'Layout removed.', 'pixelgrade_assistant' ),
-			'undoFailure'   => esc_html__( 'Layout could not be removed. Please try again.', 'pixelgrade_assistant' ),
-			'appliedTitle'  => esc_html__( 'Applied layouts', 'pixelgrade_assistant' ),
-			'appliedEmpty'  => esc_html__( 'No layouts are applied yet.', 'pixelgrade_assistant' ),
-			'templateParts' => esc_html__( 'Template parts', 'pixelgrade_assistant' ),
-			'templates'     => esc_html__( 'Templates', 'pixelgrade_assistant' ),
-			'headers'       => esc_html__( 'Headers', 'pixelgrade_assistant' ),
-			'footers'       => esc_html__( 'Footers', 'pixelgrade_assistant' ),
-			'templatesType' => esc_html__( 'Templates', 'pixelgrade_assistant' ),
-			'features'      => esc_html__( 'Features', 'pixelgrade_assistant' ),
-			'featureLabel'  => esc_html__( 'Feature', 'pixelgrade_assistant' ),
-			'sampleLabel'   => esc_html__( 'Include sample projects', 'pixelgrade_assistant' ),
-			'sourceHeading' => esc_html__( 'Source', 'pixelgrade_assistant' ),
-			'premiumLabel'  => esc_html__( 'Plus', 'pixelgrade_assistant' ),
+			'title'         => esc_html__( 'Site Parts', 'pixelgrade-assistant' ),
+			'description'   => esc_html__( 'Apply a single reusable part — a header, footer, or full page template — without importing a whole site. For complete ready-made pages, use Page Patterns; for an entire site, use Starter Sites.', 'pixelgrade-assistant' ),
+			'sourceLabel'   => esc_html__( 'Source', 'pixelgrade-assistant' ),
+			'loadLabel'     => esc_html__( 'Load layouts', 'pixelgrade-assistant' ),
+			'loading'       => esc_html__( 'Loading layouts...', 'pixelgrade-assistant' ),
+			'empty'         => esc_html__( 'No layouts are available from this source.', 'pixelgrade-assistant' ),
+			'failure'       => esc_html__( 'Layouts could not be loaded. Please try again.', 'pixelgrade-assistant' ),
+			'importLabel'   => esc_html__( 'Apply', 'pixelgrade-assistant' ),
+			'importing'     => esc_html__( 'Applying layout...', 'pixelgrade-assistant' ),
+			'importSuccess' => esc_html__( 'Layout applied.', 'pixelgrade-assistant' ),
+			'importFailure' => esc_html__( 'Layout could not be applied. Please try again.', 'pixelgrade-assistant' ),
+			'undoLabel'     => esc_html__( 'Remove', 'pixelgrade-assistant' ),
+			'undoing'       => esc_html__( 'Removing layout...', 'pixelgrade-assistant' ),
+			'undoSuccess'   => esc_html__( 'Layout removed.', 'pixelgrade-assistant' ),
+			'undoFailure'   => esc_html__( 'Layout could not be removed. Please try again.', 'pixelgrade-assistant' ),
+			'appliedTitle'  => esc_html__( 'Applied layouts', 'pixelgrade-assistant' ),
+			'appliedEmpty'  => esc_html__( 'No layouts are applied yet.', 'pixelgrade-assistant' ),
+			'templateParts' => esc_html__( 'Template parts', 'pixelgrade-assistant' ),
+			'templates'     => esc_html__( 'Templates', 'pixelgrade-assistant' ),
+			'headers'       => esc_html__( 'Headers', 'pixelgrade-assistant' ),
+			'footers'       => esc_html__( 'Footers', 'pixelgrade-assistant' ),
+			'templatesType' => esc_html__( 'Templates', 'pixelgrade-assistant' ),
+			'features'      => esc_html__( 'Features', 'pixelgrade-assistant' ),
+			'featureLabel'  => esc_html__( 'Feature', 'pixelgrade-assistant' ),
+			'sampleLabel'   => esc_html__( 'Include sample projects', 'pixelgrade-assistant' ),
+			'sourceHeading' => esc_html__( 'Source', 'pixelgrade-assistant' ),
+			'premiumLabel'  => esc_html__( 'Plus', 'pixelgrade-assistant' ),
 		);
 	}
 }
@@ -131,6 +134,12 @@ if ( ! function_exists( 'pixassist_get_layout_units_sources' ) ) {
 		$sources = array();
 		foreach ( $starters as $starter ) {
 			if ( empty( $starter['id'] ) || empty( $starter['baseRestUrl'] ) ) {
+				continue;
+			}
+
+			// A source is listed here only if it declares that it serves reusable parts. A content-only
+			// catalog owns no header, footer or template and must not appear as a Site Parts source.
+			if ( ! pixassist_starter_serves( $starter, 'parts' ) ) {
 				continue;
 			}
 

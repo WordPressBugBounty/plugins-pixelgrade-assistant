@@ -185,7 +185,7 @@ class Pixelgrade_Jetpack_Portfolio_Shortcode {
 		}
 
 		if ( ! file_exists( $template ) ) {
-			_doing_it_wrong( __FUNCTION__, sprintf( esc_html__( '%s does not exist.', 'pixelgrade_assistant' ), '<code>' . $template . '</code>' ), '1.2.6' );
+			_doing_it_wrong( __FUNCTION__, sprintf( esc_html__( '%s does not exist.', 'pixelgrade-assistant' ), '<code>' . $template . '</code>' ), '1.2.6' );
 		} else {
 			include( $template );
 		}
@@ -260,7 +260,7 @@ class Pixelgrade_Jetpack_Portfolio_Shortcode {
 			return;
 		}
 
-		$html = '<div class="project-types"><span>' . esc_html__( 'Types', 'pixelgrade_assistant' ) . ':</span>';
+		$html = '<div class="project-types"><span>' . esc_html__( 'Types', 'pixelgrade-assistant' ) . ':</span>';
 		$types = array();
 		// Loop thorugh all the types
 		foreach ( $project_types as $project_type ) {
@@ -291,7 +291,7 @@ class Pixelgrade_Jetpack_Portfolio_Shortcode {
 			return false;
 		}
 
-		$html = '<div class="project-tags"><span>' . esc_html__( 'Tags', 'pixelgrade_assistant' ) . ':</span>';
+		$html = '<div class="project-tags"><span>' . esc_html__( 'Tags', 'pixelgrade-assistant' ) . ':</span>';
 		$tags = array();
 		// Loop thorugh all the tags
 		foreach ( $project_tags as $project_tag ) {
@@ -317,7 +317,7 @@ class Pixelgrade_Jetpack_Portfolio_Shortcode {
 	static function get_project_author() {
 		$html = '<div class="project-author">';
 		/* translators: %1$s is link to author posts, %2$s is author display name */
-		$html .= sprintf( wp_kses_post( __( '<span>Author:</span> <a href="%1$s">%2$s</a>', 'pixelgrade_assistant' ) ),
+		$html .= sprintf( wp_kses_post( __( '<span>Author:</span> <a href="%1$s">%2$s</a>', 'pixelgrade-assistant' ) ),
 			esc_url( get_author_posts_url( get_the_author_meta( 'ID' ) ) ),
 			esc_html( get_the_author() )
 		);
@@ -369,13 +369,13 @@ class Pixelgrade_Jetpack_Portfolio_Shortcode {
 	 * Cloning is forbidden.
 	 */
 	public function __clone() {
-		_doing_it_wrong( __FUNCTION__, esc_html__( 'You should not do that!', 'pixelgrade_assistant' ), '1.0.0' );
+		_doing_it_wrong( __FUNCTION__, esc_html__( 'You should not do that!', 'pixelgrade-assistant' ), '1.0.0' );
 	}
 
 	/**
 	 * Unserializing instances of this class is forbidden.
 	 */
 	public function __wakeup() {
-		_doing_it_wrong( __FUNCTION__, esc_html__( 'You should not do that!', 'pixelgrade_assistant' ),  '1.0.0' );
+		_doing_it_wrong( __FUNCTION__, esc_html__( 'You should not do that!', 'pixelgrade-assistant' ),  '1.0.0' );
 	}
 }

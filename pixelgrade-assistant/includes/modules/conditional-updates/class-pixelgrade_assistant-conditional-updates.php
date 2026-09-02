@@ -160,9 +160,9 @@ if ( ! class_exists( 'PixelgradeAssistant_Conditional_Updates' ) ) :
 						printf(
 							'<div class="%1$s"><p><strong>%2$s</strong></p>%3$s<p>%4$s</p></div>',
 							esc_attr( 'notice notice-error' ),
-							esc_html__( 'Your Pixelgrade theme requires different plugin versions than the ones active:', 'pixelgrade_assistant' ),
+							esc_html__( 'Your Pixelgrade theme requires different plugin versions than the ones active:', 'pixelgrade-assistant' ),
 							$failed_list,
-							wp_kses_post( __( 'Please <strong>replace the current active plugin versions</strong> with the ones recommended for a smooth experience.<br><strong>The steps are as follows:</strong> download, go to <code>Plugins → Add New</code>, use the <code>Upload Plugin</code> button to select the downloaded zip file, and choose <code>Replace current with uploaded</code> when asked.', 'pixelgrade_assistant' ) )
+							wp_kses_post( __( 'Please <strong>replace the current active plugin versions</strong> with the ones recommended for a smooth experience.<br><strong>The steps are as follows:</strong> download, go to <code>Plugins → Add New</code>, use the <code>Upload Plugin</code> button to select the downloaded zip file, and choose <code>Replace current with uploaded</code> when asked.', 'pixelgrade-assistant' ) )
 						);
 					} );
 				}
@@ -327,7 +327,7 @@ if ( ! class_exists( 'PixelgradeAssistant_Conditional_Updates' ) ) :
 				if ( ! empty( $wporg_versions[ $found_version ] ) ) {
 					// Add the failed check details to be used in informing the user.
 					$failed[ $filename ] = sprintf(
-						__( '<a href="%1$s" target="_blank">%2$s</a> - <strong>recommended version is %3$s;</strong> download it <a href="%4$s" target="_blank">here</a>;', 'pixelgrade_assistant' ),
+						__( '<a href="%1$s" target="_blank">%2$s</a> - <strong>recommended version is %3$s;</strong> download it <a href="%4$s" target="_blank">here</a>;', 'pixelgrade-assistant' ),
 						esc_url( $current_plugin_data['PluginURI'] ),
 						esc_html( $current_plugin_data['Name'] ),
 						esc_html( $found_version ),
@@ -782,7 +782,7 @@ if ( ! class_exists( 'PixelgradeAssistant_Conditional_Updates' ) ) :
 		 */
 		public function __clone() {
 
-			_doing_it_wrong( __FUNCTION__, esc_html__( 'You should not do that!', 'pixelgrade_assistant' ), null );
+			_doing_it_wrong( __FUNCTION__, esc_html__( 'You should not do that!', 'pixelgrade-assistant' ), null );
 		}
 
 		/**
@@ -792,7 +792,7 @@ if ( ! class_exists( 'PixelgradeAssistant_Conditional_Updates' ) ) :
 		 */
 		public function __wakeup() {
 
-			_doing_it_wrong( __FUNCTION__, esc_html__( 'You should not do that!', 'pixelgrade_assistant' ), null );
+			_doing_it_wrong( __FUNCTION__, esc_html__( 'You should not do that!', 'pixelgrade-assistant' ), null );
 		}
 
 	}

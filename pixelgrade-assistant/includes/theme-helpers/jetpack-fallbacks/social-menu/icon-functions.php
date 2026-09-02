@@ -35,12 +35,12 @@ if ( ! function_exists( 'jetpack_social_menu_get_svg' ) ) {
 	function jetpack_social_menu_get_svg( $args = array() ) {
 		// Make sure $args are an array.
 		if ( empty( $args ) ) {
-			return esc_html__( 'Please define default parameters in the form of an array.', 'pixelgrade_assistant' );
+			return esc_html__( 'Please define default parameters in the form of an array.', 'pixelgrade-assistant' );
 		}
 
 		// Define an icon.
 		if ( false === array_key_exists( 'icon', $args ) ) {
-			return esc_html__( 'Please define an SVG icon filename.', 'pixelgrade_assistant' );
+			return esc_html__( 'Please define an SVG icon filename.', 'pixelgrade-assistant' );
 		}
 
 		// Set defaults.

@@ -111,21 +111,21 @@ class PixelgradeAssistant_DataCollector {
 
 		// install url
 		$install_data['url'] = array(
-			'label'       => esc_html__( 'Home URL', 'pixelgrade_assistant' ),
+			'label'       => esc_html__( 'Home URL', 'pixelgrade-assistant' ),
 			'value'       => home_url( '/' ),
 			'is_viewable' => true
 		);
 
 		// Theme Name
 		$install_data['theme_name'] = array(
-			'label'       => esc_html__( 'Theme Name', 'pixelgrade_assistant' ),
+			'label'       => esc_html__( 'Theme Name', 'pixelgrade-assistant' ),
 			'value'       => ( empty( $this->config['theme_name'] ) ? '' : $this->config['theme_name'] ),
 			'is_viewable' => true
 		);
 
 		// Theme Version
 		$install_data['theme_version'] = array(
-			'label'         => esc_html__( 'Theme Version', 'pixelgrade_assistant' ),
+			'label'         => esc_html__( 'Theme Version', 'pixelgrade-assistant' ),
 			'value'         => ( empty( $this->config['theme_version'] ) ? '' : $this->config['theme_version'] ),
 			'is_viewable'   => true,
 			'is_updateable' => $this->is_theme_updateable(),
@@ -133,20 +133,20 @@ class PixelgradeAssistant_DataCollector {
 
 		// Is Child THeme
 		$install_data['is_child_theme'] = array(
-			'label'       => esc_html__( 'Child Theme', 'pixelgrade_assistant' ),
+			'label'       => esc_html__( 'Child Theme', 'pixelgrade-assistant' ),
 			'value'       => ( ! empty( $this->config['is_child'] ) && $this->config['is_child'] ? 'In use' : 'Not in use' ),
 			'is_viewable' => true
 		);
 
 		// Template
 		$install_data['template'] = array(
-			'label'       => esc_html__( 'Template', 'pixelgrade_assistant' ),
+			'label'       => esc_html__( 'Template', 'pixelgrade-assistant' ),
 			'value'       => ( empty( $this->config['template'] ) ? '' : $this->config['template'] ),
 			'is_viewable' => false
 		);
 
 		$install_data['product'] = array(
-			'label'       => esc_html__( 'Product', 'pixelgrade_assistant' ),
+			'label'       => esc_html__( 'Product', 'pixelgrade-assistant' ),
 			'value'       => PixelgradeAssistant_Admin::get_theme_hash_id(''),
 			'is_viewable' => false
 		);
@@ -224,15 +224,15 @@ class PixelgradeAssistant_DataCollector {
 
 		$response = array(
 			'wp_debug_mode'          => array(
-				'label' => esc_html__( 'WP Debug Mode Active', 'pixelgrade_assistant' ),
+				'label' => esc_html__( 'WP Debug Mode Active', 'pixelgrade-assistant' ),
 				'value' => ( defined( 'WP_DEBUG' ) && WP_DEBUG ) ? "true" : "false",
 			),
 			'wp_cron'                => array(
-				'label' => esc_html__( 'WP Cron Active', 'pixelgrade_assistant' ),
+				'label' => esc_html__( 'WP Cron Active', 'pixelgrade-assistant' ),
 				'value' => ! ( defined( 'DISABLE_WP_CRON' ) && DISABLE_WP_CRON ) ? "true" : "false",
 			),
 			'wp_version'             => array(
-				'label'         => esc_html__( 'WP Version', 'pixelgrade_assistant' ),
+				'label'         => esc_html__( 'WP Version', 'pixelgrade-assistant' ),
 				'value'         => get_bloginfo( 'version' ),
 				'is_viewable'   => true,
 				'is_updateable' => $this->is_wp_updateable(),
@@ -240,30 +240,30 @@ class PixelgradeAssistant_DataCollector {
 			)
 		,
 			'web_server'             => array(
-				'label' => esc_html__( 'Web Server', 'pixelgrade_assistant' ),
+				'label' => esc_html__( 'Web Server', 'pixelgrade-assistant' ),
 				'value' => $web_server,
 			),
 			'wp_memory_limit'        => array(
-				'label' => esc_html__( 'WP Memory Limit', 'pixelgrade_assistant' ),
+				'label' => esc_html__( 'WP Memory Limit', 'pixelgrade-assistant' ),
 				'value' => $wp_memory_limit,
 			), // in bytes
 			'php_post_max_size'      => array(
-				'label' => esc_html__( 'PHP Post Max Size', 'pixelgrade_assistant' ),
+				'label' => esc_html__( 'PHP Post Max Size', 'pixelgrade-assistant' ),
 				'value' => wp_convert_hr_to_bytes( ini_get( 'post_max_size' ) ), // in bytes
 			),
 			'php_max_execution_time' => array(
-				'label' => esc_html__( 'PHP Max Execution Time', 'pixelgrade_assistant' ),
+				'label' => esc_html__( 'PHP Max Execution Time', 'pixelgrade-assistant' ),
 				'value' => ini_get( 'max_execution_time' ) . ' s',
 			),
 			'php_version'            => array(
-				'label'         => esc_html__( 'PHP Version', 'pixelgrade_assistant' ),
+				'label'         => esc_html__( 'PHP Version', 'pixelgrade-assistant' ),
 				'value'         => $php_version,
 				'is_viewable'   => true,
 				'is_updateable' => $this->is_php_updateable(),
 				'download_url'  => esc_url( 'https://php.net' ),
 			),
 			'mysql_version'          => array(
-				'label'         => esc_html__( 'MySQL Version', 'pixelgrade_assistant' ),
+				'label'         => esc_html__( 'MySQL Version', 'pixelgrade-assistant' ),
 				'value'         => $wpdb->db_version(),
 				'is_viewable'   => true,
 				'is_updateable' => $this->is_mysql_updateable( $wpdb->db_version() ),
@@ -271,12 +271,12 @@ class PixelgradeAssistant_DataCollector {
 
 			),
 			'wp_locale'              => array(
-				'label'       => esc_html__( 'WP Locale', 'pixelgrade_assistant' ),
+				'label'       => esc_html__( 'WP Locale', 'pixelgrade-assistant' ),
 				'value'       => get_locale(),
 				'is_viewable' => true,
 			),
 			'db_charset'             => array(
-				'label'         => esc_html__( 'DB Charset', 'pixelgrade_assistant' ),
+				'label'         => esc_html__( 'DB Charset', 'pixelgrade-assistant' ),
 				'value'         => $db_charset, //maybe get it from a mysql connection
 				'is_viewable'   => true,
 				'is_updateable' => $this->is_db_charset_updateable( $db_charset ),
@@ -468,7 +468,7 @@ class PixelgradeAssistant_DataCollector {
 	 */
 	public function __clone() {
 
-		_doing_it_wrong( __FUNCTION__, esc_html__( 'You should not do that!', 'pixelgrade_assistant' ), esc_html( $this->parent->get_version() ) );
+		_doing_it_wrong( __FUNCTION__, esc_html__( 'You should not do that!', 'pixelgrade-assistant' ), esc_html( $this->parent->get_version() ) );
 	}
 
 	/**
@@ -476,6 +476,6 @@ class PixelgradeAssistant_DataCollector {
 	 */
 	public function __wakeup() {
 
-		_doing_it_wrong( __FUNCTION__, esc_html__( 'You should not do that!', 'pixelgrade_assistant' ), esc_html( $this->parent->get_version() ) );
+		_doing_it_wrong( __FUNCTION__, esc_html__( 'You should not do that!', 'pixelgrade-assistant' ), esc_html( $this->parent->get_version() ) );
 	}
 }

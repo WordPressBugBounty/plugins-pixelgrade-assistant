@@ -149,12 +149,12 @@ class PixelgradeAssistant {
 		printf(
 			'<div class="%1$s"><p><strong>%2$s %3$s %4$s </strong></p><p>%5$s %6$s %7$s</p></div>',
 			esc_attr( 'notice notice-error' ),
-			esc_html__( 'Pixelgrade Assistant requires WordPress version', 'pixelgrade_assistant' ),
+			esc_html__( 'Pixelgrade Assistant requires WordPress version', 'pixelgrade-assistant' ),
 			$this->wp_support,
-			esc_html__( 'or later', 'pixelgrade_assistant' ),
-			esc_html__( 'You\'re using an old version of WordPress', 'pixelgrade_assistant' ),
+			esc_html__( 'or later', 'pixelgrade-assistant' ),
+			esc_html__( 'You\'re using an old version of WordPress', 'pixelgrade-assistant' ),
 			$wp_version,
-			esc_html__( 'which is not compatible with the plugin. Please update to the latest version to benefit from all its features.', 'pixelgrade_assistant' )
+			esc_html__( 'which is not compatible with the plugin. Please update to the latest version to benefit from all its features.', 'pixelgrade-assistant' )
 		);
 	}
 
@@ -354,13 +354,13 @@ class PixelgradeAssistant {
 		$html = '<div class="updated fade">' .
 		        sprintf(
 			        /* translators: %s: the plugin name. */
-			        esc_html__( 'Error: plugin "%s" requires a newer version of PHP to be running.', 'pixelgrade_assistant' ), $this->plugin_name ) .
+			        esc_html__( 'Error: plugin "%s" requires a newer version of PHP to be running.', 'pixelgrade-assistant' ), $this->plugin_name ) .
 		        '<br/>' . sprintf(
 			        /* translators: %s: the minimum required PHP version. */
-			        esc_html__( 'Minimal version of PHP required: %s', 'pixelgrade_assistant' ), '<strong>' . $this->minimalRequiredPhpVersion . '</strong>' ) .
+			        esc_html__( 'Minimal version of PHP required: %s', 'pixelgrade-assistant' ), '<strong>' . $this->minimalRequiredPhpVersion . '</strong>' ) .
 		        '<br/>' . sprintf(
 			        /* translators: %s: the server current PHP version. */
-			        esc_html__( 'Your server\'s PHP version: %s', 'pixelgrade_assistant' ), '<strong>' . phpversion() . '</strong>' ) .
+			        esc_html__( 'Your server\'s PHP version: %s', 'pixelgrade-assistant' ), '<strong>' . phpversion() . '</strong>' ) .
 		        '</div>';
 		echo wp_kses( $html, $allowed );
 	}
@@ -374,7 +374,7 @@ class PixelgradeAssistant {
 	public function add_care_compatibility_notice() {
 		$message = sprintf(
 			/* translators: 1: Pixelgrade Assistant plugin name, 2: Pixelgrade Care plugin name */
-			esc_html__( '%1$s stays inactive while %2$s is active, so the two never overlap. Your current setup keeps working — no action needed.', 'pixelgrade_assistant' ),
+			esc_html__( '%1$s stays inactive while %2$s is active, so the two never overlap. Your current setup keeps working — no action needed.', 'pixelgrade-assistant' ),
 			'Pixelgrade Assistant',
 			'Pixelgrade Care'
 		);
@@ -433,7 +433,7 @@ class PixelgradeAssistant {
 	 */
 	public function __clone() {
 
-		_doing_it_wrong( __FUNCTION__,esc_html__( 'You should not do that!', 'pixelgrade_assistant' ), esc_html( $this->version ) );
+		_doing_it_wrong( __FUNCTION__,esc_html__( 'You should not do that!', 'pixelgrade-assistant' ), esc_html( $this->version ) );
 	}
 
 	/**
@@ -441,6 +441,6 @@ class PixelgradeAssistant {
 	 */
 	public function __wakeup() {
 
-		_doing_it_wrong( __FUNCTION__, esc_html__( 'You should not do that!', 'pixelgrade_assistant' ),  esc_html( $this->version ) );
+		_doing_it_wrong( __FUNCTION__, esc_html__( 'You should not do that!', 'pixelgrade-assistant' ),  esc_html( $this->version ) );
 	}
 }

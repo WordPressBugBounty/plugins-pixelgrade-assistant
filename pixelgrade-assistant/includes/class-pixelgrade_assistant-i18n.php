@@ -54,7 +54,7 @@ class PixelgradeAssistant_i18n {
 		// The third arg must be a path relative to the plugins directory, not a URL,
 		// otherwise WordPress can't locate the bundled .mo files.
 		load_plugin_textdomain(
-			'pixelgrade_assistant',
+			'pixelgrade-assistant',
 			false,
 			dirname( plugin_basename( $this->parent->file ) ) . '/languages/'
 		);
@@ -83,7 +83,7 @@ class PixelgradeAssistant_i18n {
 	 */
 	public function __clone() {
 
-		_doing_it_wrong( __FUNCTION__, esc_html__( 'You should not do that!', 'pixelgrade_assistant' ), esc_html( $this->parent->get_version() ) );
+		_doing_it_wrong( __FUNCTION__, esc_html__( 'You should not do that!', 'pixelgrade-assistant' ), esc_html( $this->parent->get_version() ) );
 	}
 
 	/**
@@ -91,7 +91,7 @@ class PixelgradeAssistant_i18n {
 	 */
 	public function __wakeup() {
 
-		_doing_it_wrong( __FUNCTION__, esc_html__( 'You should not do that!', 'pixelgrade_assistant' ), esc_html( $this->parent->get_version() ) );
+		_doing_it_wrong( __FUNCTION__, esc_html__( 'You should not do that!', 'pixelgrade-assistant' ), esc_html( $this->parent->get_version() ) );
 	}
 
 }

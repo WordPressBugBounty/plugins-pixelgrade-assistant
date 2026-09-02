@@ -33,7 +33,7 @@ if ( ! function_exists( 'pixassist_starter_segment_text_domain' ) ) {
 	 * @return string
 	 */
 	function pixassist_starter_segment_text_domain( $text ) {
-		return function_exists( 'esc_html__' ) ? esc_html__( $text, 'pixelgrade_assistant' ) : $text;
+		return function_exists( 'esc_html__' ) ? esc_html__( $text, 'pixelgrade-assistant' ) : $text;
 	}
 }
 
